@@ -1,9 +1,15 @@
 import mysql from 'mysql2/promise';
 
+interface Options {
+  query: string,
+  values?: any[]
+}
+
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    database: 'test',
+    password: 'root',
+    database: 'mydb',
     waitForConnections: true,
     connectionLimit: 10,
     maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
@@ -12,3 +18,9 @@ const pool = mysql.createPool({
     enableKeepAlive: true,
     keepAliveInitialDelay: 0
   });
+
+  export const sql = async ({query, values} : Options) => {
+    const [rows] = await pool.query(query, values);
+    
+    return rows
+  }
