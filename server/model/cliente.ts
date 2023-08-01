@@ -15,7 +15,7 @@ export type ClienteModel = {
 
 export const getTotal = async() => {
     const result  = await sql({
-        query: 'SELECT COUNT(*) AS "total" FROM cliente'
+        query: 'SELECT COUNT(*) AS "total" FROM Cliente'
     }) ;
     
     return result[0].total as Number;
@@ -23,7 +23,7 @@ export const getTotal = async() => {
 
 export const read = async() => {
     const result  = await sql({
-        query: 'SELECT id_Cliente, Nombre, Apellido, Fecha_Nacimiento, Email, Celular, Edad, Licencia FROM cliente'
+        query: 'SELECT id_Cliente, Nombre, Apellido, Fecha_Nacimiento, Email, Celular, Edad, Licencia FROM Cliente'
     }) as any;
 
     return result as ClienteModel;
@@ -61,7 +61,7 @@ export const create = async (data: ClienteModel) => {
 
 export const detail = async (id: string) => {
     const result  = await sql({
-        query: 'SELECT id_Cliente, Nombre, Apellido, Fecha_Nacimiento, Email, Celular, Edad, Licencia FROM cliente WHERE id_Cliente = ?',
+        query: 'SELECT id_Cliente, Nombre, Apellido, Fecha_Nacimiento, Email, Celular, Edad, Licencia FROM Cliente WHERE id_Cliente = ?',
         values : [id]
     }) as any;
 
@@ -89,7 +89,7 @@ export const update = async (id:string, data: ClienteModel) => {
 
 export const remove = async (id: string) => {
     await sql({
-        query: 'DELETE FROM cliente WHERE id_cliente =?',
+        query: 'DELETE FROM Cliente WHERE id_cliente =?',
         values: [id]
     });
 

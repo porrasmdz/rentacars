@@ -11,7 +11,7 @@ export type InspectorModel = {
 
 export const getTotal = async() => {
     const result  = await sql({
-        query: 'SELECT COUNT(*) AS "total" FROM inspector'
+        query: 'SELECT COUNT(*) AS "total" FROM Inspector'
     }) ;
     
     return result[0].total as Number;
@@ -19,7 +19,7 @@ export const getTotal = async() => {
 
 export const read = async() => {
     const result  = await sql({
-        query: 'SELECT id_Inspector, Nombre, Email, Celular FROM inspector'
+        query: 'SELECT id_Inspector, Nombre, Email, Celular FROM Inspector'
     }) as any;
 
     return result as InspectorModel;
@@ -49,7 +49,7 @@ export const create = async (data: InspectorModel) => {
 
 export const detail = async (id: string) => {
     const result  = await sql({
-        query: 'SELECT id_Inspector, Nombre, Email, Celular FROM inspector WHERE id_Inspector = ?',
+        query: 'SELECT id_Inspector, Nombre, Email, Celular FROM Inspector WHERE id_Inspector = ?',
         values : [id]
     }) as any;
 
@@ -74,7 +74,7 @@ export const update = async (id:string, data: InspectorModel) => {
 
 export const remove = async (id: string) => {
     await sql({
-        query: 'DELETE FROM inspector WHERE id_Inspector =?',
+        query: 'DELETE FROM Inspector WHERE id_Inspector =?',
         values: [id]
     });
 
