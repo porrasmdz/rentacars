@@ -10,9 +10,11 @@ export const read = async () => {
       total
     };
   } catch (error) {
+    console.log(error);
+      
     throw createError({
       statusCode: 500,
-      statusMessage: "Error fetching users"+error ,
+      statusMessage: error as string ,
     });
   }
 };

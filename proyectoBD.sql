@@ -14,13 +14,13 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `ITSO_mydb` DEFAULT CHARACTER SET utf8 ;
-USE `ITSO_mydb` ;
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+USE `mydb` ;
 
 -- -----------------------------------------------------
--- Table `ITSO_mydb`.`Cliente`
+-- Table `mydb`.`Cliente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Cliente` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Cliente` (
   `id_Cliente` VARCHAR(10) NOT NULL,
   `Nombre` VARCHAR(20) NULL,
   `Apellido` VARCHAR(20) NULL,
@@ -34,9 +34,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ITSO_mydb`.`Pago`
+-- Table `mydb`.`Pago`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Pago` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Pago` (
   `Id_Pago` VARCHAR(10) NOT NULL,
   `Id_Cliente` VARCHAR(10) NOT NULL,
   `Monto` FLOAT NULL,
@@ -45,15 +45,15 @@ CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Pago` (
   `Plazo` DATE NULL,
   `Forma_pago` VARCHAR(20) NULL,
   PRIMARY KEY (`Id_Pago`),
-  FOREIGN KEY (`Id_Cliente`) REFERENCES `ITSO_mydb`.`Cliente` (`id_Cliente`)
+  FOREIGN KEY (`Id_Cliente`) REFERENCES `mydb`.`Cliente` (`id_Cliente`)
 ) 
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ITSO_mydb`.`Inspector`
+-- Table `mydb`.`Inspector`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Inspector` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Inspector` (
   `id_Inspector` VARCHAR(10) NOT NULL,
   `Nombre` VARCHAR(20) NULL,
   `Email` VARCHAR(50) NULL,
@@ -65,9 +65,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ITSO_mydb`.`EmpresaAlquiler`
+-- Table `mydb`.`EmpresaAlquiler`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`EmpresaAlquiler` (
+CREATE TABLE IF NOT EXISTS `mydb`.`EmpresaAlquiler` (
   `RUC` VARCHAR(10) NOT NULL,
   `Nombre` VARCHAR(50) NULL,
   PRIMARY KEY (`RUC`)
@@ -76,9 +76,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ITSO_mydb`.`Reserva`
+-- Table `mydb`.`Reserva`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Reserva` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Reserva` (
   `id_Reserva` VARCHAR(10) NOT NULL,
   `Id_Cliente` VARCHAR(10) NULL,
   `Id_Inspector` VARCHAR(10) NULL,
@@ -86,16 +86,16 @@ CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Reserva` (
   `Hora_reserva` TIME NULL,
   `ubicacion_recogida` VARCHAR(50) NULL,
   PRIMARY KEY (`id_Reserva`),
-  FOREIGN KEY (`Id_Cliente`) REFERENCES `ITSO_mydb`.`Cliente` (`id_Cliente`),
-  FOREIGN KEY (`Id_Inspector`) REFERENCES `ITSO_mydb`.`Inspector` (`id_Inspector`)
+  FOREIGN KEY (`Id_Cliente`) REFERENCES `mydb`.`Cliente` (`id_Cliente`),
+  FOREIGN KEY (`Id_Inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`)
 ) 
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ITSO_mydb`.`Vehiculo`
+-- Table `mydb`.`Vehiculo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Vehiculo` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Vehiculo` (
   `No_Matricula` VARCHAR(7) NOT NULL,
   `RUC` VARCHAR(10) NULL,
   `Marca` VARCHAR(20) NULL,
@@ -103,16 +103,16 @@ CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Vehiculo` (
   `Precio_alquiler` FLOAT NULL,
   `Capacidad` INT NULL,
   PRIMARY KEY (`No_Matricula`),
-  FOREIGN KEY (`RUC`) REFERENCES `ITSO_mydb`.`EmpresaAlquiler` (`RUC`)
+  FOREIGN KEY (`RUC`) REFERENCES `mydb`.`EmpresaAlquiler` (`RUC`)
 ) 
 ENGINE = InnoDB;
 
 
 
 -- -----------------------------------------------------
--- Table `ITSO_mydb`.`Recargo`
+-- Table `mydb`.`Recargo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Recargo` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Recargo` (
   `id_Recargo` VARCHAR(10) NOT NULL,
   `Id_pago` VARCHAR(10) NULL,
   `Fecha` DATE NULL,
@@ -120,15 +120,15 @@ CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Recargo` (
   `Monto` FLOAT NULL,
   `Razon` VARCHAR(100) NULL,
   PRIMARY KEY (`id_Recargo`),
-  FOREIGN KEY (`Id_pago`) REFERENCES `ITSO_mydb`.`Pago` (`Id_Pago`)
+  FOREIGN KEY (`Id_pago`) REFERENCES `mydb`.`Pago` (`Id_Pago`)
 ) 
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ITSO_mydb`.`Devolucion`
+-- Table `mydb`.`Devolucion`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Devolucion` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Devolucion` (
   `id_Devolucion` VARCHAR(10) NOT NULL,
   `No_Matricula` VARCHAR(7) NULL,
   `Estado_devolucion` TINYINT NULL,
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Devolucion` (
   `Fecha_devolucion_real` DATE NULL,
   `Lugar_devolucion` VARCHAR(100) NULL,
   PRIMARY KEY (`id_Devolucion`),
-  FOREIGN KEY (`No_Matricula`) REFERENCES `ITSO_mydb`.`Vehiculo` (`No_Matricula`)
+  FOREIGN KEY (`No_Matricula`) REFERENCES `mydb`.`Vehiculo` (`No_Matricula`)
 ) 
 ENGINE = InnoDB;
 
