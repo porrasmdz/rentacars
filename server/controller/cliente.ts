@@ -12,7 +12,7 @@ export const read = async () => {
   } catch (error) {
     throw createError({
       statusCode: 500,
-      statusMessage: "Error fetching users",
+      statusMessage: "Error fetching users"+error ,
     });
   }
 };
