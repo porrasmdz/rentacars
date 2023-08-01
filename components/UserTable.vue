@@ -1,0 +1,173 @@
+<template>
+  <div class="bg-white shadow-lg rounded-sm border border-slate-200 relative">
+    <header class="px-5 py-4">
+      <h2 class="font-semibold text-slate-800">
+        Total {{ models }} <span class="text-slate-400 font-medium">{{ total }}</span>
+      </h2>
+    </header>
+    <div>
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="table-auto w-full">
+          <!-- Table header -->
+          <thead
+            class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200"
+          >
+            <tr>
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                <div class="font-semibold text-left">Nombre</div>
+              </th>
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                <div class="font-semibold text-left">Email</div>
+              </th>
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                <div class="font-semibold text-left">Celular</div>
+              </th>
+              <th v-if="models=='Clientes'" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                <div class="font-semibold">Edad</div>
+              </th>
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                <div class="font-semibold text-left">Id</div>
+              </th>
+              
+             
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                <span class="sr-only">Menu</span>
+              </th>
+            </tr>
+          </thead>
+          <!-- Table body -->
+          <tbody class="text-sm divide-y divide-slate-200">
+            <User
+              v-for="customer in data"
+              :key="customer.id_cliente"
+              :customer="customer"
+              :models="models"
+              :value="customer.id_cliente"
+            />
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</template>
+  
+  <script setup>
+import { ref, watch } from "vue";
+import User from "./UserTableItem.vue";
+const props = defineProps(['data', 'models', 'total']);
+const emit = defineEmits(["change-selection"]);
+
+const customers = ref([
+  {
+    id: "0",
+    name: "Patricia Semklo",
+    email: "patricia.semklo@app.com",
+    location: "🇬🇧 London, UK",
+    orders: "24",
+    lastOrder: "#123567",
+    spent: "$2,890.66",
+    refunds: "-",
+    fav: true,
+  },
+  {
+    id: "1",
+    name: "Dominik Lamakani",
+    email: "dominik.lamakani@gmail.com",
+    location: "🇩🇪 Dortmund, DE",
+    orders: "77",
+    lastOrder: "#779912",
+    spent: "$14,767.04",
+    refunds: "4",
+    fav: false,
+  },
+  {
+    id: "2",
+    name: "Ivan Mesaros",
+    email: "imivanmes@gmail.com",
+    location: "🇫🇷 Paris, FR",
+    orders: "44",
+    lastOrder: "#889924",
+    spent: "$4,996.00",
+    refunds: "1",
+    fav: true,
+  },
+  {
+    id: "3",
+    name: "Maria Martinez",
+    email: "martinezhome@gmail.com",
+    location: "🇮🇹 Bologna, IT",
+    orders: "29",
+    lastOrder: "#897726",
+    spent: "$3,220.66",
+    refunds: "2",
+    fav: false,
+  },
+  {
+    id: "4",
+    name: "Vicky Jung",
+    email: "itsvicky@contact.com",
+    location: "🇬🇧 London, UK",
+    orders: "22",
+    lastOrder: "#123567",
+    spent: "$2,890.66",
+    refunds: "-",
+    fav: true,
+  },
+  {
+    id: "5",
+    name: "Tisho Yanchev",
+    email: "tisho.y@kurlytech.com",
+    location: "🇬🇧 London, UK",
+    orders: "14",
+    lastOrder: "#896644",
+    spent: "$1,649.99",
+    refunds: "1",
+    fav: true,
+  },
+  {
+    id: "6",
+    name: "James Cameron",
+    email: "james.ceo@james.tech",
+    location: "🇫🇷 Marseille, FR",
+    orders: "34",
+    lastOrder: "#136988",
+    spent: "$3,569.87",
+    refunds: "2",
+    fav: true,
+  },
+  {
+    id: "7",
+    name: "Haruki Masuno",
+    email: "haruki@supermail.jp",
+    location: "🇯🇵 Tokio, JP",
+    orders: "112",
+    lastOrder: "#442206",
+    spent: "$19,246.07",
+    refunds: "6",
+    fav: false,
+  },
+  {
+    id: "8",
+    name: "Joe Huang",
+    email: "joehuang@hotmail.com",
+    location: "🇨🇳 Shanghai, CN",
+    orders: "64",
+    lastOrder: "#764321",
+    spent: "$12,276.92",
+    refunds: "-",
+    fav: true,
+  },
+  {
+    id: "9",
+    name: "Carolyn McNeail",
+    email: "carolynlove@gmail.com",
+    location: "🇮🇹 Milan, IT",
+    orders: "19",
+    lastOrder: "#908764",
+    spent: "$1,289.97",
+    refunds: "2",
+    fav: false,
+  },
+]);
+</script>

@@ -1,10 +1,10 @@
 import { H3Event } from "h3";
-import * as clienteModel from "~~/server/model/cliente";
+import * as inspectorModel from "~~/server/model/inspector";
 
 export const read = async () => {
   try {
-    const result = await clienteModel.read();
-    const total = await clienteModel.getTotal();
+    const result = await inspectorModel.read();
+    const total = await inspectorModel.getTotal();
     return {
       data: result,
       total
@@ -20,17 +20,12 @@ export const read = async () => {
 export const create = async (evt: H3Event) => {
   try {
     const body = await readBody(evt);
-    const result = await clienteModel.create({
-      id_Cliente: body.id_cliente,
+    const result = await inspectorModel.create({
+      id_Inspector: body.id_inspector,
       Nombre: body.nombre,
-      Apellido: body.apellido,
-      
-      Fecha_Nacimiento: body.fecha_nacim,
       Email: body.email,
       Celular: body.celular,
-      Edad: body.edad,
-      Licencia: body.licencia,
-    });
+     });
     return {
       data: result,
     };
@@ -44,8 +39,8 @@ export const create = async (evt: H3Event) => {
 
 export const detail = async (evt: H3Event) => {
   try {
-    const result = await clienteModel.detail(
-      evt.context.params?.id_cliente as string
+    const result = await inspectorModel.detail(
+      evt.context.params?.id_inspector as string
     );
     return {
       data: result,
@@ -61,19 +56,15 @@ export const detail = async (evt: H3Event) => {
 export const update = async (evt: H3Event) => {
   try {
     const body = await readBody(evt);
-    const result = await clienteModel.update(
-      evt.context.params?.id_cliente as string,
+    const result = await inspectorModel.update(
+      evt.context.params?.id_inspector as string,
       {
-        id_Cliente: body.id_cliente,
+        id_Inspector: body.id_inspector,
         Nombre: body.nombre,
-        Apellido: body.apellido,
         
-        Fecha_Nacimiento: body.fecha_nacim,
         Email: body.email,
         Celular: body.celular,
-        Edad: body.edad,
-        Licencia: body.licencia,
-      }
+       }
     );
     return {
       data: result,
@@ -89,8 +80,8 @@ export const update = async (evt: H3Event) => {
 
 export const remove = async (evt: H3Event) => {
     try {
-      const result = await clienteModel.remove(
-        evt.context.params?.id_cliente as string
+      const result = await inspectorModel.remove(
+        evt.context.params?.id_inspector as string
       );
       return {
         data: result,

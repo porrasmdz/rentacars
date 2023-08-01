@@ -2,16 +2,25 @@ import {sql} from '~~/server/db';
 
 
 export type ClienteModel = {
-    id_cliente:string,
-    nombre: string,
-    apellido: string,
-    fecha_nacim: Date,
-    email: string,
-    celular: string,
-    edad: number,
-    licencia: number
+    id_Cliente:string,
+    Nombre: string,
+    Apellido: string,
+    Fecha_Nacimiento: Date,
+    Email: string,
+    Celular: string,
+    Edad: number,
+    Licencia: number
     
 };
+
+export const getTotal = async() => {
+    const result  = await sql({
+        query: 'SELECT COUNT(*) AS "total" FROM cliente'
+    }) ;
+    
+    return result[0].total as Number;
+};
+
 export const read = async() => {
     const result  = await sql({
         query: 'SELECT id_Cliente, Nombre, Apellido, Fecha_Nacimiento, Email, Celular, Edad, Licencia FROM cliente'
@@ -19,6 +28,7 @@ export const read = async() => {
 
     return result as ClienteModel;
 };
+
 
 export const create = async (data: ClienteModel) => {
     const result = await sql({
