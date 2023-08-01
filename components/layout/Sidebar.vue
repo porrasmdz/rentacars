@@ -459,9 +459,7 @@ const props = defineProps(["sidebarOpen"]);
 const trigger = ref(null);
 const sidebar = ref(null);
 
-const storedSidebarExpanded = process.cliente
-  ? localStorage.getItem("sidebar-expanded")
-  : false;
+const storedSidebarExpanded = false;
 const sidebarExpanded = ref(
   storedSidebarExpanded === null ? false : storedSidebarExpanded === "true"
 );
@@ -497,9 +495,7 @@ onUnmounted(() => {
 });
 
 watch(sidebarExpanded, () => {
-  if (process.client) {
-    localStorage.setItem("sidebar-expanded", sidebarExpanded.value);
-  }
+  
   if (sidebarExpanded.value) {
     document.querySelector("body").classList.add("sidebar-expanded");
   } else {

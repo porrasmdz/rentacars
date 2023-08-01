@@ -24,7 +24,7 @@
        
           <!-- Divider -->
           <hr class="w-px h-6 bg-slate-200" />
-          <button >Dark Mode</button>
+          <button ></button>
 
         </div>
 
