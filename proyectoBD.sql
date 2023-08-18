@@ -29,7 +29,10 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Cliente` (
   `Celular` VARCHAR(10) NULL,
   `Edad` INT NULL,
   `Licencia` TINYINT NULL,
-  PRIMARY KEY (`id_Cliente`))
+  `id_Inspector` VARCHAR(10) NOT NULL,
+  PRIMARY KEY (`id_Cliente`),
+  FOREIGN KEY (`id_inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`)
+  )
 ENGINE = InnoDB;
 
 
@@ -120,7 +123,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Recargo` (
   `Monto` FLOAT NULL,
   `Razon` VARCHAR(100) NULL,
   PRIMARY KEY (`id_Recargo`),
-  FOREIGN KEY (`Id_pago`) REFERENCES `mydb`.`Pago` (`Id_Pago`)
+  FOREIGN KEY (`Id_pago`) REFERENCES `mydb`.`Pago` (`Id_Pago`),
+  UNIQUE(`Id_Pago`)
 ) 
 ENGINE = InnoDB;
 
@@ -143,24 +147,98 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Devolucion` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `mydb`.`Realizar`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Realizar` (
+  `id_Cliente` VARCHAR(10) NOT NULL,
+  `id_Devolucion` VARCHAR(10) NOT NULL,
+  PRIMARY KEY (`id_Cliente`, `id_Devolucion`),
+  FOREIGN KEY (`id_Devolucion`) REFERENCES `mydb`.`Devolucion` (`id_Devolucion`)
+) 
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Realizado`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Realizado` (
+  `No_Matricula` VARCHAR(7) NOT NULL,
+  `Id_Pago` VARCHAR(10) NOT NULL,
+  PRIMARY KEY (`No_Matricula`,`id_Pago`),
+  FOREIGN KEY (`No_Matricula`) REFERENCES `mydb`.`Vehiculo` (`No_Matricula`),
+  FOREIGN KEY (`Id_Pago`) REFERENCES `mydb`.`Pago` (`Id_Pago`)
+) 
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Alquilar`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Alquilar` (
+  `RUC` VARCHAR(10) NOT NULL,
+  `id_Inspector` VARCHAR(10) NOT NULL,
+  PRIMARY KEY (`RUC`,`id_Inspector`),
+  FOREIGN KEY (`RUC`) REFERENCES `mydb`.`EmpresaAlquiler` (`RUC`),
+  FOREIGN KEY (`id_Inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`)
+) 
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Tiene`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Tiene` (
+  `id_Devolucion` VARCHAR(10) NOT NULL,
+  `No_Matricula` VARCHAR(10) NOT NULL,
+  PRIMARY KEY (`id_Devolucion`,`No_Matricula`),
+  FOREIGN KEY (`id_Devolucion`) REFERENCES `mydb`.`Devolucion` (`id_Devolucion`),
+  FOREIGN KEY (`No_Matricula`) REFERENCES `mydb`.`Vehiculo` (`No_Matricula`)
+) 
+ENGINE = InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 USE mydb;
+
+-- -------------------------------------------------
+-- Triggers
+-- Establece automáticamente la fecha del Recargo
+DELIMITER //
+CREATE TRIGGER setRecargoDate
+BEFORE INSERT ON Recargo
+FOR EACH ROW
+BEGIN
+	SET NEW.Fecha = NOW();
+END;
+//
+DELIMITER ;
+
+-- Establece automáticamente la fecha del Pago
+DELIMITER //
+CREATE TRIGGER setPagoDate
+BEFORE INSERT ON Pago
+FOR EACH ROW
+BEGIN
+	SET NEW.Fecha = NOW();
+END;
+//
+DELIMITER ;
+-- -------------------------------------------------
 -- Registros Clientes
-INSERT INTO Cliente (id_Cliente, Nombre, Apellido, Fecha_Nacimiento, Email, Celular, Edad, Licencia) VALUES
-('1295762108', 'Juan', 'Perez', '1985-05-15', 'juan.perez@gmail.com', '0991234567', 36, 1),
-('2108945673', 'Maria', 'Gonzalez', '1990-09-22', 'maria.gonzalez@hotmail.com', '0987654321', 31, 1),
-('3067509324', 'Pedro', 'Ramirez', '1988-11-10', 'pedro.ramirez@yahoo.com', '0998765432', 33, 1),
-('4790034562', 'Ana', 'Lopez', '1995-03-03', 'ana.lopez@outlook.com', '0987654321', 26, 1),
-('5501928374', 'Carlos', 'Martinez', '1982-07-07', 'carlos.martinez@gmail.com', '0998765432', 39, 1),
-('6681954321', 'Laura', 'Sanchez', '1992-12-18', 'laura.sanchez@hotmail.com', '0987654321', 29, 1),
-('7304859012', 'Luis', 'Hernandez', '1987-02-25', 'luis.hernandez@yahoo.com', '0998765432', 34, 1),
-('8103456789', 'Paula', 'Torres', '1998-06-14', 'paula.torres@gmail.com', '0987654321', 23, 1),
-('9001234567', 'Roberto', 'Gomez', '1980-09-30', 'roberto.gomez@outlook.com', '0998765432', 41, 1),
-('1007890123', 'Sofia', 'Diaz', '1993-04-28', 'sofia.diaz@yahoo.com', '0987654321', 28, 1);
+INSERT INTO Cliente (id_Cliente, Nombre, Apellido, Fecha_Nacimiento, Email, Celular, Edad, Licencia,Id_Inspector) VALUES
+('1295762108', 'Juan', 'Perez', '1985-05-15', 'juan.perez@gmail.com', '0991234567', 36, 1,'2009012345'),
+('2108945673', 'Maria', 'Gonzalez', '1990-09-22', 'maria.gonzalez@hotmail.com', '0987654321', 31, 1,'3334056789'),
+('3067509324', 'Pedro', 'Ramirez', '1988-11-10', 'pedro.ramirez@yahoo.com', '0998765432', 33, 1,'4500009876'),
+('4790034562', 'Ana', 'Lopez', '1995-03-03', 'ana.lopez@outlook.com', '0987654321', 26, 1,'5009871234'),
+('5501928374', 'Carlos', 'Martinez', '1982-07-07', 'carlos.martinez@gmail.com', '0998765432', 39, 1,'6009012378'),
+('6681954321', 'Laura', 'Sanchez', '1992-12-18', 'laura.sanchez@hotmail.com', '0987654321', 29, 1,'7001122334'),
+('7304859012', 'Luis', 'Hernandez', '1987-02-25', 'luis.hernandez@yahoo.com', '0998765432', 34, 1,'8034567890'),
+('8103456789', 'Paula', 'Torres', '1998-06-14', 'paula.torres@gmail.com', '0987654321', 23, 1,'9002345678'),
+('9001234567', 'Roberto', 'Gomez', '1980-09-30', 'roberto.gomez@outlook.com', '0998765432', 41, 1,'1004567890'),
+('1007890123', 'Sofia', 'Diaz', '1993-04-28', 'sofia.diaz@yahoo.com', '0987654321', 28, 1,'1110009999');
 
 -- Registros Pagos
 INSERT INTO Pago (Id_Pago, Id_Cliente, Monto, Fecha, conf_pago, Plazo, Forma_pago) VALUES
