@@ -331,3 +331,25 @@ INSERT INTO Devolucion (id_Devolucion, No_Matricula, Estado_devolucion, Hora_dev
 ('9012345678', 'STU890', 1, '12:45:00', '13:15:00', '2023-08-10', '2023-08-10', 'Guayaquil, Centro Ciudad'),
 ('1011121314', 'VWX901', 1, '19:30:00', '20:00:00', '2023-08-05', '2023-08-05', 'Cuenca, Terminal de Autobuses'),
 ('1112131415', 'YZA012', 1, '17:15:00', '17:45:00', '2023-08-12', '2023-08-12', 'Riobamba, Hotel Montecarlo');
+
+-- Agrega tabla vihiculo
+alter table vehiculo add imageURLVe varchar(100) default null;
+
+-- Agrega tabla empresaAlquiler
+alter table empresaalquiler add imageURLLogo varchar(100) default null;
+
+-- Agrega tabla cliente
+alter table cliente add imageURLFoto varchar(100) default null;
+
+-- Agrega tabla inspector
+alter table inspector add imageURLFotoin varchar(100) default null;
+
+-- todos los id_algo que no son tablas intermedias tengan propiedad autoincrement not null unique
+alter table cliente modify column id_Cliente varchar(10) not null unique ;
+alter table devolucion modify column id_Devolucion varchar(10) not null unique;
+alter table empresaalquiler modify column id_EmpresaAlquiler varchar(10) not null unique;
+alter table inspector modify column id_Inspector varchar(10) not null unique;
+alter table pago modify column id_Pago varchar(10) not null unique;
+alter table recargo modify column id_Recargo varchar(10) not null unique;
+alter table reserva modify column id_Reserva varchar(10) not null unique;
+alter table vehiculo modify column No_Matricula varchar(7) not null unique;
