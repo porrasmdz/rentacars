@@ -1,4 +1,4 @@
-import mysql from 'mysql2/promise';
+import { mysql } from 'mysql2/promise';
 
 interface Options {
   query: string,
@@ -8,9 +8,9 @@ interface Options {
 const pool = mysql.createPool({
     host: 'localhost',
     
-    user: 'root',
-    password: 'root',
-    database: 'mydb',
+    user: 'ITSO_root',
+    password: 'Rootroot123',
+    database: 'ITSO_mydb',
     waitForConnections: true,
     connectionLimit: 10,
     maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
