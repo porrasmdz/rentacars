@@ -348,7 +348,7 @@ alter table empresaalquiler add imageURLLogo varchar(300) default null;
 alter table cliente add imageURLFoto varchar(300) default null;
 
 -- Agrega tabla inspector
-alter table inspector add imageURLFotoin varchar(300) default null;
+alter table inspector add imageURLFotoin varchar(300) default null ;
 
 -- todos los id_algo que no son tablas intermedias tengan propiedad autoincrement not null unique
 alter table cliente modify column id_Cliente int auto_increment not null unique ;
