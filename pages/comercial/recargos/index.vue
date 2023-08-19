@@ -5,7 +5,7 @@
       <!-- Left: Title -->
       <div class="mb-4 sm:mb-0">
         <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">
-          Pagos 
+          Recargos 
         </h1>
       </div>
     </div>
@@ -35,11 +35,11 @@
         ></path>
       </svg>
     </div>
-    <PaymentsTable
+    <RechargesTable
      :data="data"
-     :models="'Pagos'"
+     :models="'Recargos'"
      :total="totalResults"
-     v-else-if="data.length > 1"></PaymentsTable>
+     v-else-if="data.length > 1"></RechargesTable>
     <div v-else-if="errors.length < 1">
       <div
         class="bg-white shadow-lg rounded-sm border border-slate-200 relative"
@@ -72,21 +72,21 @@
 </template>
 
 <script setup lang="ts">
-import type { PagoModel } from "~~/server/model/pago";
+import type { RecargoModel } from "~~/server/model/recargo";
 
 useHead({
-  title: "Pagos",
+  title: "Recargos",
 });
 
 const loading = ref<Boolean>(false);
-const data = ref<PagoModel[]>([]);
+const data = ref<RecargoModel[]>([]);
 const totalResults = ref(0);
 const errors = ref([]);
 const fetchData = async () => {
   try {
     loading.value = true;
-    const result = await $fetch("/api/pago");
-    data.value = result.data as PagoModel[];
+    const result = await $fetch("/api/recargo");
+    data.value = result.data as RecargoModel[];
     totalResults.value = result.total;
     loading.value = false;
   } catch (error) {

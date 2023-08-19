@@ -29,7 +29,7 @@ export const create = async (evt: H3Event) => {
       Fecha_Inicio: body.Fecha_Inicio,
       Hora_Reserva: body.Hora_Reserva,
       
-      ubicacion_recogida: body.conf_reserva,
+      ubicacion_recogida: body.ubicacion_recogida,
      
      
     });
@@ -72,7 +72,7 @@ export const update = async (evt: H3Event) => {
         Fecha_Inicio: body.Fecha_Inicio,
         Hora_Reserva: body.Hora_Reserva,
         
-        ubicacion_recogida: body.conf_reserva,
+        ubicacion_recogida: body.ubicacion_recogida,
        
       }
     );

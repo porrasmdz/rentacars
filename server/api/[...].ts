@@ -3,6 +3,7 @@ import * as clienteCtrl from '~~/server/controller/cliente';
 import * as inspectorCtrl from '~~/server/controller/inspector';
 import * as pagoCtrl from '~~/server/controller/pago';
 import * as reservaCtrl from '~~/server/controller/reserva';
+import * as recargoCtrl from '~~/server/controller/recargo';
 
 const router = createRouter();
 
@@ -31,5 +32,11 @@ router.post('/reserva', defineEventHandler(reservaCtrl.create));
 router.get('/reserva/:id_reserva', defineEventHandler(reservaCtrl.detail));
 router.put('/reserva/:id_reserva', defineEventHandler(reservaCtrl.update));
 router.delete('/reserva/:id_reserva', defineEventHandler(reservaCtrl.remove));
+
+router.get('/recargo', defineEventHandler(recargoCtrl.read));
+router.post('/recargo', defineEventHandler(recargoCtrl.create));
+router.get('/recargo/:id_recargo', defineEventHandler(recargoCtrl.detail));
+router.put('/recargo/:id_recargo', defineEventHandler(recargoCtrl.update));
+router.delete('/recargo/:id_recargo', defineEventHandler(recargoCtrl.remove));
 
 export default useBase('/api',router.handler);

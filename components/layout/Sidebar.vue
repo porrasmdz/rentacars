@@ -389,11 +389,49 @@
                         </a>
                       </li>
                     </NuxtLink>
+                    <NuxtLink
+                      to="/agencia/empresas"
+                      custom
+                      v-slot="{ href, navigate, isExactActive }"
+                    >
+                      <li class="mb-1 last:mb-0">
+                        <a
+                          class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                          :class="isExactActive && '!text-indigo-500'"
+                          :href="href"
+                          @click="navigate"
+                        >
+                          <span
+                            class="text-sm font-medium md:opacity-0 md:sidebar-expanded:opacity-100 lg:opacity-100 duration-200"
+                            >Empresas Alquiler</span
+                          >
+                        </a>
+                      </li>
+                    </NuxtLink>
+                    <NuxtLink
+                      to="/agencia/vehiculos"
+                      custom
+                      v-slot="{ href, navigate, isExactActive }"
+                    >
+                      <li class="mb-1 last:mb-0">
+                        <a
+                          class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                          :class="isExactActive && '!text-indigo-500'"
+                          :href="href"
+                          @click="navigate"
+                        >
+                          <span
+                            class="text-sm font-medium md:opacity-0 md:sidebar-expanded:opacity-100 lg:opacity-100 duration-200"
+                            >Vehiculos</span
+                          >
+                        </a>
+                      </li>
+                    </NuxtLink>
                   </ul>
                 </div>
               </SidebarLinkGroup>
 
-              <!-- Tasks -->
+              <!-- Reservas -->
               <SidebarLinkGroup
                 v-slot="parentLink"
                 :activeCondition="currentRoute.fullPath.includes('reservas')"
@@ -462,7 +500,7 @@
                     :class="!parentLink.expanded && 'hidden'"
                   >
                   <NuxtLink
-                      to="/comercial/reservas"
+                      to="/reservas/reservas"
                       custom
                       v-slot="{ href, navigate, isExactActive }"
                     >
@@ -481,7 +519,7 @@
                       </li>
                     </NuxtLink>
                     <NuxtLink
-                      to="/comercial/devoluciones"
+                      to="/reservas/devoluciones"
                       custom
                       v-slot="{ href, navigate, isExactActive }"
                     >
