@@ -31,25 +31,27 @@ export const read = async() => {
 
 
 export const create = async (data: ReservaModel) => {
-    console.log(Object.values(data));
+    console.log("values",Object.values(data));
     const result = await sql({
         query: `
         INSERT INTO reserva (
             
-            id_Cliente,
-            id_Inspector,      
+            Id_Cliente,
+            Id_Inspector,    
+            No_Matricula,  
             Fecha_Inicio,
-            Hora_Reserva,
-            ubicacion_recogida,
+            Hora_reserva,
+            ubicacion_recogida
 
         ) VALUES (
             ?,
             ?,
             ?,
             ?,
+            ?,
             ?
            
-        ) RETURNING *
+        ) 
         `,
         values:Object.values(data)
     }) as any;

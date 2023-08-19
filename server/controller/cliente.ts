@@ -22,21 +22,24 @@ export const read = async () => {
 export const create = async (evt: H3Event) => {
   try {
     const body = await readBody(evt);
+    console.log("Before parsing", body)
     const result = await clienteModel.create({
-      id_Cliente: body.id_cliente,
-      Nombre: body.nombre,
-      Apellido: body.apellido,
       
-      Fecha_Nacimiento: body.fecha_nacim,
-      Email: body.email,
-      Celular: body.celular,
-      Edad: body.edad,
-      Licencia: body.licencia,
+      Nombre: body.Nombre,
+      Apellido: body.Apellido,
+      
+      Fecha_Nacimiento: body.Fecha_Nacimiento,
+      Email: body.Email,
+      Celular: body.Celular,
+      Edad: body.Edad,
+      Licencia: body.Licencia,
+      id_Inspector : body.id_Inspector
     });
     return {
       data: result,
     };
   } catch (error) {
+    console.log(error);
     throw createError({
       statusCode: 500,
       statusMessage: "Error creating user",

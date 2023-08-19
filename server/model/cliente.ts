@@ -2,7 +2,8 @@ import {sql} from '~~/server/db';
 
 
 export type ClienteModel = {
-    id_Cliente:Number,
+    id_Cliente?:Number,
+    id_Inspector: Number,
     Nombre: string,
     Apellido: string,
     Fecha_Nacimiento: Date,
@@ -31,17 +32,19 @@ export const read = async() => {
 
 
 export const create = async (data: ClienteModel) => {
+    console.log("received", data);
     const result = await sql({
         query: `
         INSERT INTO cliente (
-            id_Cliente,
-            nombre,
-            apellido,
-            fecha_nacimiento,
-            email,
-            celular,
-            edad,
-            licencia
+            
+            Nombre,
+            Apellido,
+            Fecha_Nacimiento,
+            Email,
+            Celular,
+            Edad,
+            Licencia,
+            id_Inspector
 
         ) VALUES (
             ?,
@@ -52,9 +55,9 @@ export const create = async (data: ClienteModel) => {
             ?,
             ?,
             ?
-        ) RETURNING *
+        ) 
         `,
-        values:[data.id_Cliente,data.Nombre,data.Apellido,data.Fecha_Nacimiento,data.Email,data.Celular,data.Edad,data.Licencia]
+        values:[data.Nombre,data.Apellido,data.Fecha_Nacimiento,data.Email,data.Celular,data.Edad,data.Licencia,data.id_Inspector]
     }) as any;
     return result.length === 1 ? (result[0] as ClienteModel) : null;
 }

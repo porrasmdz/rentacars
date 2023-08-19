@@ -10,7 +10,6 @@ export const read = async () => {
       total
     };
   } catch (error) {
-    console.log(error);
       
     throw createError({
       statusCode: 500,
@@ -37,6 +36,8 @@ export const create = async (evt: H3Event) => {
       data: result,
     };
   } catch (error) {
+    
+    console.log(error);
     throw createError({
       statusCode: 500,
       statusMessage: "Error creating reservation",

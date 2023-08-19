@@ -8,8 +8,16 @@
           Reservas 
         </h1>
       </div>
+
+      <button  @click.stop="createModalOpen = true" class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+        <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
+          <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+        </svg>
+        <span class="hidden xs:block ml-2">Agregar Reserva</span>
+      </button>
     </div>
 
+    <!-- Loading -->
     <div
       v-if="loading"
       class="flex flex-col min-h-[50vh] mx-auto w-max items-center justify-center"
@@ -35,13 +43,15 @@
         ></path>
       </svg>
     </div>
+    <!-- Results -->
     <ReservationsTable
      @loading-change="fetchData()"
      :data="data"
      
      :total="totalResults"
      v-else-if="data.length > 1"></ReservationsTable>
-    <div v-else-if="errors.length < 1">
+    <!-- On Error -->
+     <div v-else-if="errors.length < 1">
       <div
         class="bg-white shadow-lg rounded-sm border border-slate-200 relative"
       >
@@ -52,6 +62,7 @@
         </header>
       </div>
     </div>
+    <!-- No results -->
     <div v-else>
       <div
         class="bg-red-200 shadow-lg rounded-sm border border-red-500 relative px-5 py-4"
@@ -69,6 +80,12 @@
         </p>
       </div>
     </div>
+    <CreateModal
+     :editable-fields="['Id_Cliente', 'Id_Inspector', 'No_Matricula', 'Fecha_Inicio', 'Hora_reserva', 'ubicacion_recogida']"
+     :post-url="'/api/reserva/'"
+     :create-modal-open="createModalOpen"
+     @close-modal="createModalOpen=false" 
+      />
   </div>
 </template>
 
@@ -79,6 +96,7 @@ useHead({
   title: "Reservas",
 });
 
+const createModalOpen = ref<Boolean>(false);
 const loading = ref<Boolean>(false);
 const data = ref<ReservaModel[]>([]);
 const totalResults = ref(0);
