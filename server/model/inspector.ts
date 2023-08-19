@@ -67,7 +67,7 @@ export const update = async (id:string, data: InspectorModel) => {
             
         WHERE id_inspector = ?
         `,
-        values:[data.nombre,data.email,data.celular, id]
+        values:[data.Nombre,data.Email,data.Celular, id]
     });
     return await detail(id);
 }

@@ -2,7 +2,7 @@ import {sql} from '~~/server/db';
 
 
 export type ClienteModel = {
-    id_Cliente:string,
+    id_Cliente:Number,
     Nombre: string,
     Apellido: string,
     Fecha_Nacimiento: Date,
@@ -15,7 +15,7 @@ export type ClienteModel = {
 
 export const getTotal = async() => {
     const result  = await sql({
-        query: 'SELECT COUNT(*) AS "total" FROM Cliente'
+        query: 'SELECT COUNT(*) AS "total" FROM cliente'
     }) ;
     
     return result[0].total as Number;
@@ -23,7 +23,7 @@ export const getTotal = async() => {
 
 export const read = async() => {
     const result  = await sql({
-        query: 'SELECT id_Cliente, Nombre, Apellido, Fecha_Nacimiento, Email, Celular, Edad, Licencia FROM Cliente'
+        query: 'SELECT * FROM cliente'
     }) as any;
 
     return result as ClienteModel;
@@ -34,7 +34,7 @@ export const create = async (data: ClienteModel) => {
     const result = await sql({
         query: `
         INSERT INTO cliente (
-            id_cliente,
+            id_Cliente,
             nombre,
             apellido,
             fecha_nacimiento,
@@ -54,14 +54,14 @@ export const create = async (data: ClienteModel) => {
             ?
         ) RETURNING *
         `,
-        values:[data.id_cliente,data.nombre,data.apellido,data.fecha_nacim,data.email,data.celular,data.edad,data.licencia]
+        values:[data.id_Cliente,data.Nombre,data.Apellido,data.Fecha_Nacimiento,data.Email,data.Celular,data.Edad,data.Licencia]
     }) as any;
     return result.length === 1 ? (result[0] as ClienteModel) : null;
 }
 
 export const detail = async (id: string) => {
     const result  = await sql({
-        query: 'SELECT id_Cliente, Nombre, Apellido, Fecha_Nacimiento, Email, Celular, Edad, Licencia FROM Cliente WHERE id_Cliente = ?',
+        query: 'SELECT * FROM cliente WHERE id_Cliente = ?',
         values : [id]
     }) as any;
 
@@ -80,16 +80,16 @@ export const update = async (id:string, data: ClienteModel) => {
             celular = ?,
             edad = ?,
             licencia = ?
-        WHERE id_cliente = ?
+        WHERE id_Cliente = ?
         `,
-        values:[data.nombre,data.apellido,data.fecha_nacim,data.email,data.celular,data.edad,data.licencia, id]
+        values:[data.Nombre,data.Apellido,data.Fecha_Nacimiento,data.Email,data.Celular,data.Edad,data.Licencia, id]
     });
     return await detail(id);
 }
 
 export const remove = async (id: string) => {
     await sql({
-        query: 'DELETE FROM Cliente WHERE id_cliente =?',
+        query: 'DELETE FROM cliente WHERE id_Cliente =?',
         values: [id]
     });
 

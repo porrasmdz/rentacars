@@ -6,11 +6,11 @@ interface Options {
 }
 
 const pool = mysql.createPool({
-    host: 'server1.shopoly.store',
+    host: 'localhost',
     
-    user: 'ITSO_root',
-    password: 'Rootroot123',
-    database: 'ITSO_mydb',
+    user: 'root',
+    password: 'root',
+    database: 'mydb',
     waitForConnections: true,
     connectionLimit: 10,
     maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`

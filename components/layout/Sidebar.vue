@@ -265,6 +265,48 @@
                         </a>
                       </li>
                     </NuxtLink>
+                    
+                    <NuxtLink
+                      to="/comercial/pagos"
+                      custom
+                      v-slot="{ href, navigate, isExactActive }"
+                    >
+                      <li class="mb-1 last:mb-0">
+                        <a
+                          class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                          :class="isExactActive && '!text-indigo-500'"
+                          :href="href"
+                          @click="navigate"
+                        >
+                          <span
+                            class="text-sm font-medium md:opacity-0 md:sidebar-expanded:opacity-100 lg:opacity-100 duration-200"
+                            >Pagos</span
+                          >
+                        </a>
+                      </li>
+                    </NuxtLink>
+                 
+                    <NuxtLink
+                      to="/comercial/recargos"
+                      custom
+                      v-slot="{ href, navigate, isExactActive }"
+                    >
+                      <li class="mb-1 last:mb-0">
+                        <a
+                          class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                          :class="isExactActive && '!text-indigo-500'"
+                          :href="href"
+                          @click="navigate"
+                        >
+                          <span
+                            class="text-sm font-medium md:opacity-0 md:sidebar-expanded:opacity-100 lg:opacity-100 duration-200"
+                            >Recargos</span
+                          >
+                        </a>
+                      </li>
+                    </NuxtLink>
+
+                   
                   </ul>
                 </div>
               </SidebarLinkGroup>
@@ -419,7 +461,44 @@
                     class="pl-9 mt-1"
                     :class="!parentLink.expanded && 'hidden'"
                   >
-                    <!-- TODO             -->
+                  <NuxtLink
+                      to="/comercial/reservas"
+                      custom
+                      v-slot="{ href, navigate, isExactActive }"
+                    >
+                      <li class="mb-1 last:mb-0">
+                        <a
+                          class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                          :class="isExactActive && '!text-indigo-500'"
+                          :href="href"
+                          @click="navigate"
+                        >
+                          <span
+                            class="text-sm font-medium md:opacity-0 md:sidebar-expanded:opacity-100 lg:opacity-100 duration-200"
+                            >Reservas</span
+                          >
+                        </a>
+                      </li>
+                    </NuxtLink>
+                    <NuxtLink
+                      to="/comercial/devoluciones"
+                      custom
+                      v-slot="{ href, navigate, isExactActive }"
+                    >
+                      <li class="mb-1 last:mb-0">
+                        <a
+                          class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                          :class="isExactActive && '!text-indigo-500'"
+                          :href="href"
+                          @click="navigate"
+                        >
+                          <span
+                            class="text-sm font-medium md:opacity-0 md:sidebar-expanded:opacity-100 lg:opacity-100 duration-200"
+                            >Devoluciones</span
+                          >
+                        </a>
+                      </li>
+                    </NuxtLink>
                   </ul>
                 </div>
               </SidebarLinkGroup>
