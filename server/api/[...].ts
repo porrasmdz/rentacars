@@ -4,6 +4,8 @@ import * as inspectorCtrl from '~~/server/controller/inspector';
 import * as pagoCtrl from '~~/server/controller/pago';
 import * as reservaCtrl from '~~/server/controller/reserva';
 import * as recargoCtrl from '~~/server/controller/recargo';
+import * as devolucionCtrl from '~~/server/controller/devolucion';
+import * as empresaCtrl from '~~/server/controller/empresa';
 
 const router = createRouter();
 
@@ -38,5 +40,17 @@ router.post('/recargo', defineEventHandler(recargoCtrl.create));
 router.get('/recargo/:id_recargo', defineEventHandler(recargoCtrl.detail));
 router.put('/recargo/:id_recargo', defineEventHandler(recargoCtrl.update));
 router.delete('/recargo/:id_recargo', defineEventHandler(recargoCtrl.remove));
+
+router.get('/devolucion', defineEventHandler(devolucionCtrl.read));
+router.post('/devolucion', defineEventHandler(devolucionCtrl.create));
+router.get('/devolucion/:id_devolucion', defineEventHandler(devolucionCtrl.detail));
+router.put('/devolucion/:id_devolucion', defineEventHandler(devolucionCtrl.update));
+router.delete('/devolucion/:id_devolucion', defineEventHandler(devolucionCtrl.remove));
+
+router.get('/empresa', defineEventHandler(empresaCtrl.read));
+router.post('/empresa', defineEventHandler(empresaCtrl.create));
+router.get('/empresa/:id_empresa', defineEventHandler(empresaCtrl.detail));
+router.put('/empresa/:id_empresa', defineEventHandler(empresaCtrl.update));
+router.delete('/empresa/:id_empresa', defineEventHandler(empresaCtrl.remove));
 
 export default useBase('/api',router.handler);

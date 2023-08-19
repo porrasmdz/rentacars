@@ -2,7 +2,7 @@
   <div class="bg-white shadow-lg rounded-sm border border-slate-200 relative">
     <header class="px-5 py-4">
       <h2 class="font-semibold text-slate-800">
-        Total Reservas <span class="text-slate-400 font-medium">{{ total }}</span>
+        Total Devoluciones <span class="text-slate-400 font-medium">{{ total }}</span>
       </h2>
     </header>
     <div>
@@ -15,22 +15,26 @@
           >
             <tr>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold">Cliente</div>
+                <div class="font-semibold">Vehiculo</div>
+              </th>
+              
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                <div class="font-semibold">Estado</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold">Inspector</div>
+                <div class="font-semibold">Hora Agendada</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold">Vehículo</div>
+                <div class="font-semibold">Hora Devuelta Real</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold">Fecha Recogida</div>
+                <div class="font-semibold">Fecha Agendada</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold">Hora Recogida</div>
+                <div class="font-semibold">Fecha Devuelta Real</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold">Ubicación</div>
+                <div class="font-semibold">Lugar Devolucion</div>
               </th>
               
              
@@ -41,10 +45,10 @@
           </thead>
           <!-- Table body -->
           <tbody class="text-sm divide-y divide-slate-200">
-            <ReservationItem
-              v-for="reservation in data"
-              :key="reservation.id_Reserva"
-              :reservation="reservation"
+            <DevolutionItem
+              v-for="devolution in data"
+              :key="devolution.id_Devolucion"
+              :devolution="devolution"
             />
           </tbody>
         </table>
@@ -55,7 +59,7 @@
   
   <script setup>
 import { ref, watch } from "vue";
-import ReservationItem from "./ReservationItem.vue";
+import DevolutionItem from "./DevolutionItem.vue";
 const props = defineProps(['data',  'total']);
 const emit = defineEmits(["change-selection"]);
 

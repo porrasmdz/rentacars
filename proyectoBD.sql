@@ -339,16 +339,16 @@ INSERT INTO Devolucion (id_Devolucion, No_Matricula, Estado_devolucion, Hora_dev
 ('1112131415', 'YZA012', 1, '17:15:00', '17:45:00', '2023-08-12', '2023-08-12', 'Riobamba, Hotel Montecarlo');
 
 -- Agrega tabla vihiculo
-alter table vehiculo add imageURLVe varchar(100) default null;
+alter table vehiculo add imageURLVe varchar(300) default null;
 
 -- Agrega tabla empresaAlquiler
-alter table empresaalquiler add imageURLLogo varchar(100) default null;
+alter table empresaalquiler add imageURLLogo varchar(300) default null;
 
 -- Agrega tabla cliente
-alter table cliente add imageURLFoto varchar(100) default null;
+alter table cliente add imageURLFoto varchar(300) default null;
 
 -- Agrega tabla inspector
-alter table inspector add imageURLFotoin varchar(100) default null;
+alter table inspector add imageURLFotoin varchar(300) default null;
 
 -- todos los id_algo que no son tablas intermedias tengan propiedad autoincrement not null unique
 alter table cliente modify column id_Cliente int auto_increment not null unique ;
