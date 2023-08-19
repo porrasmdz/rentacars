@@ -79,22 +79,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`EmpresaAlquiler` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `mydb`.`Reserva`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Reserva` (
-  `id_Reserva` INT AUTO_INCREMENT NOT NULL,
-  `Id_Cliente` INT NULL,
-  `Id_Inspector` INT NULL,
-  `Fecha_Inicio` DATE NULL,
-  `Hora_reserva` TIME NULL,
-  `ubicacion_recogida` VARCHAR(50) NULL,
-  PRIMARY KEY (`id_Reserva`),
-  FOREIGN KEY (`Id_Cliente`) REFERENCES `mydb`.`Cliente` (`id_Cliente`),
-  FOREIGN KEY (`Id_Inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`)
-) 
-ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Vehiculo`
@@ -107,6 +91,24 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Vehiculo` (
   `Precio_alquiler` FLOAT NULL,
   `Capacidad` INT NULL,
   PRIMARY KEY (`No_Matricula`)
+) 
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Reserva`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Reserva` (
+  `id_Reserva` INT AUTO_INCREMENT NOT NULL,
+  `Id_Cliente` INT NULL,
+  `Id_Inspector` INT NULL,
+  `No_Matricula` VARCHAR(7) NULL,
+  `Fecha_Inicio` DATE NULL,
+  `Hora_reserva` TIME NULL,
+  `ubicacion_recogida` VARCHAR(50) NULL,
+  PRIMARY KEY (`id_Reserva`),
+  FOREIGN KEY (`Id_Cliente`) REFERENCES `mydb`.`Cliente` (`id_Cliente`),
+  FOREIGN KEY (`Id_Inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`)
+  FOREIGN KEY (`No_Matricula`) REFERENCES `mydb`.`Vehiculo` (`No_Matricula`)
 ) 
 ENGINE = InnoDB;
 
@@ -410,20 +412,6 @@ INSERT INTO EmpresaAlquiler (RUC, Nombre) VALUES
 ('1000000008', 'Alquilautos S.A.'),
 ('2000000009', 'Velocar Rentacar'),
 ('3500000010', 'RentacarPremium Cía. Ltda.');
-
--- Registros Reservas
-INSERT INTO Reserva (Id_Cliente, Id_Inspector, Fecha_Inicio, Hora_reserva, ubicacion_recogida) VALUES
-(4, 4, '2023-08-01', '08:00:00', 'Quito, Aeropuerto Internacional Mariscal Sucre'),
-(3, 4, '2023-08-15', '09:30:00', 'Guayaquil, Centro Ciudad'),
-(1, 4, '2023-08-02', '10:45:00', 'Cuenca, Terminal de Autobuses'),
-(5, 4, '2023-08-20', '12:30:00', 'Riobamba, Terminal de Autobuses'),
-(7, 4, '2023-08-03', '14:00:00', 'Manta, Aeropuerto Internacional Eloy Alfaro'),
-( 1, 4, '2023-08-25', '16:30:00', 'Guayaquil, Hotel Sheraton'),
-(8, 4, '2023-08-04', '08:15:00', 'Quito, Aeropuerto Internacional Mariscal Sucre'),
-(2, 4, '2023-08-10', '11:30:00', 'Guayaquil, Centro Ciudad'),
-(5, 4, '2023-08-05', '13:00:00', 'Cuenca, Terminal de Autobuses'),
-(1, 4, '2023-08-12', '17:45:00', 'Riobamba, Hotel Montecarlo');
-
 -- Registros Vehiculos
 INSERT INTO Vehiculo (No_Matricula, RUC, Marca, Disponibilidad, Precio_alquiler, Capacidad) VALUES
 ('ABC123', '3000000001', 'Toyota', 1, 50.00, 4),
@@ -436,6 +424,21 @@ INSERT INTO Vehiculo (No_Matricula, RUC, Marca, Disponibilidad, Precio_alquiler,
 ('STU890', '1000000008', 'Kia', 1, 47.00, 5),
 ('VWX901', '2000000009', 'Mazda', 1, 55.00, 6),
 ('YZA012', '3500000010', 'Suzuki', 1, 49.00, 5);
+
+
+-- Registros Reservas
+INSERT INTO Reserva (Id_Cliente, Id_Inspector, No_Matricula, Fecha_Inicio, Hora_reserva, ubicacion_recogida) VALUES
+(4, 4, 'ABC123', '2023-08-01', '08:00:00', 'Quito, Aeropuerto Internacional Mariscal Sucre'),
+(3, 4, 'XYZ789','2023-08-15', '09:30:00', 'Guayaquil, Centro Ciudad'),
+(1, 4, 'YZA012','2023-08-02', '10:45:00', 'Cuenca, Terminal de Autobuses'),
+(5, 4, 'JKL234','2023-08-20', '12:30:00', 'Riobamba, Terminal de Autobuses'),
+(7, 4, 'MNO345','2023-08-03', '14:00:00', 'Manta, Aeropuerto Internacional Eloy Alfaro'),
+( 1, 4, 'XYZ789','2023-08-25', '16:30:00', 'Guayaquil, Hotel Sheraton'),
+(8, 4, 'DEF456','2023-08-04', '08:15:00', 'Quito, Aeropuerto Internacional Mariscal Sucre'),
+(2, 4, 'DEF456','2023-08-10', '11:30:00', 'Guayaquil, Centro Ciudad'),
+(5, 4, 'VWX901','2023-08-05', '13:00:00', 'Cuenca, Terminal de Autobuses'),
+(1, 4, 'XYZ789','2023-08-12', '17:45:00', 'Riobamba, Hotel Montecarlo');
+
 
 -- Registros Recargo
 INSERT INTO Recargo (Id_pago, Fecha, Cobertura_Seguro, Monto, Razon) VALUES
