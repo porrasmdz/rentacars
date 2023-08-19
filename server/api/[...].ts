@@ -6,6 +6,7 @@ import * as reservaCtrl from '~~/server/controller/reserva';
 import * as recargoCtrl from '~~/server/controller/recargo';
 import * as devolucionCtrl from '~~/server/controller/devolucion';
 import * as empresaCtrl from '~~/server/controller/empresa';
+import * as vehiculoCtrl from '~~/server/controller/vehiculo';
 
 const router = createRouter();
 
@@ -52,5 +53,11 @@ router.post('/empresa', defineEventHandler(empresaCtrl.create));
 router.get('/empresa/:id_empresa', defineEventHandler(empresaCtrl.detail));
 router.put('/empresa/:id_empresa', defineEventHandler(empresaCtrl.update));
 router.delete('/empresa/:id_empresa', defineEventHandler(empresaCtrl.remove));
+
+router.get('/vehiculo', defineEventHandler(vehiculoCtrl.read));
+router.post('/vehiculo', defineEventHandler(vehiculoCtrl.create));
+router.get('/vehiculo/:id_vehiculo', defineEventHandler(vehiculoCtrl.detail));
+router.put('/vehiculo/:id_vehiculo', defineEventHandler(vehiculoCtrl.update));
+router.delete('/vehiculo/:id_vehiculo', defineEventHandler(vehiculoCtrl.remove));
 
 export default useBase('/api',router.handler);
