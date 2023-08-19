@@ -1,4 +1,4 @@
-import { mysql } from 'mysql2/promise';
+import  mysql  from 'mysql2/promise';
 
 interface Options {
   query: string,
@@ -6,7 +6,7 @@ interface Options {
 }
 
 const pool = mysql.createPool({
-    host: 'localhost',
+    host: 'server1.shopoly.store',
     
     user: 'ITSO_root',
     password: 'Rootroot123',

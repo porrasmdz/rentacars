@@ -69,15 +69,15 @@ export const update = async (evt: H3Event) => {
     const result = await clienteModel.update(
       evt.context.params?.id_cliente as string,
       {
-        id_Cliente: body.id_cliente,
         Nombre: body.nombre,
         Apellido: body.apellido,
-        
+         
         Fecha_Nacimiento: body.fecha_nacim,
         Email: body.email,
         Celular: body.celular,
         Edad: body.edad,
         Licencia: body.licencia,
+        id_Inspector: body.id_Inspector
       }
     );
     return {

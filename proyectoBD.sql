@@ -8,20 +8,20 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema ITSO_mydb
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema ITSO_mydb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `ITSO_mydb` DEFAULT CHARACTER SET utf8 ;
+USE `ITSO_mydb` ;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Inspector`
+-- Table `ITSO_mydb`.`Inspector`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Inspector` (
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Inspector` (
   `id_Inspector` INT AUTO_INCREMENT NOT NULL,
   `Nombre` VARCHAR(20) NULL,
   `Email` VARCHAR(50) NULL,
@@ -30,9 +30,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Inspector` (
 ) 
 ENGINE = InnoDB;
 -- -----------------------------------------------------
--- Table `mydb`.`Cliente`
+-- Table `ITSO_mydb`.`Cliente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Cliente` (
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Cliente` (
   `id_Cliente` INT AUTO_INCREMENT NOT NULL,
   `Nombre` VARCHAR(20) NULL,
   `Apellido` VARCHAR(20) NULL,
@@ -43,15 +43,15 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Cliente` (
   `Licencia` TINYINT NULL,
   `id_Inspector` INT NULL,
   PRIMARY KEY (`id_Cliente`),
-  FOREIGN KEY (`id_inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`) ON DELETE SET NULL
+  FOREIGN KEY (`id_inspector`) REFERENCES `ITSO_mydb`.`Inspector` (`id_Inspector`) ON DELETE SET NULL
   )
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Pago`
+-- Table `ITSO_mydb`.`Pago`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Pago` (
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Pago` (
   `Id_Pago` INT AUTO_INCREMENT NOT NULL,
   `Id_Cliente` INT NULL,
   `Monto` FLOAT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Pago` (
   `Plazo` DATE NULL,
   `Forma_pago` VARCHAR(20) NULL,
   PRIMARY KEY (`Id_Pago`),
-  FOREIGN KEY (`Id_Cliente`) REFERENCES `mydb`.`Cliente` (`id_Cliente`) ON DELETE SET NULL
+  FOREIGN KEY (`Id_Cliente`) REFERENCES `ITSO_mydb`.`Cliente` (`id_Cliente`) ON DELETE SET NULL
 ) 
 ENGINE = InnoDB;
 
@@ -69,9 +69,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`EmpresaAlquiler`
+-- Table `ITSO_mydb`.`EmpresaAlquiler`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`EmpresaAlquiler` (
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`EmpresaAlquiler` (
   `RUC` VARCHAR(10) NOT NULL,
   `Nombre` VARCHAR(50) NULL,
   PRIMARY KEY (`RUC`)
@@ -81,9 +81,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Vehiculo`
+-- Table `ITSO_mydb`.`Vehiculo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Vehiculo` (
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Vehiculo` (
   `No_Matricula` VARCHAR(7) NOT NULL,
   `RUC` VARCHAR(10) NULL,
   `Marca` VARCHAR(20) NULL,
@@ -95,9 +95,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Vehiculo` (
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `mydb`.`Reserva`
+-- Table `ITSO_mydb`.`Reserva`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Reserva` (
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Reserva` (
   `id_Reserva` INT AUTO_INCREMENT NOT NULL,
   `Id_Cliente` INT NULL,
   `Id_Inspector` INT NULL,
@@ -106,18 +106,18 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Reserva` (
   `Hora_reserva` TIME NULL,
   `ubicacion_recogida` VARCHAR(50) NULL,
   PRIMARY KEY (`id_Reserva`),
-  FOREIGN KEY (`Id_Cliente`) REFERENCES `mydb`.`Cliente` (`id_Cliente`) ON DELETE SET NULL,
-  FOREIGN KEY (`Id_Inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`) ON DELETE SET NULL,
-  FOREIGN KEY (`No_Matricula`) REFERENCES `mydb`.`Vehiculo` (`No_Matricula`) ON DELETE SET NULL
+  FOREIGN KEY (`Id_Cliente`) REFERENCES `ITSO_mydb`.`Cliente` (`id_Cliente`) ON DELETE SET NULL,
+  FOREIGN KEY (`Id_Inspector`) REFERENCES `ITSO_mydb`.`Inspector` (`id_Inspector`) ON DELETE SET NULL,
+  FOREIGN KEY (`No_Matricula`) REFERENCES `ITSO_mydb`.`Vehiculo` (`No_Matricula`) ON DELETE SET NULL
 ) 
 ENGINE = InnoDB;
 
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Recargo`
+-- Table `ITSO_mydb`.`Recargo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Recargo` (
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Recargo` (
   `id_Recargo` INT AUTO_INCREMENT NOT NULL,
   `Id_pago` INT NULL,
   `Fecha` DATE NULL,
@@ -125,16 +125,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Recargo` (
   `Monto` FLOAT NULL,
   `Razon` VARCHAR(100) NULL,
   PRIMARY KEY (`id_Recargo`),
-  FOREIGN KEY (`id_Pago`) REFERENCES `mydb`.`Pago` (`Id_Pago`) ON DELETE CASCADE,
+  FOREIGN KEY (`id_Pago`) REFERENCES `ITSO_mydb`.`Pago` (`Id_Pago`) ON DELETE CASCADE,
   UNIQUE(`Id_Pago`)
 ) 
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Devolucion`
+-- Table `ITSO_mydb`.`Devolucion`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Devolucion` (
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Devolucion` (
   `id_Devolucion` INT AUTO_INCREMENT NOT NULL,
   `No_Matricula` VARCHAR(7) NULL,
   `Estado_devolucion` TINYINT NULL,
@@ -149,66 +149,60 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Realizar`
+-- Table `ITSO_mydb`.`Realizar`
 -- Cliente_Devolucion
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Realizar` (
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Realizar` (
   `id_Cliente` INT NOT NULL,
   `id_Devolucion` INT NOT NULL,
   PRIMARY KEY (`id_Cliente`, `id_Devolucion`),
-  FOREIGN KEY (`id_Devolucion`) REFERENCES `mydb`.`Devolucion` (`id_Devolucion`)
+  FOREIGN KEY (`id_Devolucion`) REFERENCES `ITSO_mydb`.`Devolucion` (`id_Devolucion`)
 ) 
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Realizado`
+-- Table `ITSO_mydb`.`Realizado`
 -- Pago_Vehiculo
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Realizado` (
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Realizado` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `No_Matricula` VARCHAR(7) NOT NULL,
   `Id_Pago` INT NULL,
   `finished_payment` BOOL DEFAULT FALSE,
   PRIMARY KEY (`ID`,`No_Matricula`),
-  FOREIGN KEY (`No_Matricula`) REFERENCES `mydb`.`Vehiculo` (`No_Matricula`) ON DELETE CASCADE,
-  FOREIGN KEY (`id_Pago`) REFERENCES `mydb`.`Pago` (`Id_Pago`) ON DELETE SET NULL
+  FOREIGN KEY (`No_Matricula`) REFERENCES `ITSO_mydb`.`Vehiculo` (`No_Matricula`) ON DELETE CASCADE,
+  FOREIGN KEY (`id_Pago`) REFERENCES `ITSO_mydb`.`Pago` (`Id_Pago`) ON DELETE SET NULL
 ) 
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Alquilar`
+-- Table `ITSO_mydb`.`Alquilar`
 -- Inspector_EmpresaAlquiler
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Alquilar` (
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Alquilar` (
   `RUC` VARCHAR(10) NOT NULL,
   `id_Inspector` INT NOT NULL,
   PRIMARY KEY (`RUC`,`id_Inspector`),
-  FOREIGN KEY (`RUC`) REFERENCES `mydb`.`EmpresaAlquiler` (`RUC`),
-  FOREIGN KEY (`id_Inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`)
+  FOREIGN KEY (`RUC`) REFERENCES `ITSO_mydb`.`EmpresaAlquiler` (`RUC`),
+  FOREIGN KEY (`id_Inspector`) REFERENCES `ITSO_mydb`.`Inspector` (`id_Inspector`)
 ) 
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Tiene`
+-- Table `ITSO_mydb`.`Tiene`
 -- Devolucion_Vehiculo
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Tiene` (
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Tiene` (
   `id_Devolucion` INT NOT NULL,
   `No_Matricula` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`id_Devolucion`,`No_Matricula`),
-  FOREIGN KEY (`id_Devolucion`) REFERENCES `mydb`.`Devolucion` (`id_Devolucion`),
-  FOREIGN KEY (`No_Matricula`) REFERENCES `mydb`.`Vehiculo` (`No_Matricula`)
+  FOREIGN KEY (`id_Devolucion`) REFERENCES `ITSO_mydb`.`Devolucion` (`id_Devolucion`),
+  FOREIGN KEY (`No_Matricula`) REFERENCES `ITSO_mydb`.`Vehiculo` (`No_Matricula`)
 ) 
 ENGINE = InnoDB;
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
-USE mydb;
 
 -- -------------------------------------------------
 -- Triggers
@@ -233,114 +227,6 @@ BEGIN
 END;
 //
 DELIMITER ;
-
--- Registros Inspectores
-INSERT INTO Inspector (id_Inspector, Nombre, Email, Celular) VALUES
-('2009012345', 'Javier', 'javier.inspector@gmail.com', '0998765432'),
-('3334056789', 'Carolina', 'carolina.inspector@hotmail.com', '0987654321'),
-('4500009876', 'Andres', 'andres.inspector@yahoo.com', '0998765432'),
-('5009871234', 'Patricia', 'patricia.inspector@outlook.com', '0987654321'),
-('6009012378', 'Fernando', 'fernando.inspector@gmail.com', '0998765432'),
-('7001122334', 'Diana', 'diana.inspector@hotmail.com', '0987654321'),
-('8034567890', 'Oscar', 'oscar.inspector@yahoo.com', '0998765432'),
-('9002345678', 'Camila', 'camila.inspector@gmail.com', '0987654321'),
-('1004567890', 'Carlos', 'carlos.inspector@outlook.com', '0998765432'),
-('1110009999', 'Sara', 'sara.inspector@yahoo.com', '0987654321');
-
--- ---------------
--- Registros Clientes
-INSERT INTO Cliente (id_Cliente, Nombre, Apellido, Fecha_Nacimiento, Email, Celular, Edad, Licencia,Id_Inspector) VALUES
-('1295762108', 'Juan', 'Perez', '1985-05-15', 'juan.perez@gmail.com', '0991234567', 36, 1,'2009012345'),
-('2108945673', 'Maria', 'Gonzalez', '1990-09-22', 'maria.gonzalez@hotmail.com', '0987654321', 31, 1,'3334056789'),
-('3067509324', 'Pedro', 'Ramirez', '1988-11-10', 'pedro.ramirez@yahoo.com', '0998765432', 33, 1,'4500009876'),
-('4790034562', 'Ana', 'Lopez', '1995-03-03', 'ana.lopez@outlook.com', '0987654321', 26, 1,'5009871234'),
-('5501928374', 'Carlos', 'Martinez', '1982-07-07', 'carlos.martinez@gmail.com', '0998765432', 39, 1,'6009012378'),
-('6681954321', 'Laura', 'Sanchez', '1992-12-18', 'laura.sanchez@hotmail.com', '0987654321', 29, 1,'7001122334'),
-('7304859012', 'Luis', 'Hernandez', '1987-02-25', 'luis.hernandez@yahoo.com', '0998765432', 34, 1,'8034567890'),
-('8103456789', 'Paula', 'Torres', '1998-06-14', 'paula.torres@gmail.com', '0987654321', 23, 1,'9002345678'),
-('9001234567', 'Roberto', 'Gomez', '1980-09-30', 'roberto.gomez@outlook.com', '0998765432', 41, 1,'1004567890'),
-('1007890123', 'Sofia', 'Diaz', '1993-04-28', 'sofia.diaz@yahoo.com', '0987654321', 28, 1,'1110009999');
-
--- Registros Pagos
-INSERT INTO Pago (Id_Pago, Id_Cliente, Monto, Fecha, conf_pago, Plazo, Forma_pago) VALUES
-('1675291048', '1295762108', 100.00, '2023-07-01', 1, '2023-08-01', 'Tarjeta'),
-('2251937602', '1295762108', 150.50, '2023-07-15', 1, '2023-08-15', 'Efectivo'),
-('3168991220', '2108945673', 200.00, '2023-07-02', 1, '2023-08-02', 'Tarjeta'),
-('4167894562', '2108945673', 120.75, '2023-07-20', 1, '2023-08-20', 'Transferencia'),
-('5523345678', '3067509324', 80.25, '2023-07-03', 1, '2023-08-03', 'Tarjeta'),
-('6678905432', '3067509324', 300.00, '2023-07-25', 1, '2023-08-25', 'Efectivo'),
-('7300909890', '4790034562', 180.50, '2023-07-04', 1, '2023-08-04', 'Efectivo'),
-('8812345670', '4790034562', 90.00, '2023-07-10', 1, '2023-08-10', 'Tarjeta'),
-('9000234567', '5501928374', 220.75, '2023-07-05', 1, '2023-08-05', 'Transferencia'),
-('1059000012', '5501928374', 150.25, '2023-07-12', 1, '2023-08-12', 'Tarjeta');
-
-
--- Registros Empresa Alquiler
-INSERT INTO EmpresaAlquiler (RUC, Nombre) VALUES
-('3000000001', 'Alquiler de Autos Ecuador'),
-('4000000002', 'Autos Rentables Cía. Ltda.'),
-('5000000003', 'Carros Express S.A.'),
-('6000000004', 'Rentacar Andino C.A.'),
-('7000000005', 'CarrosVeloz Rentacar'),
-('8000000006', 'RentautoEC Alquiler de Autos'),
-('9000000007', 'Ecuarent Car Rental'),
-('1000000008', 'Alquilautos S.A.'),
-('2000000009', 'Velocar Rentacar'),
-('3500000010', 'RentacarPremium Cía. Ltda.');
-
--- Registros Reservas
-INSERT INTO Reserva (id_Reserva, Id_Cliente, Id_Inspector, Fecha_Inicio, Hora_reserva, ubicacion_recogida) VALUES
-('5678912345', '1295762108', '2009012345', '2023-08-01', '08:00:00', 'Quito, Aeropuerto Internacional Mariscal Sucre'),
-('6789012345', '1295762108', '3334056789', '2023-08-15', '09:30:00', 'Guayaquil, Centro Ciudad'),
-('7876543210', '2108945673', '4500009876', '2023-08-02', '10:45:00', 'Cuenca, Terminal de Autobuses'),
-('8901234567', '2108945673', '5009871234', '2023-08-20', '12:30:00', 'Riobamba, Terminal de Autobuses'),
-('9012345678', '3067509324', '6009012378', '2023-08-03', '14:00:00', 'Manta, Aeropuerto Internacional Eloy Alfaro'),
-('1000004567', '3067509324', '7001122334', '2023-08-25', '16:30:00', 'Guayaquil, Hotel Sheraton'),
-('1010101010', '4790034562', '8034567890', '2023-08-04', '08:15:00', 'Quito, Aeropuerto Internacional Mariscal Sucre'),
-('1111111111', '4790034562', '9002345678', '2023-08-10', '11:30:00', 'Guayaquil, Centro Ciudad'),
-('1212121212', '5501928374', '1004567890', '2023-08-05', '13:00:00', 'Cuenca, Terminal de Autobuses'),
-('1313131313', '5501928374', '1110009999', '2023-08-12', '17:45:00', 'Riobamba, Hotel Montecarlo');
-
--- Registros Vehiculos
-INSERT INTO Vehiculo (No_Matricula, RUC, Marca, Disponibilidad, Precio_alquiler, Capacidad) VALUES
-('ABC123', '3000000001', 'Toyota', 1, 50.00, 4),
-('XYZ789', '4000000002', 'Nissan', 1, 45.00, 5),
-('DEF456', '5000000003', 'Chevrolet', 1, 60.00, 7),
-('GHI987', '6000000004', 'Ford', 1, 55.00, 4),
-('JKL234', '7000000005', 'Honda', 1, 48.00, 5),
-('MNO345', '8000000006', 'Hyundai', 1, 52.00, 6),
-('PQR567', '9000000007', 'Volkswagen', 1, 50.00, 4),
-('STU890', '1000000008', 'Kia', 1, 47.00, 5),
-('VWX901', '2000000009', 'Mazda', 1, 55.00, 6),
-('YZA012', '3500000010', 'Suzuki', 1, 49.00, 5);
-
--- Registros Recargo
-INSERT INTO Recargo (id_Recargo, Id_pago, Fecha, Cobertura_Seguro, Monto, Razon) VALUES
-('1000000001', '1675291048', '2023-07-01', 'Seguro básico', 10.00, 'Cobertura adicional'),
-('1000000002', '2251937602', '2023-07-15', 'Seguro completo', 15.50, 'Daño en el vehículo'),
-('1000000003', '3168991220', '2023-07-02', 'Seguro básico', 20.00, 'Demora en la entrega'),
-('1000000004', '4167894562', '2023-07-20', 'Seguro completo', 12.75, 'Daño en el parabrisas'),
-('1000000005', '5523345678', '2023-07-03', 'Seguro básico', 8.25, 'Demora en la devolución'),
-('1000000006', '6678905432', '2023-07-25', 'Seguro completo', 30.00, 'Choque delantero'),
-('1000000007', '7300909890', '2023-07-04', 'Seguro básico', 18.50, 'Choque trasero'),
-('1000000008', '8812345670', '2023-07-10', 'Seguro completo', 9.00, 'Rayón en la puerta derecha'),
-('1000000009', '9000234567', '2023-07-05', 'Seguro básico', 22.75, 'Demora en la entrega'),
-('1000000010', '1059000012', '2023-07-12', 'Seguro completo', 15.25, 'Daño en el retrovisor');
-
-
--- Registros Devoluciones
-INSERT INTO Devolucion (id_Devolucion, No_Matricula, Estado_devolucion, Hora_devolucion, Hora_devolucion_real, Fecha_devolucion, Fecha_devolucion_real, Lugar_devolucion) VALUES
-('2345678901', 'ABC123', 1, '17:00:00', '17:30:00', '2023-08-01', '2023-08-01', 'Quito, Aeropuerto Internacional Mariscal Sucre'),
-('3456789012', 'XYZ789', 1, '18:30:00', '19:00:00', '2023-08-15', '2023-08-15', 'Guayaquil, Centro Ciudad'),
-('4567890123', 'DEF456', 1, '15:45:00', '16:00:00', '2023-08-02', '2023-08-02', 'Cuenca, Terminal de Autobuses'),
-('5678901234', 'GHI987', 1, '16:30:00', '17:00:00', '2023-08-20', '2023-08-20', 'Riobamba, Terminal de Autobuses'),
-('6789012345', 'JKL234', 1, '14:30:00', '15:00:00', '2023-08-03', '2023-08-03', 'Manta, Aeropuerto Internacional Eloy Alfaro'),
-('7890123456', 'MNO345', 1, '16:00:00', '16:30:00', '2023-08-25', '2023-08-25', 'Guayaquil, Hotel Sheraton'),
-('8901234567', 'PQR567', 1, '10:00:00', '10:30:00', '2023-08-04', '2023-08-04', 'Quito, Aeropuerto Internacional Mariscal Sucre'),
-('9012345678', 'STU890', 1, '12:45:00', '13:15:00', '2023-08-10', '2023-08-10', 'Guayaquil, Centro Ciudad'),
-('1011121314', 'VWX901', 1, '19:30:00', '20:00:00', '2023-08-05', '2023-08-05', 'Cuenca, Terminal de Autobuses'),
-('1112131415', 'YZA012', 1, '17:15:00', '17:45:00', '2023-08-12', '2023-08-12', 'Riobamba, Hotel Montecarlo');
-
 -- Agrega tabla vihiculo
 alter table vehiculo add imageURLVe varchar(300) default null;
 
@@ -352,16 +238,6 @@ alter table cliente add imageURLFoto varchar(300) default null;
 
 -- Agrega tabla inspector
 alter table inspector add imageURLFotoin varchar(300) default null ;
-
--- todos los id_algo que no son tablas intermedias tengan propiedad autoincrement not null unique
-alter table cliente modify column id_Cliente int auto_increment not null unique ;
-alter table devolucion modify column id_Devolucion int auto_increment not null unique;
-alter table empresaalquiler modify column RUC varchar(10) not null unique;
-alter table inspector modify column id_Inspector int auto_increment not null unique;
-alter table pago modify column id_Pago int auto_increment not null unique;
-alter table recargo modify column id_Recargo int auto_increment not null unique;
-alter table reserva modify column id_Reserva int auto_increment not null unique;
-alter table vehiculo modify column No_Matricula varchar(7) not null unique;
 
 -- Registros Inspectores
 INSERT INTO Inspector (Nombre, Email, Celular) VALUES
