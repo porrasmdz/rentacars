@@ -39,6 +39,7 @@
           <!-- Table body -->
           <tbody class="text-sm divide-y divide-slate-200">
             <User
+              @loading-change="$emit('loading-change')"
               v-for="customer in data"
               :key="customer.id_cliente"
               :customer="customer"

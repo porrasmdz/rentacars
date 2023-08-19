@@ -46,6 +46,7 @@
           <!-- Table body -->
           <tbody class="text-sm divide-y divide-slate-200">
             <DevolutionItem
+              @loading-change="$emit('loading-change')"
               v-for="devolution in data"
               :key="devolution.id_Devolucion"
               :devolution="devolution"

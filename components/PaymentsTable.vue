@@ -39,6 +39,7 @@
           <!-- Table body -->
           <tbody class="text-sm divide-y divide-slate-200">
             <PaymentItem
+              @loading-change="$emit('loading-change')"
               v-for="payment in data"
               :key="payment.id_Pago"
               :payment="payment"
@@ -54,6 +55,6 @@
 import { ref, watch } from "vue";
 import PaymentItem from "./PaymentItem.vue";
 const props = defineProps(['data',  'total']);
-const emit = defineEmits(["change-selection"]);
+const emit = defineEmits(["loading-change"]);
 
 </script>

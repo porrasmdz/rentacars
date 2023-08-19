@@ -14,6 +14,10 @@
             class="text-xs text-justify font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200"
           >
             <tr>
+              
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                <div class="font-semibold">Auto</div>
+              </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="font-semibold">Matrícula</div>
               </th>
@@ -33,9 +37,7 @@
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="font-semibold">Capacidad</div>
               </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                <div class="font-semibold">imageURLVe</div>
-              </th>
+             
               
              
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -46,6 +48,7 @@
           <!-- Table body -->
           <tbody class="text-sm divide-y divide-slate-200">
             <VehicleItem
+             @loading-change="$emit('loading-change')"
               v-for="vehicle in data"
               :key="vehicle.id_Devolucion"
               :vehicle="vehicle"

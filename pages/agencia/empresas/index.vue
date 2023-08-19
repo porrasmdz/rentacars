@@ -36,6 +36,7 @@
       </svg>
     </div>
     <BusinessTable
+    @loading-change="fetchData()"
      :data="data"
      
      :total="totalResults"

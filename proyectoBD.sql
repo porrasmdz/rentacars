@@ -41,9 +41,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Cliente` (
   `Celular` VARCHAR(10) NULL,
   `Edad` INT NULL,
   `Licencia` TINYINT NULL,
-  `id_Inspector` INT NOT NULL,
+  `id_Inspector` INT NULL,
   PRIMARY KEY (`id_Cliente`),
-  FOREIGN KEY (`id_inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`)
+  FOREIGN KEY (`id_inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`) ON DELETE SET NULL
   )
 ENGINE = InnoDB;
 
@@ -53,14 +53,14 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Pago` (
   `Id_Pago` INT AUTO_INCREMENT NOT NULL,
-  `Id_Cliente` INT NOT NULL,
+  `Id_Cliente` INT NULL,
   `Monto` FLOAT NULL,
   `Fecha` DATE NULL,
   `conf_pago` TINYINT NULL,
   `Plazo` DATE NULL,
   `Forma_pago` VARCHAR(20) NULL,
   PRIMARY KEY (`Id_Pago`),
-  FOREIGN KEY (`Id_Cliente`) REFERENCES `mydb`.`Cliente` (`id_Cliente`)
+  FOREIGN KEY (`Id_Cliente`) REFERENCES `mydb`.`Cliente` (`id_Cliente`) ON DELETE SET NULL
 ) 
 ENGINE = InnoDB;
 
@@ -106,9 +106,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Reserva` (
   `Hora_reserva` TIME NULL,
   `ubicacion_recogida` VARCHAR(50) NULL,
   PRIMARY KEY (`id_Reserva`),
-  FOREIGN KEY (`Id_Cliente`) REFERENCES `mydb`.`Cliente` (`id_Cliente`),
-  FOREIGN KEY (`Id_Inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`)
-  FOREIGN KEY (`No_Matricula`) REFERENCES `mydb`.`Vehiculo` (`No_Matricula`)
+  FOREIGN KEY (`Id_Cliente`) REFERENCES `mydb`.`Cliente` (`id_Cliente`) ON DELETE SET NULL,
+  FOREIGN KEY (`Id_Inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`) ON DELETE SET NULL,
+  FOREIGN KEY (`No_Matricula`) REFERENCES `mydb`.`Vehiculo` (`No_Matricula`) ON DELETE SET NULL
 ) 
 ENGINE = InnoDB;
 
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Recargo` (
   `Monto` FLOAT NULL,
   `Razon` VARCHAR(100) NULL,
   PRIMARY KEY (`id_Recargo`),
-  FOREIGN KEY (`Id_pago`) REFERENCES `mydb`.`Pago` (`Id_Pago`),
+  FOREIGN KEY (`id_Pago`) REFERENCES `mydb`.`Pago` (`Id_Pago`) ON DELETE CASCADE,
   UNIQUE(`Id_Pago`)
 ) 
 ENGINE = InnoDB;
@@ -163,13 +163,16 @@ ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Realizado`
+-- Pago_Vehiculo
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Realizado` (
+  `id` INT NOT NULL AUTO_INCREMENT,
   `No_Matricula` VARCHAR(7) NOT NULL,
-  `Id_Pago` INT NOT NULL,
-  PRIMARY KEY (`No_Matricula`,`id_Pago`),
-  FOREIGN KEY (`No_Matricula`) REFERENCES `mydb`.`Vehiculo` (`No_Matricula`),
-  FOREIGN KEY (`Id_Pago`) REFERENCES `mydb`.`Pago` (`Id_Pago`)
+  `Id_Pago` INT NULL,
+  `finished_payment` BOOL DEFAULT FALSE,
+  PRIMARY KEY (`ID`,`No_Matricula`),
+  FOREIGN KEY (`No_Matricula`) REFERENCES `mydb`.`Vehiculo` (`No_Matricula`) ON DELETE CASCADE,
+  FOREIGN KEY (`id_Pago`) REFERENCES `mydb`.`Pago` (`Id_Pago`) ON DELETE SET NULL
 ) 
 ENGINE = InnoDB;
 
@@ -445,13 +448,13 @@ INSERT INTO Recargo (Id_pago, Fecha, Cobertura_Seguro, Monto, Razon) VALUES
 (1, '2023-07-01', 'Seguro básico', 10.00, 'Cobertura adicional'),
 (3,  '2023-07-15', 'Seguro completo', 15.50, 'Daño en el vehículo'),
 (2, '2023-07-02', 'Seguro básico', 20.00, 'Demora en la entrega'),
-(2, '2023-07-20', 'Seguro completo', 12.75, 'Daño en el parabrisas'),
-(2, '2023-07-03', 'Seguro básico', 8.25, 'Demora en la devolución'),
-(2, '2023-07-25', 'Seguro completo', 30.00, 'Choque delantero'),
-(2, '2023-07-04', 'Seguro básico', 18.50, 'Choque trasero'),
-(2, '2023-07-10', 'Seguro completo', 9.00, 'Rayón en la puerta derecha'),
-(2, '2023-07-05', 'Seguro básico', 22.75, 'Demora en la entrega'),
-(2, '2023-07-12', 'Seguro completo', 15.25, 'Daño en el retrovisor');
+(4, '2023-07-20', 'Seguro completo', 12.75, 'Daño en el parabrisas'),
+(5, '2023-07-03', 'Seguro básico', 8.25, 'Demora en la devolución'),
+(6, '2023-07-25', 'Seguro completo', 30.00, 'Choque delantero'),
+(7, '2023-07-04', 'Seguro básico', 18.50, 'Choque trasero'),
+(8, '2023-07-10', 'Seguro completo', 9.00, 'Rayón en la puerta derecha'),
+(9, '2023-07-05', 'Seguro básico', 22.75, 'Demora en la entrega'),
+(10, '2023-07-12', 'Seguro completo', 15.25, 'Daño en el retrovisor');
 
 
 -- Registros Devoluciones

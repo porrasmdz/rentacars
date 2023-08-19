@@ -36,6 +36,7 @@
       </svg>
     </div>
     <RechargesTable
+    @loading-change="fetchData()"
      :data="data"
      :models="'Recargos'"
      :total="totalResults"
@@ -84,6 +85,7 @@ const totalResults = ref(0);
 const errors = ref([]);
 const fetchData = async () => {
   try {
+    
     loading.value = true;
     const result = await $fetch("/api/recargo");
     data.value = result.data as RecargoModel[];

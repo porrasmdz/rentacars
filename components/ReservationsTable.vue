@@ -42,6 +42,7 @@
           <!-- Table body -->
           <tbody class="text-sm divide-y divide-slate-200">
             <ReservationItem
+              @loading-change="$emit('loading-change')"
               v-for="reservation in data"
               :key="reservation.id_Reserva"
               :reservation="reservation"

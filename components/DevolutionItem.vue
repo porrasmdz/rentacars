@@ -46,15 +46,25 @@
     </td>
     
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-      <!-- Menu button -->
-      <button class="text-slate-400 hover:text-slate-500 rounded-full">
-        <span class="sr-only">Menu</span>
-        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-          <circle cx="16" cy="16" r="2" />
-          <circle cx="10" cy="16" r="2" />
-          <circle cx="22" cy="16" r="2" />
-        </svg>
-      </button>
+      
+      <DropdownEditMenu :align="'right'" class="relative inline-flex">
+        <li>
+          <span class="cursor-pointer font-medium text-sm text-slate-600 flex py-1 px-3
+           hover:text-slate-800 hover:bg-slate-100 active:bg-slate-50">
+           Editar Devolucion
+          </span>
+        </li>
+        
+        <li @click.stop="deleteModal = true">
+          <span class="cursor-pointer font-medium text-sm text-red-600 flex py-1 px-3
+           hover:text-red-800 hover:bg-red-100 active:bg-red-50">
+           Eliminar Devolucion
+          </span>
+        </li>
+      </DropdownEditMenu>
+
+      <DangerModal :danger-modal-open="deleteModal" :message="'¿Eliminar Devolucion?'" 
+      @close-modal="deleteModal = false" :action="deleteItem" />
     </td>
   </tr>
 </template>
@@ -64,5 +74,15 @@ import { computed } from "vue";
 
 const props = defineProps(["devolution"]);
 
+const emits = defineEmits(['loading-change'])
+const deleteModal = ref(false);
+
+const deleteItem = async () => {
+    const result = await $fetch(`/api/devolucion/${props?.devolution?.id_Devolucion}`, {method: 'DELETE'})
+    .then((res)=> {
+      emits('loading-change');
+      
+    })
+}
 
 </script>

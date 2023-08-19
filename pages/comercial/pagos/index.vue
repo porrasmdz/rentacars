@@ -36,6 +36,7 @@
       </svg>
     </div>
     <PaymentsTable
+    @loading-change="fetchData()"
      :data="data"
      :models="'Pagos'"
      :total="totalResults"
@@ -83,16 +84,19 @@ const data = ref<PagoModel[]>([]);
 const totalResults = ref(0);
 const errors = ref([]);
 const fetchData = async () => {
-  try {
     loading.value = true;
-    const result = await $fetch("/api/pago");
-    data.value = result.data as PagoModel[];
-    totalResults.value = result.total;
-    loading.value = false;
-  } catch (error) {
-    loading.value = false;
-    errors.value.push(error);
-  }
+    const result = await $fetch("/api/pago")
+    .then((res)=> {
+      data.value = res.data as PagoModel[];
+      totalResults.value = res.total;
+      loading.value = false;
+    })
+    .catch((error: string) => {
+      loading.value = false;
+      errors.value.push(error);
+    });
+    
+ 
 };
 
 onMounted(() => fetchData());

@@ -39,8 +39,9 @@
           <!-- Table body -->
           <tbody class="text-sm divide-y divide-slate-200">
             <RechargeItem
+              @loading-change="$emit('loading-change')"
               v-for="recharge in data"
-              :key="recharge.id_Reserva"
+              :key="recharge.id_Recargo"
               :recharge="recharge"
             />
           </tbody>

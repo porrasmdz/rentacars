@@ -36,6 +36,7 @@
       </svg>
     </div>
     <DevolutionsTable
+      @loading-change="fetchData()"
      :data="data"
      
      :total="totalResults"

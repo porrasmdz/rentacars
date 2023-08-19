@@ -36,6 +36,7 @@
       </svg>
     </div>
     <UserTable
+     @loading-change="fetchData()"
      :data="data"
      :models="'Inspectores'"
      :total="totalResults"

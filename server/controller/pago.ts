@@ -94,10 +94,10 @@ export const remove = async (evt: H3Event) => {
       return {
         data: result,
       };
-    } catch (error) {
+    } catch (error:any) {
       throw createError({
         statusCode: 500,
-        statusMessage: "Error removing payment",
+        statusMessage: error,
       });
     }
   };

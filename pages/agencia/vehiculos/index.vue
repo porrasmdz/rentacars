@@ -36,6 +36,7 @@
       </svg>
     </div>
     <VehiclesTable
+    @loading-change="fetchData()"
      :data="data"
      
      :total="totalResults"

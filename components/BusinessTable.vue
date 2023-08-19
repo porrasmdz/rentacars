@@ -34,6 +34,7 @@
           <!-- Table body -->
           <tbody class="text-sm divide-y divide-slate-200">
             <BusinessItem
+              @loading-change="$emit('loading-change')"
               v-for="business in data"
               :key="business.RUC"
               :business="business"
