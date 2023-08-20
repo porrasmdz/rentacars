@@ -1,8 +1,8 @@
 <template>
      <ModalBasic
-      :modalOpen="createModalOpen"
-      @close-modal="createModalOpen = false; $emit('close-modal')"
-      title="Crear Nuevo Registro"
+      :modalOpen="editModalOpen"
+      @close-modal="editModalOpen = false; $emit('close-modal')"
+      :title="`Editar Registro ${id}`"
       v-bind="$attrs"
     >
       <!-- Modal content -->
@@ -15,13 +15,15 @@
           <!-- Form Start -->
           <form autocomplete="on" class="space-y-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
             
-            <div class="first:mt-2" v-for="(field, idx) in editableFields" :key="idx">
+           {{ putUrl + id }}
+            <div v-for="(field, idx) in editableFields" :key="idx">
                 
-              <label class="block text-sm font-medium mb-1 mt-2" :for="field">
+              <label class="block text-sm font-medium mb-1 mt-2" :for="`${field}-${id}`">
                 {{field}}
               </label>
              
-              <input :id="field" class="form-input w-full" type="text" v-model="newItem[field]"/>
+              <input :id="`${field}-${id}`" class="form-input w-full" type="text" v-model="newItem[field]" />
+              
             </div>
             <!-- Name Input + Label -->
             <div>
@@ -41,11 +43,11 @@
               hover:border-slate-300
               text-slate-600
             "
-            @click.stop="createModalOpen = false; $emit('close-modal')"
+            @click.stop="editModalOpen = false; $emit('close-modal')"
           >
             Cancelar
           </button>
-          <button  @click.stop="createNewItem(); createModalOpen = false; $emit('close-modal')" class="btn-sm disabled:bg-indigo-300 bg-indigo-500 hover:bg-indigo-600 text-white">
+          <button  @click.stop="createNewItem(); editModalOpen = false; $emit('close-modal')" class="btn-sm disabled:bg-indigo-300 bg-indigo-500 hover:bg-indigo-600 text-white">
             <span >Crear</span>
             
           </button>
@@ -54,23 +56,38 @@
     </ModalBasic>
 </template>
 <script setup>
-const props = defineProps(['createModalOpen','editableFields','postUrl'])
+const props = defineProps(['editModalOpen','editableFields','putUrl','item', 'id'])
 const emits = defineEmits(['close-modal', 'success'])
-const newItem = ref({
-
-});
+const newItem = ref({...props.item});
 
 const createNewItem = async() => {
-    await $fetch(props.postUrl,{
-        method: 'POST',
-        body: newItem.value
+    console.log(newItem.value)
+    await $fetch(props.putUrl+props.id,{
+        method: 'PUT',
+        body: {...newItem.value}
     }).then((res)=>{  
-        useState('success').value = "El registro ha sido creado exitosamente";
+        useState('success').value = "El registro ha sido ACTUALIZADO exitosamente";
         emits('success')})
     .catch((error)=> {
         useState('errors').value.push(error);
         console.log("ERROR",error)
     })
 }
+
+const cleanItem = () => {
+  Object.keys(newItem.value).map((key)=>{
+    if(key.includes('Fecha')){
+      const date = new Date(newItem.value[key])
+      const result = date.getFullYear() +'-' + (date.getUTCMonth()+1).toString().padStart(2,'0')+
+      '-' + (date.getUTCDate()).toString().padStart(2,'0');
+      newItem.value[key] =  result
+    }
+  })
+}
+
+onMounted(()=>{
+  cleanItem();
+})
+
 
 </script>

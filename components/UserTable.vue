@@ -57,7 +57,7 @@
 import { ref, watch } from "vue";
 import User from "./UserTableItem.vue";
 const props = defineProps(['data', 'models', 'total']);
-const emit = defineEmits(["change-selection"]);
+const emit = defineEmits(["change-selection",'loading-change']);
 
 const customers = ref([
   {
