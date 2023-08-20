@@ -58,14 +58,18 @@ export const detail = async (evt: H3Event) => {
 
 export const update = async (evt: H3Event) => {
   try {
+    
     const body = await readBody(evt);
     const result = await empresaModel.update(
       evt.context.params?.id_empresa ?? '',
       {
+        
+        RUC : body.RUC,
         Nombre : body.Nombre,
         imageURLLogo : body.imageURLLogo
       }
     );
+    console.log("RESULTADO:",result)
     return {
       data: result,
     };

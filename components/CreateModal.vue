@@ -13,10 +13,9 @@
           </div> -->
 
           <!-- Form Start -->
-          <div class="space-y-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <form autocomplete="on" class="space-y-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
             
-           {{ newItem }}
-            <div v-for="(field, idx) in editableFields" :key="idx">
+            <div class="first:mt-2" v-for="(field, idx) in editableFields" :key="idx">
                 
               <label class="block text-sm font-medium mb-1 mt-2" :for="field">
                 {{field}}
@@ -29,7 +28,7 @@
             </div>
           
             
-          </div>
+          </form>
         </div>
       </div>
       <!-- Modal footer -->
@@ -62,7 +61,6 @@ const newItem = ref({
 });
 
 const createNewItem = async() => {
-    console.log(newItem.value)
     await $fetch(props.postUrl,{
         method: 'POST',
         body: newItem.value

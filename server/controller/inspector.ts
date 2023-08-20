@@ -62,10 +62,10 @@ export const update = async (evt: H3Event) => {
       evt.context.params?.id_inspector as string,
       {
        
-        Nombre: body.nombre,
+        Nombre: body.Nombre,
         
-        Email: body.email,
-        Celular: body.celular,
+        Email: body.Email,
+        Celular: body.Celular,
         imageURLFotoin: body.imageURLFotoin
       }
     );

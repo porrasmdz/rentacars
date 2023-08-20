@@ -25,7 +25,7 @@
 
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
       <DropdownEditMenu :align="'right'" class="relative inline-flex">
-        <li>
+        <li @click.stop="editModal = true">
           <span class="cursor-pointer font-medium text-sm text-slate-600 flex py-1 px-3
            hover:text-slate-800 hover:bg-slate-100 active:bg-slate-50">
            Editar Recargo
@@ -39,7 +39,16 @@
           </span>
         </li>
       </DropdownEditMenu>
-
+      
+      <EditModal
+      :editable-fields="['Id_pago','Fecha','Cobertura_Seguro','Monto','Razon']"
+      :put-url="`/api/recargo/`"
+      :edit-modal-open="editModal"
+      :item="recharge"
+      :id="recharge?.id_Recargo"
+      @success="$emit('loading-change')"
+      @close-modal="editModal=false" 
+        />
       <DangerModal :danger-modal-open="deleteModal" :message="'¿Eliminar Recargo?'" 
       @close-modal="deleteModal = false" :action="deleteItem" />
     </td>
@@ -53,6 +62,7 @@ const props = defineProps(["recharge"]);
 
 
 const emits = defineEmits(['loading-change'])
+const editModal = ref(false);
 const deleteModal = ref(false);
 
 const deleteItem = async () => {

@@ -20,7 +20,7 @@
     
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
       <DropdownEditMenu :align="'right'" class="relative inline-flex">
-        <li>
+        <li @click.stop="editModal = true">
           <span class="cursor-pointer font-medium text-sm text-slate-600 flex py-1 px-3
            hover:text-slate-800 hover:bg-slate-100 active:bg-slate-50">
            Editar Empresa
@@ -35,6 +35,17 @@
         </li>
       </DropdownEditMenu>
 
+      
+      <EditModal
+      :editable-fields="[ 'Nombre', 'imageURLLogo']"
+      :put-url="`/api/empresa/`"
+      :edit-modal-open="editModal"
+      :item="business"
+      :id="business?.RUC"
+
+      @success="$emit('loading-change')"
+      @close-modal="editModal=false" 
+        />
       <DangerModal :danger-modal-open="deleteModal" :message="'¿Eliminar Empresa?'" 
       @close-modal="deleteModal = false" :action="deleteItem" />
     
@@ -47,6 +58,7 @@
 const props = defineProps(["business"]);
 
 const emits = defineEmits(['loading-change'])
+const editModal = ref(false);
 const deleteModal = ref(false);
 
 const deleteItem = async () => {

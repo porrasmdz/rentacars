@@ -40,7 +40,7 @@
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
      <!-- Menu button -->
      <DropdownEditMenu :align="'right'" class="relative inline-flex">
-        <li>
+        <li @click.stop="editModal = true">
           <span class="cursor-pointer font-medium text-sm text-slate-600 flex py-1 px-3
            hover:text-slate-800 hover:bg-slate-100 active:bg-slate-50">
            Editar {{ models == 'Clientes' ? 'Cliente':'Inspector' }}
@@ -56,6 +56,20 @@
         </li>
       </DropdownEditMenu>
 
+      <EditModal
+      :editable-fields=" models=='Clientes'? ['Nombre', 'Apellido', 'Fecha_Nacimiento',
+      'Email','Celular','Edad','Licencia','id_Inspector','imageURLFoto']
+      :
+      ['Nombre','Email','Celular','imageURLFotoin']
+      "
+      :put-url="models=='Clientes'? `/api/cliente/` : `/api/inspector/`"
+      :edit-modal-open="editModal"
+      :item="customer"
+      :id="customer?.id_Cliente || customer?.id_Inspector"
+
+      @success="$emit('loading-change')"
+      @close-modal="editModal=false" 
+        />
       <DangerModal :danger-modal-open="deleteModal" :message="'¿Eliminar Persona?'" 
       @close-modal="deleteModal = false" :action="deleteItem" />
     </td>
@@ -69,6 +83,7 @@ const props = defineProps(["customer", "value","models"]);
 
 
 const emits = defineEmits(['loading-change'])
+const editModal = ref(false);
 const deleteModal = ref(false);
 
 const deleteItem = async () => {

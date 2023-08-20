@@ -60,15 +60,17 @@ export const detail = async (id: string) => {
 };
 
 export const update = async (id:string, data: InspectorModel) => {
+    
+    console.log("data",data)
     await sql({
         query: `
         UPDATE Inspector
         SET
             Nombre = ?,
             Email = ? ,
-            Celular = ?,
+            Celular = ?
             
-        WHERE id_inspector = ?
+        WHERE id_Inspector = ?
         `,
         values:[data.Nombre,data.Email,data.Celular, id]
     });
