@@ -76,7 +76,7 @@ const createNewItem = async() => {
 
 const cleanItem = () => {
   Object.keys(newItem.value).map((key)=>{
-    if(key.includes('Fecha')){
+    if(key.includes('Fecha') || key.includes('Plazo')){
       const date = new Date(newItem.value[key])
       const result = date.getFullYear() +'-' + (date.getUTCMonth()+1).toString().padStart(2,'0')+
       '-' + (date.getUTCDate()).toString().padStart(2,'0');

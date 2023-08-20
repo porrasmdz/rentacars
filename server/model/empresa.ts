@@ -43,7 +43,7 @@ export const create = async (data: EmpresaModel) => {
            
         ) RETURNING *
         `,
-        values:Object.values(data)
+        values:[data.RUC, data.Nombre, data.imageURLLogo]
     }) as any;
     return result.length === 1 ? (result[0] as EmpresaModel) : null;
 }
@@ -58,14 +58,15 @@ export const detail = async (id: string) => {
 };
 
 export const update = async (id: string, data: EmpresaModel) => {
+    console.log("recvd2",id,data)
     await sql({
         query: `
         UPDATE EmpresaAlquiler
         SET
+
+            Nombre = ?,
+            imageURLLogo = ?
         
-        Nombre = ?,
-        imageURLLogo = ?
-    
     
         WHERE RUC = ?
         `,

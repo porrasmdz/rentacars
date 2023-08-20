@@ -72,7 +72,7 @@ export const update = async (id: Number, data: PagoModel) => {
         UPDATE Pago
         SET
             
-        id_Cliente = ?,
+        Id_Cliente = ?,
         Monto =  ?,
         Fecha = ?,
         conf_pago = ?,

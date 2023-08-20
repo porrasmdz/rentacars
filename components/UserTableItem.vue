@@ -57,7 +57,11 @@
       </DropdownEditMenu>
 
       <EditModal
-      :editable-fields="['Nombre', 'Apellido', 'Fecha_Nacimiento','Email','Celular','Edad','Licencia','id_Inspector','imageURLFoto']"
+      :editable-fields=" models=='Clientes'? ['Nombre', 'Apellido', 'Fecha_Nacimiento',
+      'Email','Celular','Edad','Licencia','id_Inspector','imageURLFoto']
+      :
+      ['Nombre','Email','Celular','imageURLFotoin']
+      "
       :put-url="models=='Clientes'? `/api/cliente/` : `/api/inspector/`"
       :edit-modal-open="editModal"
       :item="customer"
@@ -78,7 +82,7 @@ import { computed } from "vue";
 const props = defineProps(["customer", "value","models"]);
 
 
-const emits = defineEmits(['loading-change','success'])
+const emits = defineEmits(['loading-change'])
 const editModal = ref(false);
 const deleteModal = ref(false);
 
