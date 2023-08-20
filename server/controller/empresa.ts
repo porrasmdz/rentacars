@@ -1,6 +1,7 @@
 import { H3Event } from "h3";
 import * as empresaModel from "~~/server/model/empresa";
 
+const UNKNOWM_ERROR = "Ha ocurrido un error desconocido";
 export const read = async () => {
   try {
     const result = await empresaModel.read();
@@ -9,12 +10,11 @@ export const read = async () => {
       data: result,
       total
     };
-  } catch (error) {
-    console.log(error);
+  } catch (error:any) {
       
     throw createError({
       statusCode: 500,
-      statusMessage: error as string ,
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -24,7 +24,7 @@ export const create = async (evt: H3Event) => {
     const body = await readBody(evt);
     const result = await empresaModel.create({
      
-      RUC: body.No_Matricula,
+      RUC: body.RUC,
       Nombre: body.Nombre,
       imageURLLogo: body.imageURLLogo,     
      
@@ -32,10 +32,10 @@ export const create = async (evt: H3Event) => {
     return {
       data: result,
     };
-  } catch (error) {
+  } catch (error:any) {
     throw createError({
       statusCode: 500,
-      statusMessage: "Error creating empresa",
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -48,10 +48,10 @@ export const detail = async (evt: H3Event) => {
     return {
       data: result,
     };
-  } catch (error) {
+  } catch (error:any) {
     throw createError({
       statusCode: 500,
-      statusMessage: "Error fetching empresa",
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -69,10 +69,10 @@ export const update = async (evt: H3Event) => {
     return {
       data: result,
     };
-  } catch (error) {
+  } catch (error:any) {
     throw createError({
       statusCode: 500,
-      statusMessage: "Error creating empresa",
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -86,10 +86,10 @@ export const remove = async (evt: H3Event) => {
       return {
         data: result,
       };
-    } catch (error) {
+    } catch (error:any) {
       throw createError({
         statusCode: 500,
-        statusMessage: "Error removing empresa",
+        statusMessage: error.message ?? UNKNOWM_ERROR,
       });
     }
   };

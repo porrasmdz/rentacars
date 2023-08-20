@@ -1,6 +1,6 @@
 import { H3Event } from "h3";
 import * as pagoModel from "~~/server/model/pago";
-
+const UNKNOWM_ERROR = "Ha ocurrido un error desconocido";
 export const read = async () => {
   try {
     const result = await pagoModel.read();
@@ -9,12 +9,11 @@ export const read = async () => {
       data: result,
       total
     };
-  } catch (error) {
-    console.log(error);
+  } catch (error:any) {
       
     throw createError({
       statusCode: 500,
-      statusMessage: error as string ,
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -23,7 +22,7 @@ export const create = async (evt: H3Event) => {
   try {
     const body = await readBody(evt);
     const result = await pagoModel.create({
-      id_Cliente: body.id_Cliente,
+      Id_Cliente: body.Id_Cliente,
       Monto: body.Monto,
       Fecha: body.Fecha,
       
@@ -35,10 +34,11 @@ export const create = async (evt: H3Event) => {
     return {
       data: result,
     };
-  } catch (error) {
+  } catch (error :any) {
+    
     throw createError({
       statusCode: 500,
-      statusMessage: "Error creating payment",
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -51,10 +51,10 @@ export const detail = async (evt: H3Event) => {
     return {
       data: result,
     };
-  } catch (error) {
+  } catch (error:any) {
     throw createError({
       statusCode: 500,
-      statusMessage: "Error fetching users",
+      statusMessage: error?.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -65,7 +65,7 @@ export const update = async (evt: H3Event) => {
     const result = await pagoModel.update(
       Number.parseInt(evt.context.params?.id_pago || "1") as Number,
       {
-        id_Cliente: body.id_Cliente,
+        Id_Cliente: body.Id_Cliente,
         Monto: body.Monto,
         Fecha: body.Fecha,
         
@@ -77,10 +77,10 @@ export const update = async (evt: H3Event) => {
     return {
       data: result,
     };
-  } catch (error) {
+  } catch (error:any) {
     throw createError({
       statusCode: 500,
-      statusMessage: "Error creating user",
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -88,16 +88,18 @@ export const update = async (evt: H3Event) => {
 
 export const remove = async (evt: H3Event) => {
     try {
+      console.log("Received params ", evt.context.params)
       const result = await pagoModel.remove(
         Number.parseInt(evt.context.params?.id_pago || "1") as Number
       );
+      
       return {
         data: result,
       };
     } catch (error:any) {
       throw createError({
         statusCode: 500,
-        statusMessage: error,
+        statusMessage: error.message ?? UNKNOWM_ERROR,
       });
     }
   };

@@ -68,8 +68,12 @@ const deleteModal = ref(false);
 const deleteItem = async () => {
     const result = await $fetch(`/api/vehiculo/${props?.vehicle?.No_Matricula}`, {method: 'DELETE'})
     .then((res)=> {
+      useState('success').value = "El registro ha sido ELIMINADO exitosamente";
       emits('loading-change');
       
+    })
+    .catch((error)=>{
+      useState('errors').value.push(error);
     })
 }
 

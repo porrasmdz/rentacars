@@ -1,6 +1,7 @@
 import { H3Event } from "h3";
 import * as reservaModel from "~~/server/model/reserva";
 
+const UNKNOWM_ERROR = "Ha ocurrido un error desconocido";
 export const read = async () => {
   try {
     const result = await reservaModel.read();
@@ -9,11 +10,11 @@ export const read = async () => {
       data: result,
       total
     };
-  } catch (error) {
+  } catch (error:any) {
       
     throw createError({
       statusCode: 500,
-      statusMessage: error as string ,
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -22,11 +23,12 @@ export const create = async (evt: H3Event) => {
   try {
     const body = await readBody(evt);
     const result = await reservaModel.create({
-      id_Cliente: body.id_Cliente,
+      Id_Cliente: body.Id_Cliente,
 
-      id_Inspector: body.id_Inspector,      
+      Id_Inspector: body.Id_Inspector,   
+      No_Matricula: body.No_Matricula,   
       Fecha_Inicio: body.Fecha_Inicio,
-      Hora_Reserva: body.Hora_Reserva,
+      Hora_reserva: body.Hora_reserva,
       
       ubicacion_recogida: body.ubicacion_recogida,
      
@@ -35,12 +37,11 @@ export const create = async (evt: H3Event) => {
     return {
       data: result,
     };
-  } catch (error) {
+  } catch (error:any) {
     
-    console.log(error);
     throw createError({
       statusCode: 500,
-      statusMessage: "Error creating reservation",
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -53,10 +54,10 @@ export const detail = async (evt: H3Event) => {
     return {
       data: result,
     };
-  } catch (error) {
+  } catch (error:any) {
     throw createError({
       statusCode: 500,
-      statusMessage: "Error fetching reservations",
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -80,10 +81,10 @@ export const update = async (evt: H3Event) => {
     return {
       data: result,
     };
-  } catch (error) {
+  } catch (error:any) {
     throw createError({
       statusCode: 500,
-      statusMessage: "Error creating reservation",
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -97,10 +98,10 @@ export const remove = async (evt: H3Event) => {
       return {
         data: result,
       };
-    } catch (error) {
+    } catch (error:any) {
       throw createError({
         statusCode: 500,
-        statusMessage: "Error removing reservation",
+        statusMessage: error.message ?? UNKNOWM_ERROR,
       });
     }
   };

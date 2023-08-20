@@ -76,6 +76,7 @@
       </div>
     </div>
     <CreateModal
+     @success="fetchData()"
      :editable-fields="['Nombre', 'Email', 'Celular','imageURLFotoin']"
      :post-url="'/api/inspector/'"
      :create-modal-open="createModalOpen"

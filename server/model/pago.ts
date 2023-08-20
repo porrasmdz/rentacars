@@ -2,9 +2,9 @@ import {sql} from '~~/server/db';
 
 
 export type PagoModel = {
-    id_Pago?:Number,
+    Id_Pago?:Number,
     
-    id_Cliente:Number,
+    Id_Cliente:Number,
     Monto:Number,
     Fecha:Date,
     conf_pago: Number,
@@ -33,9 +33,9 @@ export const create = async (data: PagoModel) => {
     console.log(Object.values(data));
     const result = await sql({
         query: `
-        INSERT INTO pago (
+        INSERT INTO Pago (
             
-            id_Cliente,
+            Id_Cliente,
             Monto,
             Fecha,
             conf_pago,
@@ -69,7 +69,7 @@ export const detail = async (id: Number) => {
 export const update = async (id: Number, data: PagoModel) => {
     await sql({
         query: `
-        UPDATE pago
+        UPDATE Pago
         SET
             
         id_Cliente = ?,
@@ -82,12 +82,13 @@ export const update = async (id: Number, data: PagoModel) => {
     
         WHERE id_Pago = ?
         `,
-        values:[data.id_Cliente,data.Monto,data.Fecha,data.conf_pago,data.Plazo,data.Forma_pago, id]
+        values:[data.Id_Cliente,data.Monto,data.Fecha,data.conf_pago,data.Plazo,data.Forma_pago, id]
     });
     return await detail(id);
 }
 
 export const remove = async (id: Number) => {
+    console.log("Received ", id)
     await sql({
         query: 'DELETE FROM Pago WHERE id_Pago =?',
         values: [id]

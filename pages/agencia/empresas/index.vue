@@ -76,6 +76,7 @@
       </div>
     </div>
     <CreateModal
+     @success="fetchData()"
      :editable-fields="['RUC', 'Nombre', 'imageURLLogo']"
      :post-url="'/api/empresa/'"
      :create-modal-open="createModalOpen"

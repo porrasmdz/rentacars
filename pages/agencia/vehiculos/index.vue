@@ -76,6 +76,7 @@
       </div>
     </div>
     <CreateModal
+     @success="fetchData()"
      :editable-fields="['No_Matricula', 'RUC', 'Marca', 'Disponibilidad', 'Precio_alquiler', 'Capacidad', 'imageURLVe']"
      :post-url="'/api/vehiculo/'"
      :create-modal-open="createModalOpen"

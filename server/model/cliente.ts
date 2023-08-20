@@ -32,7 +32,7 @@ export const read = async() => {
 
 
 export const create = async (data: ClienteModel) => {
-    console.log("received", data);
+   
     const result = await sql({
         query: `
         INSERT INTO Cliente (

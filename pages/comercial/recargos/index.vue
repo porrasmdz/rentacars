@@ -77,6 +77,7 @@
     </div>
     
     <CreateModal
+     @success="fetchData()"
      :editable-fields="['Id_pago', 'Fecha', 'Cobertura_Seguro', 'Monto', 'Razon']"
      :post-url="'/api/recargo/'"
      :create-modal-open="createModalOpen"

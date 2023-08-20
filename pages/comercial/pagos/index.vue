@@ -77,6 +77,7 @@
     </div>
     
     <CreateModal
+      @success="fetchData()"
      :editable-fields="['Id_Cliente', 'Monto', 'Fecha', 'conf_pago', 'Plazo', 'Forma_pago']"
      :post-url="'/api/pago/'"
      :create-modal-open="createModalOpen"
