@@ -62,7 +62,7 @@
 
       
       <EditModal
-      :editable-fields="['Id_Cliente', 'Id_Inspector', 'No_Matricula','Fecha_Inicio','Hora_reserva','ubicacion_escogida']"
+      :editable-fields="['Id_Cliente', 'Id_Inspector', 'No_Matricula','Fecha_Inicio','Hora_reserva','ubicacion_recogida']"
       :put-url="`/api/reserva/`"
       :edit-modal-open="editModal"
       :item="reservation"

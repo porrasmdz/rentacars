@@ -68,11 +68,11 @@ export const update = async (evt: H3Event) => {
     const result = await reservaModel.update(
       Number.parseInt(evt.context.params?.id_reserva || "1") as Number,
       {
-        id_Cliente: body.id_Cliente,
-
-        id_Inspector: body.id_Inspector,      
+        Id_Cliente: body.Id_Cliente,
+        No_Matricula: body.No_Matricula,
+        Id_Inspector: body.Id_Inspector,      
         Fecha_Inicio: body.Fecha_Inicio,
-        Hora_Reserva: body.Hora_Reserva,
+        Hora_reserva: body.Hora_reserva,
         
         ubicacion_recogida: body.ubicacion_recogida,
        
