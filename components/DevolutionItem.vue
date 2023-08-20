@@ -32,7 +32,7 @@
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
       
       <DropdownEditMenu :align="'right'" class="relative inline-flex">
-        <li>
+        <li @click.stop="editModal = true">
           <span class="cursor-pointer font-medium text-sm text-slate-600 flex py-1 px-3
            hover:text-slate-800 hover:bg-slate-100 active:bg-slate-50">
            Editar Devolucion
@@ -47,6 +47,18 @@
         </li>
       </DropdownEditMenu>
 
+      <EditModal
+      :editable-fields="['No_Matricula', 'Estado_devolucion', 'Hora_devolucion',
+      'Hora_devolucion_real','Fecha_devolucion','Fecha_devolucion_real','Lugar_devolucion']"
+      :put-url="`/api/devolucion/`"
+      :edit-modal-open="editModal"
+      :item="devolution"
+      :id="devolution?.id_Devolucion"
+
+      @success="$emit('loading-change')"
+      @close-modal="editModal=false" 
+        />
+
       <DangerModal :danger-modal-open="deleteModal" :message="'¿Eliminar Devolucion?'" 
       @close-modal="deleteModal = false" :action="deleteItem" />
     </td>
@@ -59,6 +71,7 @@ import { computed } from "vue";
 const props = defineProps(["devolution"]);
 
 const emits = defineEmits(['loading-change'])
+const editModal = ref(false);
 const deleteModal = ref(false);
 
 const deleteItem = async () => {

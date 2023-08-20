@@ -5,8 +5,8 @@ export type ReservaModel = {
     id_Reserva?:Number,
     
     Id_Cliente: Number,
-
-    id_Inspector: Number,      
+    No_Matricula: string,
+    Id_Inspector: Number,      
     Fecha_Inicio: Date,
     Hora_reserva: string,
     
@@ -75,18 +75,20 @@ export const update = async (id: Number, data: ReservaModel) => {
             
         
         id_Cliente = ?,
-        id_Inspector = ?,      
+        id_Inspector = ?,   
+        No_Matricula = ?,      
         Fecha_Inicio = ?,
-        Hora_Reserva = ?,
-        ubicacion_recogida = ?,
+        Hora_reserva = ?,
+        ubicacion_recogida = ?
     
         WHERE id_Reserva = ?
         `,
         values:[  
-            data.id_Cliente,
-            data.id_Inspector,      
+            data.Id_Cliente,
+            data.Id_Inspector,
+            data.No_Matricula,      
             data.Fecha_Inicio,
-            data.Hora_Reserva,
+            data.Hora_reserva,
             data.ubicacion_recogida, id]
     });
     return await detail(id);
