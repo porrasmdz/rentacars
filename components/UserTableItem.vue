@@ -76,8 +76,12 @@ const deleteItem = async () => {
       props.models=='Clientes' ? 'cliente':'inspector'}/${
       props?.customer?.id_Cliente || props?.customer.id_Inspector }`, {method: 'DELETE'})
     .then((res)=> {
+      useState('success').value = "El registro ha sido ELIMINADO exitosamente";
       emits('loading-change');
       
+    })
+    .catch((error)=>{
+      useState('errors').value.push(error);
     })
 }
 </script>

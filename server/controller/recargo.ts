@@ -1,6 +1,7 @@
 import { H3Event } from "h3";
 import * as recargoModel from "~~/server/model/recargo";
 
+const UNKNOWM_ERROR = "Ha ocurrido un error desconocido";
 export const read = async () => {
   try {
     const result = await recargoModel.read();
@@ -9,12 +10,11 @@ export const read = async () => {
       data: result,
       total
     };
-  } catch (error) {
-    console.log(error);
+  } catch (error:any) {
       
     throw createError({
       statusCode: 500,
-      statusMessage: error as string ,
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -35,10 +35,10 @@ export const create = async (evt: H3Event) => {
     return {
       data: result,
     };
-  } catch (error) {
+  } catch (error:any) {
     throw createError({
       statusCode: 500,
-      statusMessage: "Error creating recharges",
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -51,10 +51,10 @@ export const detail = async (evt: H3Event) => {
     return {
       data: result,
     };
-  } catch (error) {
+  } catch (error:any) {
     throw createError({
       statusCode: 500,
-      statusMessage: "Error fetching recharges",
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -76,10 +76,10 @@ export const update = async (evt: H3Event) => {
     return {
       data: result,
     };
-  } catch (error) {
+  } catch (error:any) {
     throw createError({
       statusCode: 500,
-      statusMessage: "Error creating recharges",
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -93,10 +93,10 @@ export const remove = async (evt: H3Event) => {
       return {
         data: result,
       };
-    } catch (error) {
+    } catch (error: any) {
       throw createError({
         statusCode: 500,
-        statusMessage: "Error removing recharges",
+        statusMessage: error.message ?? UNKNOWM_ERROR,
       });
     }
   };

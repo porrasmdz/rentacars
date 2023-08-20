@@ -2,24 +2,8 @@
   <tr>
     <td class="px-2 first:pl-5 last:pr-5 py-3 text-justify whitespace-nowrap">
       <div class="flex items-center">
-        <!-- <div class="w-9 h-9 rounded-full shrink-0  my-2 mr-3"
-        :class="'bg-green-500'">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="2.5"
-            stroke="currentColor"
-            class="w-6 h-6 m-1.5 text-sky-50"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-            />
-          </svg>
-        </div> -->
-        <div class="font-medium text-slate-800">{{ recharge.Id_pago }}</div>
+     
+        <div class="font-medium text-slate-800">{{ recharge.Id_pago ?? '---' }}</div>
       </div>
     </td>
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -27,15 +11,15 @@
       <span >{{ new Date(recharge.Fecha).toLocaleDateString() }}</span>
     </td>
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-      <div class="">{{ recharge.Cobertura_Seguro }}</div>
+      <div class="">{{ recharge.Cobertura_Seguro ?? '---' }}</div>
     </td>
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap flex w-16 gap-2 justify-between">
       <span>$</span>
-      <span>{{ recharge.Monto }}</span>
+      <span>{{ recharge.Monto ?? '0.00'}}</span>
     </td>
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
       <div class=" font-medium text-sky-500">
-        {{ recharge.Razon }}
+        {{ recharge.Razon ?? '---' }}
       </div>
     </td>
 
@@ -75,8 +59,12 @@ const deleteItem = async () => {
   
     const result = await $fetch(`/api/recargo/${props?.recharge?.id_Recargo}`, {method: 'DELETE'})
     .then((res)=> {
+      useState('success').value = "El registro ha sido ELIMINADO exitosamente";
       emits('loading-change');
       
+    })
+    .catch((error)=>{
+      useState('errors').value.push(error);
     })
 }
 </script>

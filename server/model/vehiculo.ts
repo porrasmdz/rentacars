@@ -34,7 +34,7 @@ export const create = async (data: VehiculoModel) => {
     
     const result = await sql({
         query: `
-        INSERT INTO vehiculo (     
+        INSERT INTO Vehiculo (     
         No_Matricula,
         RUC,
         Marca,
@@ -72,7 +72,7 @@ export const detail = async (No_Matricula: string) => {
 export const update = async (No_Matricula: string, data: VehiculoModel) => {
     await sql({
         query: `
-        UPDATE vehiculo
+        UPDATE Vehiculo
         SET
             
        

@@ -66,8 +66,13 @@ const createNewItem = async() => {
     await $fetch(props.postUrl,{
         method: 'POST',
         body: newItem.value
-    }).then((res)=> emits('success'))
-    .catch((error)=> console.log("ERROR",error))
+    }).then((res)=>{  
+        useState('success').value = "El registro ha sido creado exitosamente";
+        emits('success')})
+    .catch((error)=> {
+        useState('errors').value.push(error);
+        console.log("ERROR",error)
+    })
 }
 
 </script>

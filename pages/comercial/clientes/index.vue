@@ -5,7 +5,7 @@
       <!-- Left: Title -->
       <div class="mb-4 sm:mb-0">
         <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">
-          Clientes 
+          Clientes {{ }}
         </h1>
       </div>
       <button  @click.stop="createModalOpen = true" class="btn bg-indigo-500 hover:bg-indigo-600 text-white">

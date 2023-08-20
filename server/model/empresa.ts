@@ -29,7 +29,7 @@ export const create = async (data: EmpresaModel) => {
     console.log(Object.values(data));
     const result = await sql({
         query: `
-        INSERT INTO empresaalquiler (
+        INSERT INTO EmpresaAlquiler (
             
         RUC,
         Nombre,
@@ -60,7 +60,7 @@ export const detail = async (id: string) => {
 export const update = async (id: string, data: EmpresaModel) => {
     await sql({
         query: `
-        UPDATE empresaalquiler
+        UPDATE EmpresaAlquiler
         SET
         
         Nombre = ?,

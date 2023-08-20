@@ -19,22 +19,22 @@
             />
           </svg>
         </div> -->
-        <div class="font-medium text-slate-800">{{ payment.Id_Cliente }}</div>
+        <div class="font-medium text-slate-800">{{ payment?.Id_Cliente ?? 'null'}}</div>
       </div>
     </td>
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap flex w-20 gap-2 justify-between">
       <span>$</span>
-      <span >{{ payment.Monto.toFixed(2) }}</span>
+      <span >{{ payment?.Monto?.toFixed(2)  ?? '0.00'}}</span>
     </td>
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-      <div class="">{{ new Date(payment.Fecha).toLocaleDateString() }}</div>
+      <div class="">{{ new Date(payment?.Fecha)?.toLocaleDateString() ?? '--/--/--'}}</div>
     </td>
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-      <div class="">{{ new Date(payment.Plazo).toLocaleDateString() }}</div>
+      <div class="">{{ new Date(payment?.Plazo)?.toLocaleDateString()?? '--/--/--' }}</div>
     </td>
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
       <div class=" font-medium text-sky-500">
-        {{ payment.Forma_pago }}
+        {{ payment?.Forma_pago ?? 'null' }}
       </div>
     </td>
 
@@ -68,10 +68,15 @@ const emits = defineEmits(['loading-change'])
 const deleteModal = ref(false);
 
 const deleteItem = async () => {
-    const result = await $fetch(`/api/pago/${props?.payment?.id_Pago}`, {method: 'DELETE'})
+  console.log("Buscando", props.payment)
+    const result = await $fetch(`/api/pago/${props?.payment?.Id_Pago}`, {method: 'DELETE'})
     .then((res)=> {
+      useState('success').value = "El registro ha sido ELIMINADO exitosamente";
       emits('loading-change');
       
+    })
+    .catch((error)=>{
+      useState('errors').value.push(error);
     })
 }
 

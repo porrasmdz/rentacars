@@ -2,10 +2,11 @@ import {sql} from '~~/server/db';
 
 
 export type InspectorModel = {
-    id_Inspector:string,
+    id_Inspector?:string,
     Nombre: string,
     Email: string,
-    Celular: string
+    Celular: string,
+    imageURLFotoin: string,
     
 };
 
@@ -19,7 +20,7 @@ export const getTotal = async() => {
 
 export const read = async() => {
     const result  = await sql({
-        query: 'SELECT id_Inspector, Nombre, Email, Celular FROM Inspector'
+        query: 'SELECT * FROM Inspector'
     }) as any;
 
     return result as InspectorModel;
@@ -27,13 +28,15 @@ export const read = async() => {
 
 
 export const create = async (data: InspectorModel) => {
+
     const result = await sql({
         query: `
-        INSERT INTO inspector (
-            id_Inspector,
+        INSERT INTO Inspector (
+            
             Nombre,
             Email,
             Celular,
+            imageURLFotoin
             
         ) VALUES (
             ?,
@@ -42,7 +45,7 @@ export const create = async (data: InspectorModel) => {
             ?
         ) RETURNING *
         `,
-        values:[data.id_Inspector,data.Nombre,data.Email,data.Celular]
+        values:[data.Nombre,data.Email,data.Celular, data.imageURLFotoin]
     }) as any;
     return result.length === 1 ? (result[0] as InspectorModel) : null;
 }
@@ -59,7 +62,7 @@ export const detail = async (id: string) => {
 export const update = async (id:string, data: InspectorModel) => {
     await sql({
         query: `
-        UPDATE inspector
+        UPDATE Inspector
         SET
             Nombre = ?,
             Email = ? ,

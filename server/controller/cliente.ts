@@ -1,6 +1,6 @@
 import { H3Event } from "h3";
 import * as clienteModel from "~~/server/model/cliente";
-
+const UNKNOWM_ERROR = "Ha ocurrido un error desconocido";
 export const read = async () => {
   try {
     const result = await clienteModel.read();
@@ -38,11 +38,11 @@ export const create = async (evt: H3Event) => {
     return {
       data: result,
     };
-  } catch (error) {
+  } catch (error:any) {
     console.log(error);
     throw createError({
       statusCode: 500,
-      statusMessage: "Error creating user",
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -55,10 +55,10 @@ export const detail = async (evt: H3Event) => {
     return {
       data: result,
     };
-  } catch (error) {
+  } catch (error:any) {
     throw createError({
       statusCode: 500,
-      statusMessage: "Error fetching users",
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -83,10 +83,10 @@ export const update = async (evt: H3Event) => {
     return {
       data: result,
     };
-  } catch (error) {
+  } catch (error:any) {
     throw createError({
       statusCode: 500,
-      statusMessage: "Error creating user",
+      statusMessage: error.message ?? UNKNOWM_ERROR,
     });
   }
 };
@@ -100,10 +100,10 @@ export const remove = async (evt: H3Event) => {
       return {
         data: result,
       };
-    } catch (error) {
+    } catch (error:any) {
       throw createError({
         statusCode: 500,
-        statusMessage: "Error removing users",
+        statusMessage: error.message ?? UNKNOWM_ERROR
       });
     }
   };

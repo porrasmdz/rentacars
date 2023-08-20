@@ -4,11 +4,11 @@ import {sql} from '~~/server/db';
 export type ReservaModel = {
     id_Reserva?:Number,
     
-    id_Cliente: Number,
+    Id_Cliente: Number,
 
     id_Inspector: Number,      
     Fecha_Inicio: Date,
-    Hora_Reserva: string,
+    Hora_reserva: string,
     
     ubicacion_recogida: string,
 };
@@ -34,7 +34,7 @@ export const create = async (data: ReservaModel) => {
     console.log("values",Object.values(data));
     const result = await sql({
         query: `
-        INSERT INTO reserva (
+        INSERT INTO Reserva (
             
             Id_Cliente,
             Id_Inspector,    
@@ -51,7 +51,7 @@ export const create = async (data: ReservaModel) => {
             ?,
             ?
            
-        ) 
+        ) RETURNING *
         `,
         values:Object.values(data)
     }) as any;
@@ -70,7 +70,7 @@ export const detail = async (id: Number) => {
 export const update = async (id: Number, data: ReservaModel) => {
     await sql({
         query: `
-        UPDATE reserva
+        UPDATE Reserva
         SET
             
         
