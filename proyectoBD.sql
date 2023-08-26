@@ -1030,13 +1030,12 @@ create index idx_indexclie on cliente(Nombre);
 
 create index idx_indexEmp on empresaalquiler(Nombre);
 
-create index idx_indexVehi on vehiculo(Disponibilidad);
+create index idx_indexVehi on vehiculo(Marca);
 
 create index idx_indexReserva on reserva(Fecha_Inicio);
 
 
 -- usuarios
-
 CREATE USER 'Cliente'@'localhost' IDENTIFIED BY '1';
 CREATE USER 'Inspector'@'localhost' IDENTIFIED BY '2';
 CREATE USER 'Empresa'@'localhost' IDENTIFIED BY '3';
@@ -1044,10 +1043,25 @@ CREATE USER 'Administrador'@'localhost' IDENTIFIED BY '4';
 CREATE USER 'Gerente'@'localhost' IDENTIFIED BY '5';
 
 
-GRANT select, insert ON mydb.* TO 'Cliente'@'localhost';
-GRANT select, update, insert, delete ON mydb.* TO 'Inspector'@'localhost';
-GRANT select, update , insert, delete ON mydb.* TO 'Empresa'@'localhost';
-GRANT ALL PRIVILEGES ON mydb.* TO 'Administrador'@'localhost';
-GRANT select, update, insert ON mydb.* TO 'Gerente'@'localhost';
+GRANT select, insert ON itso_mydb.* TO 'Operador'@'localhost';
+GRANT select, update, insert, delete ON itso_mydb.* TO 'Inspector'@'localhost';
+GRANT select, update , insert, delete ON itso_mydb.* TO 'Empresa'@'localhost';
+GRANT ALL PRIVILEGES ON itso_mydb.* TO 'Administrador'@'localhost';
+GRANT select, update, insert ON itso_mydb.* TO 'Gerente'@'localhost';
+
+-- procedure permisos
+GRANT EXECUTE ON PROCEDURE itso_mydb.deleteReserva TO 'Operador'@'localhost';
+GRANT EXECUTE ON PROCEDURE itso_mydb.insertDevolucion TO 'Inspector'@'localhost';
+GRANT EXECUTE ON PROCEDURE itso_mydb.insertVehiculo TO 'Empresa'@'localhost';
+GRANT EXECUTE ON PROCEDURE itso_mydb.deleteEmpresaAlquiler TO 'Administrado'@'localhost';
+GRANT EXECUTE ON PROCEDURE itso_mydb.deleteDevolucion TO 'Gerente'@'localhost';
+
+-- vistas premisos
+GRANT SELECT, insert  ON itso_mydb.GananciasPorMarca TO 'Administrador'@'localhost';
+GRANT SELECT, insert ON itso_mydb.PromedioTiempoAlquiler TO 'Operador'@'localhost';
+GRANT SELECT, update ON itso_mydb.ReservaVehiculosNoReclamados TO 'Gerente'@'localhost';
+GRANT SELECT,  update on itso_mydb.VehiculosReservadosNoDevueltos TO 'Inspector'@'localhost';
+GRANT SELECT, insert ON itso_mydb.GananciasPorMarca TO 'Empresa'@'localhost';
+
 
 FLUSH PRIVILEGES;
