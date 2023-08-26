@@ -1019,3 +1019,35 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+
+
+-- indices
+
+create index idx_indexpago on pago(Fecha);
+
+create index idx_indexclie on cliente(Nombre);
+
+create index idx_indexEmp on empresaalquiler(Nombre);
+
+create index idx_indexVehi on vehiculo(Disponibilidad);
+
+create index idx_indexReserva on reserva(Fecha_Inicio);
+
+
+-- usuarios
+
+CREATE USER 'Cliente'@'localhost' IDENTIFIED BY '1';
+CREATE USER 'Inspector'@'localhost' IDENTIFIED BY '2';
+CREATE USER 'Empresa'@'localhost' IDENTIFIED BY '3';
+CREATE USER 'Administrador'@'localhost' IDENTIFIED BY '4';
+CREATE USER 'Gerente'@'localhost' IDENTIFIED BY '5';
+
+
+GRANT select, insert ON mydb.* TO 'Cliente'@'localhost';
+GRANT select, update, insert, delete ON mydb.* TO 'Inspector'@'localhost';
+GRANT select, update , insert, delete ON mydb.* TO 'Empresa'@'localhost';
+GRANT ALL PRIVILEGES ON mydb.* TO 'Administrador'@'localhost';
+GRANT select, update, insert ON mydb.* TO 'Gerente'@'localhost';
+
+FLUSH PRIVILEGES;
