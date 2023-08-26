@@ -37,7 +37,7 @@
 
       
       <EditModal
-      :editable-fields="[ 'Nombre', 'imageURLLogo']"
+      :editable-fields="['Nombre', 'imageURLLogo']"
       :put-url="`/api/empresa/`"
       :edit-modal-open="editModal"
       :item="business"
