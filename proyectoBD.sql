@@ -345,3 +345,300 @@ INSERT INTO Devolucion (No_Matricula, Estado_devolucion, Hora_devolucion, Hora_d
 ('STU890', 1, '12:45:00', '13:15:00', '2023-08-10', '2023-08-10', 'Guayaquil, Centro Ciudad'),
 ('VWX901', 1, '19:30:00', '20:00:00', '2023-08-05', '2023-08-05', 'Cuenca, Terminal de Autobuses'),
 ('YZA012', 1, '17:15:00', '17:45:00', '2023-08-12', '2023-08-12', 'Riobamba, Hotel Montecarlo');
+
+
+-- SP
+-- INSPECTOR
+DELIMITER //
+CREATE PROCEDURE insertInspector(IN nombre VARCHAR(20), IN email VARCHAR(50), IN celular VARCHAR(10))
+BEGIN
+    START TRANSACTION;
+    IF nombre = '' OR email = '' OR celular = '' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+    END IF;
+    
+    INSERT INTO Inspector(nombre, email, celular) VALUES (nombre, email, celular);
+    
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE updateInspector(IN id INT, IN nombre VARCHAR(20), IN email VARCHAR(50), IN celular VARCHAR(10))
+BEGIN
+	START TRANSACTION;
+    IF nombre = '' OR email = '' OR celular = '' THEN
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+	END IF;
+    
+    UPDATE Inspector
+    SET nombre = nombre, email = email, celular = celular
+    WHERE id_Inspector = id;
+    
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE deleteInspector(IN id INT)
+BEGIN
+	START TRANSACTION;
+    IF id IS NULL THEN
+		SIGNAL SQLSTATE '45000'
+		SET MESSAGE_TEXT = 'El ID del Inspector no puede ser NULL';
+    END IF;
+    DELETE FROM Inspector
+    WHERE id_Inspector = id;
+END;
+//
+DELIMITER ;
+
+-- Clientes
+DELIMITER //
+CREATE PROCEDURE insertCliente(IN nombre VARCHAR(20), IN apellido VARCHAR(20), IN fecha_nacimiento DATE, IN email VARCHAR(50), IN celular VARCHAR(10), IN edad INT, IN licencia TINYINT, IN id_Inspector INT)
+BEGIN
+	START TRANSACTION;
+    IF nombre = '' OR apellido = '' OR email = '' OR celular = '' THEN
+		SIGNAL SQLSTATE '45000'
+		SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+    END IF;
+    INSERT INTO Cliente(nombre, apellido, fecha_nacimiento, email, celular, edad, licencia, id_Inspector)
+    VALUES (nombre, apellido, fecha_nacimiento, email, celular, edad, licencia, id_Inspector);
+    
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE updateCliente(IN nombre VARCHAR(20), IN apellido VARCHAR(20), IN fecha_nacimiento DATE, IN email VARCHAR(50), IN celular VARCHAR(10), IN edad INT, IN licencia TINYINT, IN id_Inspector INT)
+BEGIN
+	START TRANSACTION;
+    IF nombre = '' OR apellido = '' OR email = '' OR celular = '' THEN
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+	END IF;
+    
+    UPDATE Cliente
+    SET nombre = nombre, apellido = apellido, fecha_nacimiento = fecha_nacimiento, email = email, celular = celular, edad = edad, licencia = licencia, id_Inspector = id_Inspector
+    WHERE id_Cliente = id;
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE deleteCliente(IN id INT)
+BEGIN
+	START TRANSACTION;
+    IF id IS NULL THEN
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El ID del Cliente no puede ser NULL';
+	END IF;
+    DELETE FROM Cliente 
+    WHERE id_Cliente = id;
+END;
+//
+DELIMITER //
+
+-- Pago
+DELIMITER //
+CREATE PROCEDURE insertPago(IN id_Cliente INT, IN monto FLOAT, IN conf_pago TINYINT, IN plazo DATE, IN forma_pago VARCHAR(20))
+BEGIN
+	START TRANSACTION;
+    IF id_Cliente IS NULL OR monto IS NULL OR conf_pago IS NULL OR plazo IS NULL OR forma_pago = '' THEN
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+	END IF;
+    INSERT INTO Pago(id_Cliente, monto, conf_pago, plazo, forma_pago)
+    VALUES (id_Cliente, monto, conf_pago, plazo, forma_pago);
+    
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE updatePago(IN id_Pago INT, IN id_Cliente INT, IN monto FLOAT, IN conf_pago TINYINT, IN plazo DATE, IN forma_pago VARCHAR(20))
+BEGIN
+    START TRANSACTION;
+
+    IF id_Cliente IS NULL OR monto IS NULL OR conf_pago IS NULL OR plazo IS NULL OR forma_pago = '' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+    END IF;
+
+    UPDATE Pago
+    SET id_Cliente = id_Cliente, monto = monto, conf_pago = conf_pago, plazo = plazo, forma_pago = forma_pago
+    WHERE id_Pago = id_Pago;
+
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE DeletePago(IN id_Pago INT)
+BEGIN
+    START TRANSACTION;
+
+    IF id_Pago IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El ID del Pago no puede ser nulo';
+    END IF;
+
+    DELETE FROM pago WHERE id_Pago = id_Pago;
+
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+-- Empresa Alquiler
+DELIMITER //
+CREATE PROCEDURE insertEmpresaAlquiler(IN RUC VARCHAR(10), IN nombre VARCHAR(50))
+BEGIN
+	START TRANSACTION;
+    IF RUC = '' OR nombre = '' THEN
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+	END IF;
+    INSERT INTO EmpresaAlquiler(RUC, nombre)
+    VALUES (RUC, nombre);
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE updateEmpresaAlquiler(IN RUC VARCHAR(10), IN nombre VARCHAR(50))
+BEGIN
+	START TRANSACTION;
+    IF RUC = '' OR nombre = '' THEN
+		SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+	END IF;
+    
+    UPDATE EmpresaAlquiler
+    SET nombre = nombre
+    WHERE RUC = RUC;
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE deleteEmpresaAlquiler(IN RUC VARCHAR(10))
+BEGIN 
+	START TRANSACTION;
+	IF RUC IS NULL THEN
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El RUC de la empresa no puede ser NULL';
+	END IF;
+    DELETE FROM EmpresaAlquiler
+    WHERE RUC = RUC;
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+-- Vehiculo
+DELIMITER //
+CREATE PROCEDURE insertVehiculo(IN no_Matricula VARCHAR(7), IN RUC VARCHAR(10), IN marca VARCHAR(20), IN disponibilidad TINYINT, IN precio_alquiler FLOAT, IN capacidad INT, IN imageURLVe VARCHAR(300))
+BEGIN
+	START TRANSACTION;
+    IF no_Matricula = '' OR RUC = '' OR marca = '' OR precio_alquiler IS NULL OR capacidad IS NULL THEN
+		SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+	END IF;
+    INSERT INTO Vehiculo(no_Matricula, RUC, marca, disponibilidad, precio_alquiler, capacidad, imageURLVe);
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE updateVehiculo(IN no_Matricula VARCHAR(7), IN RUC VARCHAR(10), IN marca VARCHAR(20), IN disponibilidad TINYINT, IN precio_alquiler FLOAT, IN capacidad INT, IN imageURLVe VARCHAR(300))
+BEGIN
+	START TRANSACTION;
+    IF no_Matricula = '' OR RUC = '' OR marca = '' OR precioAlquiler IS NULL THEN
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+	END IF;
+    
+    UPDATE Vehiculo
+    SET RUC = RUC, marca = marca, disponibilidad = disponibilidad, precio_alquiler = precio_alquiler, capacidad = capacidad, imageURLVe = imageURLVe
+    WHERE no_Matricula = no_Matricula;
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE deleteVehiculo(IN no_Matricula VARCHAR(7))
+BEGIN
+	START TRANSACTION;
+    IF no_Matricula IS NULL THEN
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La matricula del vehiculo no puede ser NULL';
+	END IF;
+    
+    DELETE FROM Vehiculo 
+    WHERE
+    no_Matricula = no_Matricula;
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+-- Reserva
+DELIMITER //
+CREATE PROCEDURE insertReserva(IN id_Cliente INT, IN id_Inspector INT, IN no_Matricula VARCHAR(7), IN fecha_inicio DATE, IN hora_reserva TIME, IN ubicacion_recogida VARCHAR(50))
+BEGIN
+	START TRANSACTION;
+    IF id_Cliente IS NULL OR id_Inspector IS NULL OR no_Matricula IS NULL OR hora_reserva IS NULL OR ubicacion_recogida = '' THEN
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+	END IF;
+    INSERT INTO Reserva(id_Cliente, id_Inspector, nod_Matricula, fecha_inicio, hora_reserva, ubicacion_recogida)
+    VALUES (id_Cliente, id_Inspector, no_Matricula, fecha_inicio, hora_reserva, ubicacion_recogida);
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE updateReserva(IN id_Reserva INT, IN id_Inspector INT, IN no_Matricula VARCHAR(7), IN fecha_inicio DATE, IN hora_reserva TIME, IN ubicacion_recogida VARCHAR(50))
+BEGIN
+	START TRANSACTION;
+    IF id_Reserva IS NULL OR id_Cliente IS NULL OR id_Inspector IS NULL OR no_Matricula = '' OR fecha_inicio IS NULL OR hora_reserva IS NULL OR ubicacion_recogida = '' THEN
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+	END IF;
+    
+    UPDATE Reserva;
+    SET id_Cliente = id_Cliente, id_Inspector = id_Inspector, no_Matricula = no_Matricula, fecha_inicio = fecha_inicio, hora_reserva = hora_reserva, ubicacion_recogida = ubicacion_recogida
+    WHERE id_Reserva = id_Reserva;
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE deleteReserva(IN id_Reserva INT)
+BEGIN
+	START TRANSACTION;
+    IF id_Reserva IS NULL THEN
+		SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'El ID de la Reserva no puede ser NULL';
+	END IF;
+    DELETE FROM Reserva 
+    WHERE id_Reserva = id_Reserva;
+    COMMIT;
+END;
+//
+DELIMITER ;
+-- Recargo
+
+-- Devoluciones
