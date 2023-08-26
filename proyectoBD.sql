@@ -8,20 +8,20 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema ITSO_mydb
+-- Schema mydb
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema ITSO_mydb
+-- Schema mydb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `ITSO_mydb` DEFAULT CHARACTER SET utf8 ;
-USE `ITSO_mydb` ;
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+USE `mydb` ;
 
 
 -- -----------------------------------------------------
--- Table `ITSO_mydb`.`Inspector`
+-- Table `mydb`.`Inspector`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Inspector` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Inspector` (
   `id_Inspector` INT AUTO_INCREMENT NOT NULL,
   `Nombre` VARCHAR(20) NULL,
   `Email` VARCHAR(50) NULL,
@@ -30,9 +30,9 @@ CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Inspector` (
 ) 
 ENGINE = InnoDB;
 -- -----------------------------------------------------
--- Table `ITSO_mydb`.`Cliente`
+-- Table `mydb`.`Cliente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Cliente` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Cliente` (
   `id_Cliente` INT AUTO_INCREMENT NOT NULL,
   `Nombre` VARCHAR(20) NULL,
   `Apellido` VARCHAR(20) NULL,
@@ -43,24 +43,26 @@ CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Cliente` (
   `Licencia` TINYINT NULL,
   `id_Inspector` INT NULL,
   PRIMARY KEY (`id_Cliente`),
-  FOREIGN KEY (`id_inspector`) REFERENCES `ITSO_mydb`.`Inspector` (`id_Inspector`) ON DELETE SET NULL
+  FOREIGN KEY (`id_inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`) ON DELETE SET NULL
   )
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ITSO_mydb`.`Pago`
+-- Table `mydb`.`Pago`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Pago` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Pago` (
   `Id_Pago` INT AUTO_INCREMENT NOT NULL,
   `Id_Cliente` INT NULL,
+  `id_Devolucion` INT NULL,
   `Monto` FLOAT NULL,
   `Fecha` DATE NULL,
   `conf_pago` TINYINT NULL,
   `Plazo` DATE NULL,
   `Forma_pago` VARCHAR(20) NULL,
   PRIMARY KEY (`Id_Pago`),
-  FOREIGN KEY (`Id_Cliente`) REFERENCES `ITSO_mydb`.`Cliente` (`id_Cliente`) ON DELETE SET NULL
+  FOREIGN KEY (`Id_Cliente`) REFERENCES `mydb`.`Cliente` (`id_Cliente`) ON DELETE SET NULL,
+  FOREIGN KEY (`id_Devolucion`) REFERENCES `mydb`.`Devolucion` (`id_Devolucion`) ON DELETE SET NULL
 ) 
 ENGINE = InnoDB;
 
@@ -69,9 +71,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ITSO_mydb`.`EmpresaAlquiler`
+-- Table `mydb`.`EmpresaAlquiler`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`EmpresaAlquiler` (
+CREATE TABLE IF NOT EXISTS `mydb`.`EmpresaAlquiler` (
   `RUC` VARCHAR(10) NOT NULL,
   `Nombre` VARCHAR(50) NULL,
   PRIMARY KEY (`RUC`)
@@ -81,9 +83,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ITSO_mydb`.`Vehiculo`
+-- Table `mydb`.`Vehiculo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Vehiculo` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Vehiculo` (
   `No_Matricula` VARCHAR(7) NOT NULL,
   `RUC` VARCHAR(10) NULL,
   `Marca` VARCHAR(20) NULL,
@@ -95,9 +97,9 @@ CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Vehiculo` (
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `ITSO_mydb`.`Reserva`
+-- Table `mydb`.`Reserva`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Reserva` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Reserva` (
   `id_Reserva` INT AUTO_INCREMENT NOT NULL,
   `Id_Cliente` INT NULL,
   `Id_Inspector` INT NULL,
@@ -106,18 +108,18 @@ CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Reserva` (
   `Hora_reserva` TIME NULL,
   `ubicacion_recogida` VARCHAR(50) NULL,
   PRIMARY KEY (`id_Reserva`),
-  FOREIGN KEY (`Id_Cliente`) REFERENCES `ITSO_mydb`.`Cliente` (`id_Cliente`) ON DELETE SET NULL,
-  FOREIGN KEY (`Id_Inspector`) REFERENCES `ITSO_mydb`.`Inspector` (`id_Inspector`) ON DELETE SET NULL,
-  FOREIGN KEY (`No_Matricula`) REFERENCES `ITSO_mydb`.`Vehiculo` (`No_Matricula`) ON DELETE SET NULL
+  FOREIGN KEY (`Id_Cliente`) REFERENCES `mydb`.`Cliente` (`id_Cliente`) ON DELETE SET NULL,
+  FOREIGN KEY (`Id_Inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`) ON DELETE SET NULL,
+  FOREIGN KEY (`No_Matricula`) REFERENCES `mydb`.`Vehiculo` (`No_Matricula`) ON DELETE SET NULL
 ) 
 ENGINE = InnoDB;
 
 
 
 -- -----------------------------------------------------
--- Table `ITSO_mydb`.`Recargo`
+-- Table `mydb`.`Recargo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Recargo` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Recargo` (
   `id_Recargo` INT AUTO_INCREMENT NOT NULL,
   `Id_pago` INT NULL,
   `Fecha` DATE NULL,
@@ -125,17 +127,17 @@ CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Recargo` (
   `Monto` FLOAT NULL,
   `Razon` VARCHAR(100) NULL,
   PRIMARY KEY (`id_Recargo`),
-  FOREIGN KEY (`id_Pago`) REFERENCES `ITSO_mydb`.`Pago` (`Id_Pago`) ON DELETE CASCADE,
-  UNIQUE(`Id_Pago`)
+  FOREIGN KEY (`id_Pago`) REFERENCES `mydb`.`Pago` (`Id_Pago`) ON DELETE CASCADE
 ) 
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ITSO_mydb`.`Devolucion`
+-- Table `mydb`.`Devolucion`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Devolucion` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Devolucion` (
   `id_Devolucion` INT AUTO_INCREMENT NOT NULL,
+  `Id_Cliente` INT NULL,
   `No_Matricula` VARCHAR(7) NULL,
   `Estado_devolucion` TINYINT NULL,
   `Hora_devolucion` TIME NULL,
@@ -143,66 +145,31 @@ CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Devolucion` (
   `Fecha_devolucion` DATE NULL,
   `Fecha_devolucion_real` DATE NULL,
   `Lugar_devolucion` VARCHAR(100) NULL,
-  PRIMARY KEY (`id_Devolucion`)
+  PRIMARY KEY (`id_Devolucion`),
+  
+  FOREIGN KEY (`No_Matricula`) REFERENCES `mydb`.`Vehiculo` (`No_Matricula`) ON DELETE SET NULL,
+  FOREIGN KEY (`Id_Cliente`) REFERENCES `mydb`.`Cliente` (`Id_Cliente`) ON DELETE SET NULL
 ) 
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `ITSO_mydb`.`Realizar`
--- Cliente_Devolucion
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Realizar` (
-  `id_Cliente` INT NOT NULL,
-  `id_Devolucion` INT NOT NULL,
-  PRIMARY KEY (`id_Cliente`, `id_Devolucion`),
-  FOREIGN KEY (`id_Devolucion`) REFERENCES `ITSO_mydb`.`Devolucion` (`id_Devolucion`)
-) 
-ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ITSO_mydb`.`Realizado`
--- Pago_Vehiculo
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Realizado` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `No_Matricula` VARCHAR(7) NOT NULL,
-  `Id_Pago` INT NULL,
-  `finished_payment` BOOL DEFAULT FALSE,
-  PRIMARY KEY (`ID`,`No_Matricula`),
-  FOREIGN KEY (`No_Matricula`) REFERENCES `ITSO_mydb`.`Vehiculo` (`No_Matricula`) ON DELETE CASCADE,
-  FOREIGN KEY (`id_Pago`) REFERENCES `ITSO_mydb`.`Pago` (`Id_Pago`) ON DELETE SET NULL
-) 
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `ITSO_mydb`.`Alquilar`
+-- Table `mydb`.`Alquilar`
 -- Inspector_EmpresaAlquiler
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Alquilar` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Alquilar` (
   `RUC` VARCHAR(10) NOT NULL,
   `id_Inspector` INT NOT NULL,
   PRIMARY KEY (`RUC`,`id_Inspector`),
-  FOREIGN KEY (`RUC`) REFERENCES `ITSO_mydb`.`EmpresaAlquiler` (`RUC`),
-  FOREIGN KEY (`id_Inspector`) REFERENCES `ITSO_mydb`.`Inspector` (`id_Inspector`)
+  FOREIGN KEY (`RUC`) REFERENCES `mydb`.`EmpresaAlquiler` (`RUC`),
+  FOREIGN KEY (`id_Inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`)
 ) 
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `ITSO_mydb`.`Tiene`
--- Devolucion_Vehiculo
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Tiene` (
-  `id_Devolucion` INT NOT NULL,
-  `No_Matricula` VARCHAR(10) NOT NULL,
-  PRIMARY KEY (`id_Devolucion`,`No_Matricula`),
-  FOREIGN KEY (`id_Devolucion`) REFERENCES `ITSO_mydb`.`Devolucion` (`id_Devolucion`),
-  FOREIGN KEY (`No_Matricula`) REFERENCES `ITSO_mydb`.`Vehiculo` (`No_Matricula`)
-) 
-ENGINE = InnoDB;
+
 
 -- -------------------------------------------------
 -- Triggers
@@ -266,17 +233,16 @@ INSERT INTO Cliente (Nombre, Apellido, Fecha_Nacimiento, Email, Celular, Edad, L
 ('Sofia', 'Diaz', '1993-04-28', 'sofia.diaz@yahoo.com', '0987654321', 28, 1,7);
 
 -- Registros Pagos
-INSERT INTO Pago (Id_Cliente, Monto, Fecha, conf_pago, Plazo, Forma_pago) VALUES
-(4, 100.00, '2023-07-01', 1, '2023-08-01', 'Tarjeta'),
-(7, 150.50, '2023-07-15', 1, '2023-08-15', 'Efectivo'),
-(6, 200.00, '2023-07-02', 1, '2023-08-02', 'Tarjeta'),
-(4, 120.75, '2023-07-20', 1, '2023-08-20', 'Transferencia'),
-(3, 80.25, '2023-07-03', 1, '2023-08-03', 'Tarjeta'),
-(5, 300.00, '2023-07-25', 1, '2023-08-25', 'Efectivo'),
-(2, 180.50, '2023-07-04', 1, '2023-08-04', 'Efectivo'),
-(1, 90.00, '2023-07-10', 1, '2023-08-10', 'Tarjeta'),
-(1, 220.75, '2023-07-05', 1, '2023-08-05', 'Transferencia'),
-(1, 150.25, '2023-07-12', 1, '2023-08-12', 'Tarjeta');
+INSERT INTO Pago (Id_Cliente, id_Devolucion, Monto, Fecha, conf_pago, Plazo, Forma_pago) VALUES
+(1, 1, 100.00, '2023-07-01', 0, '2023-08-01', 'Tarjeta'),
+(2, 2, 150.50, '2023-07-15', 1, '2023-08-15', 'Efectivo'),
+(3, 3, 200.00, '2023-07-02', 0, '2023-12-02', 'Tarjeta'),
+(4, 4, 120.75, '2023-07-20', 4, '2023-08-20', 'Transferencia'),
+(5, 5, 80.25, '2023-07-03', 1, '2023-08-03', 'Tarjeta'),
+(6, 6, 300.00, '2023-07-25', 1, '2023-08-25', 'Efectivo'),
+(3, 7, 90.00, '2023-07-10', 0, '2023-12-10', 'Tarjeta'),
+(8, 8, 220.75, '2023-07-05', 0, '2023-08-05', 'Transferencia'),
+(9, 9, 150.25, '2023-07-12', 1, '2023-08-12', 'Tarjeta');
 
 
 -- Registros Empresa Alquiler
@@ -307,16 +273,16 @@ INSERT INTO Vehiculo (No_Matricula, RUC, Marca, Disponibilidad, Precio_alquiler,
 
 -- Registros Reservas
 INSERT INTO Reserva (Id_Cliente, Id_Inspector, No_Matricula, Fecha_Inicio, Hora_reserva, ubicacion_recogida) VALUES
-(4, 4, 'ABC123', '2023-08-01', '08:00:00', 'Quito, Aeropuerto Internacional Mariscal Sucre'),
-(3, 4, 'XYZ789','2023-08-15', '09:30:00', 'Guayaquil, Centro Ciudad'),
-(1, 4, 'YZA012','2023-08-02', '10:45:00', 'Cuenca, Terminal de Autobuses'),
-(5, 4, 'JKL234','2023-08-20', '12:30:00', 'Riobamba, Terminal de Autobuses'),
-(7, 4, 'MNO345','2023-08-03', '14:00:00', 'Manta, Aeropuerto Internacional Eloy Alfaro'),
-( 1, 4, 'XYZ789','2023-08-25', '16:30:00', 'Guayaquil, Hotel Sheraton'),
-(8, 4, 'DEF456','2023-08-04', '08:15:00', 'Quito, Aeropuerto Internacional Mariscal Sucre'),
-(2, 4, 'DEF456','2023-08-10', '11:30:00', 'Guayaquil, Centro Ciudad'),
-(5, 4, 'VWX901','2023-08-05', '13:00:00', 'Cuenca, Terminal de Autobuses'),
-(1, 4, 'XYZ789','2023-08-12', '17:45:00', 'Riobamba, Hotel Montecarlo');
+(1, 4, 'ABC123', '2023-07-01', '08:00:00', 'Quito, Aeropuerto Internacional Mariscal Sucre'),
+(2, 4, 'XYZ789','2023-07-15', '09:30:00', 'Guayaquil, Centro Ciudad'),
+(3, 4, 'YZA012','2023-07-02', '10:45:00', 'Cuenca, Terminal de Autobuses'),
+(4, 4, 'JKL234','2023-07-20', '12:30:00', 'Riobamba, Terminal de Autobuses'),
+(5, 4, 'MNO345','2023-07-03', '14:00:00', 'Manta, Aeropuerto Internacional Eloy Alfaro'),
+(6, 4, 'ABC123','2023-07-25', '16:30:00', 'Guayaquil, Hotel Sheraton'),
+(2, 4, 'DEF456','2023-07-04', '08:15:00', 'Quito, Aeropuerto Internacional Mariscal Sucre'),
+(3, 4, 'DEF456','2023-07-10', '11:30:00', 'Guayaquil, Centro Ciudad'),
+(8, 4, 'VWX901','2023-07-05', '13:00:00', 'Cuenca, Terminal de Autobuses'),
+(9, 4, 'XYZ789','2023-07-12', '17:45:00', 'Riobamba, Hotel Montecarlo');
 
 
 -- Registros Recargo
@@ -326,26 +292,137 @@ INSERT INTO Recargo (Id_pago, Fecha, Cobertura_Seguro, Monto, Razon) VALUES
 (2, '2023-07-02', 'Seguro básico', 20.00, 'Demora en la entrega'),
 (4, '2023-07-20', 'Seguro completo', 12.75, 'Daño en el parabrisas'),
 (5, '2023-07-03', 'Seguro básico', 8.25, 'Demora en la devolución'),
-(6, '2023-07-25', 'Seguro completo', 30.00, 'Choque delantero'),
-(7, '2023-07-04', 'Seguro básico', 18.50, 'Choque trasero'),
+(8, '2023-07-25', 'Seguro completo', 30.00, 'Choque delantero'),
+(8, '2023-07-04', 'Seguro básico', 18.50, 'Choque trasero'),
 (8, '2023-07-10', 'Seguro completo', 9.00, 'Rayón en la puerta derecha'),
 (9, '2023-07-05', 'Seguro básico', 22.75, 'Demora en la entrega'),
 (10, '2023-07-12', 'Seguro completo', 15.25, 'Daño en el retrovisor');
 
 
 -- Registros Devoluciones
-INSERT INTO Devolucion (No_Matricula, Estado_devolucion, Hora_devolucion, Hora_devolucion_real, Fecha_devolucion, Fecha_devolucion_real, Lugar_devolucion) VALUES
-('ABC123', 1, '17:00:00', '17:30:00', '2023-08-01', '2023-08-01', 'Quito, Aeropuerto Internacional Mariscal Sucre'),
-('XYZ789', 1, '18:30:00', '19:00:00', '2023-08-15', '2023-08-15', 'Guayaquil, Centro Ciudad'),
-('DEF456', 1, '15:45:00', '16:00:00', '2023-08-02', '2023-08-02', 'Cuenca, Terminal de Autobuses'),
-('GHI987', 1, '16:30:00', '17:00:00', '2023-08-20', '2023-08-20', 'Riobamba, Terminal de Autobuses'),
-('JKL234', 1, '14:30:00', '15:00:00', '2023-08-03', '2023-08-03', 'Manta, Aeropuerto Internacional Eloy Alfaro'),
-('MNO345', 1, '16:00:00', '16:30:00', '2023-08-25', '2023-08-25', 'Guayaquil, Hotel Sheraton'),
-('PQR567', 1, '10:00:00', '10:30:00', '2023-08-04', '2023-08-04', 'Quito, Aeropuerto Internacional Mariscal Sucre'),
-('STU890', 1, '12:45:00', '13:15:00', '2023-08-10', '2023-08-10', 'Guayaquil, Centro Ciudad'),
-('VWX901', 1, '19:30:00', '20:00:00', '2023-08-05', '2023-08-05', 'Cuenca, Terminal de Autobuses'),
-('YZA012', 1, '17:15:00', '17:45:00', '2023-08-12', '2023-08-12', 'Riobamba, Hotel Montecarlo');
+INSERT INTO Devolucion (Id_Cliente, No_Matricula, Estado_devolucion, Hora_devolucion, Hora_devolucion_real, Fecha_devolucion, Fecha_devolucion_real, Lugar_devolucion) VALUES
+(1,'ABC123', 1, '17:00:00', null, '2023-08-01', null, 'Quito, Aeropuerto Internacional Mariscal Sucre'),
+(2,'XYZ789', 1, '18:30:00', '19:00:00', '2023-08-15', '2023-08-15', 'Guayaquil, Centro Ciudad'),
+(3,'DEF456', 1, '15:45:00', '16:00:00', '2023-08-02', '2023-08-02', 'Cuenca, Terminal de Autobuses'),
+(4,'GHI987', 1, '16:30:00', null, '2023-08-20', null, 'Riobamba, Terminal de Autobuses'),
+(5,'JKL234', 1, '14:30:00', '15:00:00', '2023-08-03', '2023-08-03', 'Manta, Aeropuerto Internacional Eloy Alfaro'),
+(6,'ABC123', 1, '16:00:00', '16:30:00', '2023-08-25', '2023-08-25', 'Guayaquil, Hotel Sheraton'),
+(3,'STU890', 1, '12:45:00', '13:15:00', '2023-08-10', '2023-08-10', 'Guayaquil, Centro Ciudad'),
+(8,'VWX901', 1, '19:30:00', null, '2023-08-05', null, 'Cuenca, Terminal de Autobuses'),
+(9,'YZA012', 1, '17:15:00', '17:45:00', '2023-08-12', '2023-08-12', 'Riobamba, Hotel Montecarlo');
 
+-- ##############################################################################
+-- ##############################AVANCE 3########################################
+-- ##############################################################################
+
+-- TRIGGERS
+-- Trigger antes de insertar una reserva para verificar que hayan autos disponibles
+DELIMITER //
+CREATE TRIGGER checkDisponibility
+BEFORE INSERT ON Reserva
+FOR EACH ROW
+BEGIN
+    DECLARE actualDisponibilidad INT;
+    
+    SELECT Disponibilidad INTO actualDisponibilidad
+    FROM Vehiculo
+    WHERE No_Matricula=NEW.No_Matricula;
+    
+    IF actualDisponibilidad = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo no está disponible para reservar.';
+    ELSE
+        UPDATE Vehiculo
+        SET Disponibilidad = actualDisponibilidad - 1
+        WHERE No_Matricula = NEW.No_Matricula;
+    END IF;
+END;
+//
+DELIMITER ;
+
+-- Trigger tras insertar una Devolución
+DELIMITER //
+CREATE TRIGGER afterReturningCar
+BEFORE UPDATE ON Devolucion
+FOR EACH ROW
+BEGIN
+    IF NEW.Fecha_devolucion_real IS NOT NULL AND OLD.Fecha_devolucion_real IS NULL THEN
+        UPDATE Vehiculo
+        SET Disponibilidad = Disponibilidad + 1
+        WHERE No_Matricula = NEW.No_Matricula;
+    END IF;
+END;
+//
+DELIMITER ;
+
+-- 4 reportes (views con al menos 3 tablas)
+-- Clientes con Devoluciones pendientes de Vehiculos (En app marco de rojo los atrasados)
+CREATE VIEW VehiculosReservadosNoDevueltos AS
+SELECT
+    D.id_Devolucion,
+    V.No_Matricula AS Vehiculo_No_Matricula,
+    V.Marca AS Vehiculo_Marca,
+    D.Fecha_devolucion AS Fecha_Entrega_Esperada,
+    D.Fecha_devolucion_real AS Fecha_Entrega_Efectiva,
+    DATEDIFF(NOW(),D.Fecha_devolucion) as Dias_de_Atraso,
+    C.Nombre AS Cliente_Nombre,
+    C.Apellido AS Cliente_Apellido,
+    C.Email AS Cliente_Email,
+    C.Celular AS Cliente_Celular
+FROM
+	Devolucion D
+    NATURAL JOIN Vehiculo V
+    NATURAL JOIN Cliente C 
+WHERE
+    D.Fecha_devolucion_real IS NULL;
+
+SELECT * FROM VehiculosReservadosNoDevueltos;
+-- Duracion promedio de Alquileres de Vehiculos por Cliente
+CREATE VIEW PromedioTiempoAlquilerVehiculosPorCliente AS
+SELECT
+    C.id_Cliente,
+    C.Nombre AS Cliente_Nombre,
+    C.Apellido AS Cliente_Apellido,
+    AVG(DATEDIFF(D.Fecha_devolucion_real, R.Fecha_Inicio)) AS Dias_Promedio_Alquiler
+FROM
+    Cliente C
+    JOIN Reserva R ON C.id_Cliente = R.Id_Cliente
+    JOIN Devolucion D ON R.No_Matricula = D.No_Matricula
+WHERE
+    D.Fecha_devolucion_real IS NOT NULL
+GROUP BY
+    C.id_Cliente, C.Nombre, C.Apellido;
+    
+SELECT * FROM PromedioTiempoAlquilerVehiculosPorCliente;
+-- Vehiculos Reservados pero no recogidos de la agencia
+CREATE VIEW ReservasVehiculosNoReclamados AS
+SELECT
+    R.id_Reserva,
+    R.No_Matricula,
+    C.Nombre AS Cliente_Nombre,
+    C.Apellido AS Cliente_Apellido,
+    R.Fecha_Inicio AS Fecha_Reserva,
+    R.Hora_reserva AS Hora_Reserva,
+    R.ubicacion_recogida AS Ubicacion_Recogida,
+    datediff(NOW(), R.Fecha_Inicio) as Dias_Sin_Retirar
+FROM
+    (Reserva R
+	JOIN Cliente C ON C.Id_Cliente = R.id_Cliente)
+    LEFT JOIN Devolucion D ON (D.No_Matricula = R.No_Matricula AND D.Id_Cliente = C.Id_Cliente)
+WHERE D.id_Devolucion IS NULL;
+
+SELECT * FROM ReservasVehiculosNoReclamados;
+-- Ganancias por Vehiculo (Considerando Recargos)
+CREATE VIEW GananciasPorMarca AS
+SELECT SUM(P.Monto) IngresosTotales, SUM(TotalRecargo) RecargosTotales, V.No_Matricula, Marca 
+	FROM Pago P 
+    LEFT JOIN (SELECT Id_pago ,SUM(Monto) AS TotalRecargo FROM Recargo GROUP BY Recargo.Id_pago) as R ON R.Id_pago = P.Id_Pago 
+    JOIN Devolucion D ON D.id_Devolucion = P.id_Devolucion
+    JOIN Vehiculo V ON V.No_Matricula = D.No_Matricula
+GROUP BY Marca, V.No_Matricula
+ORDER BY
+    IngresosTotales DESC;
+
+SELECT * FROM GananciasPorMarca;
 
 -- SP
 -- INSPECTOR
@@ -461,7 +538,7 @@ BEGIN
     START TRANSACTION;
     
     -- Verificar si el cliente existe
-    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE id_Cliente = id;
+    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE Id_Cliente = id;
     
     IF clientCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente no existe';
@@ -472,7 +549,7 @@ BEGIN
         
         UPDATE Cliente
         SET nombre = nombre, apellido = apellido, fecha_nacimiento = fecha_nacimiento, email = email, celular = celular, edad = edad, licencia = licencia, id_Inspector = id_Inspector
-        WHERE id_Cliente = id;
+        WHERE Id_Cliente = id;
     END IF;
     
     COMMIT;
@@ -488,13 +565,13 @@ BEGIN
     START TRANSACTION;
     
     -- Verificar si el cliente existe
-    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE id_Cliente = id;
+    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE Id_Cliente = id;
     
     IF clientCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente no existe';
     ELSE
         DELETE FROM Cliente 
-        WHERE id_Cliente = id;
+        WHERE Id_Cliente = id;
     END IF;
     
     COMMIT;
@@ -505,24 +582,24 @@ DELIMITER ;
 
 -- Pago
 DELIMITER //
-CREATE PROCEDURE insertPago(IN id_Cliente INT, IN monto FLOAT, IN conf_pago TINYINT, IN plazo DATE, IN forma_pago VARCHAR(20))
+CREATE PROCEDURE insertPago(IN Id_Cliente INT, IN id_Devolucion INT, IN monto FLOAT, IN conf_pago TINYINT, IN plazo DATE, IN forma_pago VARCHAR(20))
 BEGIN
     DECLARE clientCount INT;
     
     START TRANSACTION;
 
     -- Verificar si el cliente existe
-    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE id_Cliente = id_Cliente;
+    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE Id_Cliente = Id_Cliente;
 
     IF clientCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente no existe';
     ELSE
-        IF id_Cliente IS NULL OR monto IS NULL OR conf_pago IS NULL OR plazo IS NULL OR forma_pago = '' THEN
+        IF Id_Cliente IS NULL OR monto IS NULL OR conf_pago IS NULL OR plazo IS NULL OR forma_pago = '' THEN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
         END IF;
 
-        INSERT INTO Pago(id_Cliente, monto, conf_pago, plazo, forma_pago)
-        VALUES (id_Cliente, monto, conf_pago, plazo, forma_pago);
+        INSERT INTO Pago(Id_Cliente, id_Devolucion, monto, conf_pago, plazo, forma_pago)
+        VALUES (Id_Cliente, id_Devolucion, monto, conf_pago, plazo, forma_pago);
     END IF;
 
     COMMIT;
@@ -531,7 +608,7 @@ END;
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE updatePago(IN id_Pago INT, IN id_Cliente INT, IN monto FLOAT, IN conf_pago TINYINT, IN plazo DATE, IN forma_pago VARCHAR(20))
+CREATE PROCEDURE updatePago(IN id_Pago INT, IN Id_Cliente INT, IN id_Devolucion INT, IN monto FLOAT, IN conf_pago TINYINT, IN plazo DATE, IN forma_pago VARCHAR(20))
 BEGIN
     DECLARE clientCount INT;
     DECLARE paymentCount INT;
@@ -539,7 +616,7 @@ BEGIN
     START TRANSACTION;
 
     -- Verificar si el cliente y el pago existen
-    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE id_Cliente = id_Cliente;
+    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE Id_Cliente = Id_Cliente;
     SELECT COUNT(*) INTO paymentCount FROM Pago WHERE id_Pago = id_Pago;
 
     IF clientCount = 0 THEN
@@ -548,12 +625,12 @@ BEGIN
         IF paymentCount = 0 THEN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El pago no existe';
         ELSE
-            IF id_Cliente IS NULL OR monto IS NULL OR conf_pago IS NULL OR plazo IS NULL OR forma_pago = '' THEN
+            IF Id_Cliente IS NULL OR monto IS NULL OR conf_pago IS NULL OR plazo IS NULL OR forma_pago = '' THEN
                 SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
             END IF;
 
             UPDATE Pago
-            SET id_Cliente = id_Cliente, monto = monto, conf_pago = conf_pago, plazo = plazo, forma_pago = forma_pago
+            SET Id_Cliente = Id_Cliente, monto = monto, conf_pago = conf_pago, plazo = plazo, forma_pago = forma_pago
             WHERE id_Pago = id_Pago;
         END IF;
     END IF;
@@ -672,24 +749,24 @@ DELIMITER ;
 
 -- Vehiculo
 DELIMITER //
-CREATE PROCEDURE insertVehiculo(IN no_Matricula VARCHAR(7), IN RUC VARCHAR(10), IN marca VARCHAR(20), IN disponibilidad TINYINT, IN precio_alquiler FLOAT, IN capacidad INT, IN imageURLVe VARCHAR(300))
+CREATE PROCEDURE insertVehiculo(IN No_Matricula VARCHAR(7), IN RUC VARCHAR(10), IN marca VARCHAR(20), IN disponibilidad TINYINT, IN precio_alquiler FLOAT, IN capacidad INT, IN imageURLVe VARCHAR(300))
 BEGIN
     DECLARE matriculaCount INT;
 
     START TRANSACTION;
 
     -- Verificar si el vehículo ya existe por su matrícula
-    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE no_Matricula = no_Matricula;
+    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE No_Matricula = No_Matricula;
 
     IF matriculaCount > 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo con esta matrícula ya existe';
     ELSE
-        IF no_Matricula = '' OR RUC = '' OR marca = '' OR precio_alquiler IS NULL OR capacidad IS NULL THEN
+        IF No_Matricula = '' OR RUC = '' OR marca = '' OR precio_alquiler IS NULL OR capacidad IS NULL THEN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
         END IF;
 
-        INSERT INTO Vehiculo(no_Matricula, RUC, marca, disponibilidad, precio_alquiler, capacidad, imageURLVe)
-        VALUES (no_Matricula, RUC, marca, disponibilidad, precio_alquiler, capacidad, imageURLVe);
+        INSERT INTO Vehiculo(No_Matricula, RUC, marca, disponibilidad, precio_alquiler, capacidad, imageURLVe)
+        VALUES (No_Matricula, RUC, marca, disponibilidad, precio_alquiler, capacidad, imageURLVe);
     END IF;
 
     COMMIT;
@@ -698,25 +775,25 @@ END;
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE updateVehiculo(IN no_Matricula VARCHAR(7), IN RUC VARCHAR(10), IN marca VARCHAR(20), IN disponibilidad TINYINT, IN precio_alquiler FLOAT, IN capacidad INT, IN imageURLVe VARCHAR(300))
+CREATE PROCEDURE updateVehiculo(IN No_Matricula VARCHAR(7), IN RUC VARCHAR(10), IN marca VARCHAR(20), IN disponibilidad TINYINT, IN precio_alquiler FLOAT, IN capacidad INT, IN imageURLVe VARCHAR(300))
 BEGIN
     DECLARE matriculaCount INT;
 
     START TRANSACTION;
 
     -- Verificar si el vehículo existe por su matrícula
-    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE no_Matricula = no_Matricula;
+    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE No_Matricula = No_Matricula;
 
     IF matriculaCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo con esta matrícula no existe';
     ELSE
-        IF no_Matricula = '' OR RUC = '' OR marca = '' OR precio_alquiler IS NULL THEN
+        IF No_Matricula = '' OR RUC = '' OR marca = '' OR precio_alquiler IS NULL THEN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
         END IF;
 
         UPDATE Vehiculo
         SET RUC = RUC, marca = marca, disponibilidad = disponibilidad, precio_alquiler = precio_alquiler, capacidad = capacidad, imageURLVe = imageURLVe
-        WHERE no_Matricula = no_Matricula;
+        WHERE No_Matricula = No_Matricula;
     END IF;
 
     COMMIT;
@@ -725,24 +802,24 @@ END;
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE deleteVehiculo(IN no_Matricula VARCHAR(7))
+CREATE PROCEDURE deleteVehiculo(IN No_Matricula VARCHAR(7))
 BEGIN
     DECLARE matriculaCount INT;
 
     START TRANSACTION;
 
     -- Verificar si el vehículo existe por su matrícula
-    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE no_Matricula = no_Matricula;
+    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE No_Matricula = No_Matricula;
 
     IF matriculaCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo con esta matrícula no existe';
     ELSE
-        IF no_Matricula IS NULL THEN
+        IF No_Matricula IS NULL THEN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La matrícula del vehículo no puede ser NULL';
         END IF;
 
         DELETE FROM Vehiculo 
-        WHERE no_Matricula = no_Matricula;
+        WHERE No_Matricula = No_Matricula;
     END IF;
 
     COMMIT;
@@ -753,7 +830,7 @@ DELIMITER ;
 
 -- Reserva
 DELIMITER //
-CREATE PROCEDURE insertReserva(IN id_Cliente INT, IN id_Inspector INT, IN no_Matricula VARCHAR(7), IN fecha_inicio DATE, IN hora_reserva TIME, IN ubicacion_recogida VARCHAR(50))
+CREATE PROCEDURE insertReserva(IN Id_Cliente INT, IN id_Inspector INT, IN No_Matricula VARCHAR(7), IN fecha_inicio DATE, IN hora_reserva TIME, IN ubicacion_recogida VARCHAR(50))
 BEGIN
     DECLARE clienteCount INT;
     DECLARE inspectorCount INT;
@@ -762,9 +839,9 @@ BEGIN
     START TRANSACTION;
 
     -- Verificar si el cliente, el inspector y el vehículo existen
-    SELECT COUNT(*) INTO clienteCount FROM Cliente WHERE id_Cliente = id_Cliente;
+    SELECT COUNT(*) INTO clienteCount FROM Cliente WHERE Id_Cliente = Id_Cliente;
     SELECT COUNT(*) INTO inspectorCount FROM Inspector WHERE id_Inspector = id_Inspector;
-    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE no_Matricula = no_Matricula;
+    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE No_Matricula = No_Matricula;
 
     IF clienteCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente especificado no existe';
@@ -773,12 +850,12 @@ BEGIN
     ELSEIF matriculaCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo especificado no existe';
     ELSE
-        IF id_Cliente IS NULL OR id_Inspector IS NULL OR no_Matricula IS NULL OR hora_reserva IS NULL OR ubicacion_recogida = '' THEN
+        IF Id_Cliente IS NULL OR id_Inspector IS NULL OR No_Matricula IS NULL OR hora_reserva IS NULL OR ubicacion_recogida = '' THEN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
         END IF;
 
-        INSERT INTO Reserva(id_Cliente, id_Inspector, nod_Matricula, fecha_inicio, hora_reserva, ubicacion_recogida)
-        VALUES (id_Cliente, id_Inspector, no_Matricula, fecha_inicio, hora_reserva, ubicacion_recogida);
+        INSERT INTO Reserva(Id_Cliente, id_Inspector, No_Matricula, fecha_inicio, hora_reserva, ubicacion_recogida)
+        VALUES (Id_Cliente, id_Inspector, No_Matricula, fecha_inicio, hora_reserva, ubicacion_recogida);
     END IF;
 
     COMMIT;
@@ -787,7 +864,7 @@ END;
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE updateReserva(IN id_Reserva INT, IN id_Inspector INT, IN no_Matricula VARCHAR(7), IN fecha_inicio DATE, IN hora_reserva TIME, IN ubicacion_recogida VARCHAR(50))
+CREATE PROCEDURE updateReserva(IN id_Reserva INT, IN Id_Cliente INT,IN id_Inspector INT, IN No_Matricula VARCHAR(7), IN fecha_inicio DATE, IN hora_reserva TIME, IN ubicacion_recogida VARCHAR(50))
 BEGIN
     DECLARE reservaCount INT;
     DECLARE clienteCount INT;
@@ -798,9 +875,9 @@ BEGIN
 
     -- Verificar si la reserva, el cliente, el inspector y el vehículo existen
     SELECT COUNT(*) INTO reservaCount FROM Reserva WHERE id_Reserva = id_Reserva;
-    SELECT COUNT(*) INTO clienteCount FROM Cliente WHERE id_Cliente = id_Cliente;
+    SELECT COUNT(*) INTO clienteCount FROM Cliente WHERE Id_Cliente = Id_Cliente;
     SELECT COUNT(*) INTO inspectorCount FROM Inspector WHERE id_Inspector = id_Inspector;
-    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE no_Matricula = no_Matricula;
+    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE No_Matricula = No_Matricula;
 
     IF reservaCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La reserva especificada no existe';
@@ -811,12 +888,12 @@ BEGIN
     ELSEIF matriculaCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo especificado no existe';
     ELSE
-        IF id_Reserva IS NULL OR id_Cliente IS NULL OR id_Inspector IS NULL OR no_Matricula = '' OR fecha_inicio IS NULL OR hora_reserva IS NULL OR ubicacion_recogida = '' THEN
+        IF id_Reserva IS NULL OR Id_Cliente IS NULL OR id_Inspector IS NULL OR No_Matricula = '' OR fecha_inicio IS NULL OR hora_reserva IS NULL OR ubicacion_recogida = '' THEN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
         END IF;
 
         UPDATE Reserva
-        SET id_Cliente = id_Cliente, id_Inspector = id_Inspector, no_Matricula = no_Matricula, fecha_inicio = fecha_inicio, hora_reserva = hora_reserva, ubicacion_recogida = ubicacion_recogida
+        SET Id_Cliente = Id_Cliente, id_Inspector = id_Inspector, No_Matricula = No_Matricula, fecha_inicio = fecha_inicio, hora_reserva = hora_reserva, ubicacion_recogida = ubicacion_recogida
         WHERE id_Reserva = id_Reserva;
     END IF;
 
@@ -938,24 +1015,26 @@ DELIMITER ;
 
 -- Devoluciones
 DELIMITER //
-CREATE PROCEDURE insertDevolucion(IN no_Matricula VARCHAR(7), IN estado_devolucion TINYINT, IN hora_devolucion TIME, IN hora_devolucion_real TIME, IN fecha_devolucion DATE, IN fecha_devolucion_real DATE, IN lugar_devolucion VARCHAR(100))
+CREATE PROCEDURE insertDevolucion(IN No_Matricula VARCHAR(7), IN Id_Cliente INT,IN estado_devolucion TINYINT, IN hora_devolucion TIME, IN hora_devolucion_real TIME, IN fecha_devolucion DATE, IN fecha_devolucion_real DATE, IN lugar_devolucion VARCHAR(100))
 BEGIN
+    DECLARE clienteCount INT;
     DECLARE vehiculoCount INT;
 
     START TRANSACTION;
 
     -- Verificar si el vehículo asociado a la devolución existe
-    SELECT COUNT(*) INTO vehiculoCount FROM Vehiculo WHERE no_Matricula = no_Matricula;
+    SELECT COUNT(*) INTO clienteCount FROM Cliente WHERE Id_Cliente = Id_Cliente;
+    SELECT COUNT(*) INTO vehiculoCount FROM Vehiculo WHERE No_Matricula = No_Matricula;
 
     IF vehiculoCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo especificado no existe';
     ELSE
-        IF no_Matricula IS NULL OR estado_devolucion IS NULL OR hora_devolucion IS NULL OR hora_devolucion_real IS NULL OR fecha_devolucion IS NULL OR fecha_devolucion_real IS NULL OR lugar_devolucion = '' THEN
+        IF No_Matricula IS NULL OR estado_devolucion IS NULL OR hora_devolucion IS NULL OR hora_devolucion_real IS NULL OR fecha_devolucion IS NULL OR fecha_devolucion_real IS NULL OR lugar_devolucion = '' THEN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
         END IF;
 
-        INSERT INTO Devolucion(no_Matricula, estado_devolucion, hora_devolucion, hora_devolucion_real, fecha_devolucion, fecha_devolucion_real, lugar_devolucion)
-        VALUES(no_Matricula, estado_devolucion, hora_devolucion, hora_devolucion_real, fecha_devolucion, fecha_devolucion_real, lugar_devolucion);
+        INSERT INTO Devolucion(No_Matricula, Id_Cliente, estado_devolucion, hora_devolucion, hora_devolucion_real, fecha_devolucion, fecha_devolucion_real, lugar_devolucion)
+        VALUES(No_Matricula, Id_Cliente, estado_devolucion, hora_devolucion, hora_devolucion_real, fecha_devolucion, fecha_devolucion_real, lugar_devolucion);
     END IF;
 
     COMMIT;
@@ -964,28 +1043,31 @@ END;
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE updateDevolucion(IN id_Devolucion INT, IN no_Matricula VARCHAR(7), IN estado_devolucion TINYINT, IN hora_devolucion TIME, IN hora_devolucion_real TIME, IN fecha_devolucion_real DATE, IN lugar_devolucion VARCHAR(100))
+CREATE PROCEDURE updateDevolucion(IN id_Devolucion INT, IN No_Matricula VARCHAR(7), IN Id_Cliente INT,IN estado_devolucion TINYINT, IN hora_devolucion TIME, IN hora_devolucion_real TIME, IN fecha_devolucion_real DATE, IN lugar_devolucion VARCHAR(100))
 BEGIN
     DECLARE devolucionCount INT;
     DECLARE vehiculoCount INT;
+    DECLARE clienteCount INT;
 
     START TRANSACTION;
 
     -- Verificar si la devolución y el vehículo existen
+    
+    SELECT COUNT(*) INTO clienteCount FROM Cliente WHERE Id_Cliente = Id_Cliente;
     SELECT COUNT(*) INTO devolucionCount FROM Devolucion WHERE id_Devolucion = id_Devolucion;
-    SELECT COUNT(*) INTO vehiculoCount FROM Vehiculo WHERE no_Matricula = no_Matricula;
+    SELECT COUNT(*) INTO vehiculoCount FROM Vehiculo WHERE No_Matricula = No_Matricula;
 
     IF devolucionCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La devolución especificada no existe';
     ELSEIF vehiculoCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo especificado no existe';
     ELSE
-        IF id_Devolucion IS NULL OR no_Matricula IS NULL OR estado_devolucion IS NULL OR hora_devolucion IS NULL OR hora_devolucion_real IS NULL OR fecha_devolucion_real IS NULL OR lugar_devolucion = '' THEN
+        IF id_Devolucion IS NULL OR No_Matricula IS NULL OR Id_Cliente IS NULL OR estado_devolucion IS NULL OR hora_devolucion IS NULL OR hora_devolucion_real IS NULL OR fecha_devolucion_real IS NULL OR lugar_devolucion = '' THEN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
         END IF;
 
         UPDATE Devolucion
-        SET no_Matricula = no_Matricula, estado_devolucion = estado_devolucion, hora_devolucion = hora_devolucion, hora_devolucion_real = hora_devolucion_real, fecha_devolucion_real = fecha_devolucion_real, lugar_devolucion = lugar_devolucion
+        SET No_Matricula = No_Matricula, Id_Cliente, estado_devolucion = estado_devolucion, hora_devolucion = hora_devolucion, hora_devolucion_real = hora_devolucion_real, fecha_devolucion_real = fecha_devolucion_real, lugar_devolucion = lugar_devolucion
         WHERE id_Devolucion = id_Devolucion;
     END IF;
 
@@ -1043,25 +1125,25 @@ CREATE USER 'Administrador'@'localhost' IDENTIFIED BY '4';
 CREATE USER 'Gerente'@'localhost' IDENTIFIED BY '5';
 
 
-GRANT select, insert ON itso_mydb.* TO 'Operador'@'localhost';
-GRANT select, update, insert, delete ON itso_mydb.* TO 'Inspector'@'localhost';
-GRANT select, update , insert, delete ON itso_mydb.* TO 'Empresa'@'localhost';
-GRANT ALL PRIVILEGES ON itso_mydb.* TO 'Administrador'@'localhost';
-GRANT select, update, insert ON itso_mydb.* TO 'Gerente'@'localhost';
+GRANT select, insert ON mydb.* TO 'Operador'@'localhost';
+GRANT select, update, insert, delete ON mydb.* TO 'Inspector'@'localhost';
+GRANT select, update , insert, delete ON mydb.* TO 'Empresa'@'localhost';
+GRANT ALL PRIVILEGES ON mydb.* TO 'Administrador'@'localhost';
+GRANT select, update, insert ON mydb.* TO 'Gerente'@'localhost';
 
 -- procedure permisos
-GRANT EXECUTE ON PROCEDURE itso_mydb.deleteReserva TO 'Operador'@'localhost';
-GRANT EXECUTE ON PROCEDURE itso_mydb.insertDevolucion TO 'Inspector'@'localhost';
-GRANT EXECUTE ON PROCEDURE itso_mydb.insertVehiculo TO 'Empresa'@'localhost';
-GRANT EXECUTE ON PROCEDURE itso_mydb.deleteEmpresaAlquiler TO 'Administrado'@'localhost';
-GRANT EXECUTE ON PROCEDURE itso_mydb.deleteDevolucion TO 'Gerente'@'localhost';
+GRANT EXECUTE ON PROCEDURE mydb.deleteReserva TO 'Operador'@'localhost';
+GRANT EXECUTE ON PROCEDURE mydb.insertDevolucion TO 'Inspector'@'localhost';
+GRANT EXECUTE ON PROCEDURE mydb.insertVehiculo TO 'Empresa'@'localhost';
+GRANT EXECUTE ON PROCEDURE mydb.deleteEmpresaAlquiler TO 'Administrado'@'localhost';
+GRANT EXECUTE ON PROCEDURE mydb.deleteDevolucion TO 'Gerente'@'localhost';
 
 -- vistas premisos
-GRANT SELECT, insert  ON itso_mydb.GananciasPorMarca TO 'Administrador'@'localhost';
-GRANT SELECT, insert ON itso_mydb.PromedioTiempoAlquiler TO 'Operador'@'localhost';
-GRANT SELECT, update ON itso_mydb.ReservaVehiculosNoReclamados TO 'Gerente'@'localhost';
-GRANT SELECT,  update on itso_mydb.VehiculosReservadosNoDevueltos TO 'Inspector'@'localhost';
-GRANT SELECT, insert ON itso_mydb.GananciasPorMarca TO 'Empresa'@'localhost';
+GRANT SELECT, insert  ON mydb.GananciasPorMarca TO 'Administrador'@'localhost';
+GRANT SELECT, insert ON mydb.PromedioTiempoAlquiler TO 'Operador'@'localhost';
+GRANT SELECT, update ON mydb.ReservaVehiculosNoReclamados TO 'Gerente'@'localhost';
+GRANT SELECT,  update on mydb.VehiculosReservadosNoDevueltos TO 'Inspector'@'localhost';
+GRANT SELECT, insert ON mydb.GananciasPorMarca TO 'Empresa'@'localhost';
 
 
 FLUSH PRIVILEGES;
