@@ -315,6 +315,115 @@ INSERT INTO Devolucion (Id_Cliente, No_Matricula, Estado_devolucion, Hora_devolu
 -- ##############################AVANCE 3########################################
 -- ##############################################################################
 
+-- TRIGGERS
+-- Trigger antes de insertar una reserva para verificar que hayan autos disponibles
+DELIMITER //
+CREATE TRIGGER checkDisponibility
+BEFORE INSERT ON Reserva
+FOR EACH ROW
+BEGIN
+    DECLARE actualDisponibilidad INT;
+    
+    SELECT Disponibilidad INTO actualDisponibilidad
+    FROM Vehiculo
+    WHERE No_Matricula=NEW.No_Matricula;
+    
+    IF actualDisponibilidad = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo no está disponible para reservar.';
+    ELSE
+        UPDATE Vehiculo
+        SET Disponibilidad = actualDisponibilidad - 1
+        WHERE No_Matricula = NEW.No_Matricula;
+    END IF;
+END;
+//
+DELIMITER ;
+
+-- Trigger tras insertar una Devolución
+DELIMITER //
+CREATE TRIGGER afterReturningCar
+BEFORE UPDATE ON Devolucion
+FOR EACH ROW
+BEGIN
+    IF NEW.Fecha_devolucion_real IS NOT NULL AND OLD.Fecha_devolucion_real IS NULL THEN
+        UPDATE Vehiculo
+        SET Disponibilidad = Disponibilidad + 1
+        WHERE No_Matricula = NEW.No_Matricula;
+    END IF;
+END;
+//
+DELIMITER ;
+
+-- 4 reportes (views con al menos 3 tablas)
+-- Clientes con Devoluciones pendientes de Vehiculos (En app marco de rojo los atrasados)
+CREATE VIEW VehiculosReservadosNoDevueltos AS
+SELECT
+    D.id_Devolucion,
+    V.No_Matricula AS Vehiculo_No_Matricula,
+    V.Marca AS Vehiculo_Marca,
+    D.Fecha_devolucion AS Fecha_Entrega_Esperada,
+    D.Fecha_devolucion_real AS Fecha_Entrega_Efectiva,
+    DATEDIFF(NOW(),D.Fecha_devolucion) as Dias_de_Atraso,
+    C.Nombre AS Cliente_Nombre,
+    C.Apellido AS Cliente_Apellido,
+    C.Email AS Cliente_Email,
+    C.Celular AS Cliente_Celular
+FROM
+	Devolucion D
+    NATURAL JOIN Vehiculo V
+    NATURAL JOIN Cliente C 
+WHERE
+    D.Fecha_devolucion_real IS NULL;
+
+SELECT * FROM VehiculosReservadosNoDevueltos;
+-- Duracion promedio de Alquileres de Vehiculos por Cliente
+CREATE VIEW PromedioTiempoAlquilerVehiculosPorCliente AS
+SELECT
+    C.id_Cliente,
+    C.Nombre AS Cliente_Nombre,
+    C.Apellido AS Cliente_Apellido,
+    AVG(DATEDIFF(D.Fecha_devolucion_real, R.Fecha_Inicio)) AS Dias_Promedio_Alquiler
+FROM
+    Cliente C
+    JOIN Reserva R ON C.id_Cliente = R.Id_Cliente
+    JOIN Devolucion D ON R.No_Matricula = D.No_Matricula
+WHERE
+    D.Fecha_devolucion_real IS NOT NULL
+GROUP BY
+    C.id_Cliente, C.Nombre, C.Apellido;
+    
+SELECT * FROM PromedioTiempoAlquilerVehiculosPorCliente;
+-- Vehiculos Reservados pero no recogidos de la agencia
+CREATE VIEW ReservasVehiculosNoReclamados AS
+SELECT
+    R.id_Reserva,
+    R.No_Matricula,
+    C.Nombre AS Cliente_Nombre,
+    C.Apellido AS Cliente_Apellido,
+    R.Fecha_Inicio AS Fecha_Reserva,
+    R.Hora_reserva AS Hora_Reserva,
+    R.ubicacion_recogida AS Ubicacion_Recogida,
+    datediff(NOW(), R.Fecha_Inicio) as Dias_Sin_Retirar
+FROM
+    (Reserva R
+	JOIN Cliente C ON C.Id_Cliente = R.id_Cliente)
+    LEFT JOIN Devolucion D ON (D.No_Matricula = R.No_Matricula AND D.Id_Cliente = C.Id_Cliente)
+WHERE D.id_Devolucion IS NULL;
+
+SELECT * FROM ReservasVehiculosNoReclamados;
+-- Ganancias por Vehiculo (Considerando Recargos)
+CREATE VIEW GananciasPorMarca AS
+SELECT SUM(P.Monto) IngresosTotales, SUM(TotalRecargo) RecargosTotales, V.No_Matricula, Marca 
+	FROM Pago P 
+    LEFT JOIN (SELECT Id_pago ,SUM(Monto) AS TotalRecargo FROM Recargo GROUP BY Recargo.Id_pago) as R ON R.Id_pago = P.Id_Pago 
+    JOIN Devolucion D ON D.id_Devolucion = P.id_Devolucion
+    JOIN Vehiculo V ON V.No_Matricula = D.No_Matricula
+GROUP BY Marca, V.No_Matricula
+ORDER BY
+    IngresosTotales DESC;
+
+SELECT * FROM GananciasPorMarca;
+
 -- SP
 -- INSPECTOR
 DELIMITER //
@@ -1016,25 +1125,25 @@ CREATE USER 'Administrador'@'localhost' IDENTIFIED BY '4';
 CREATE USER 'Gerente'@'localhost' IDENTIFIED BY '5';
 
 
-GRANT select, insert ON itso_mydb.* TO 'Operador'@'localhost';
-GRANT select, update, insert, delete ON itso_mydb.* TO 'Inspector'@'localhost';
-GRANT select, update , insert, delete ON itso_mydb.* TO 'Empresa'@'localhost';
-GRANT ALL PRIVILEGES ON itso_mydb.* TO 'Administrador'@'localhost';
-GRANT select, update, insert ON itso_mydb.* TO 'Gerente'@'localhost';
+GRANT select, insert ON mydb.* TO 'Operador'@'localhost';
+GRANT select, update, insert, delete ON mydb.* TO 'Inspector'@'localhost';
+GRANT select, update , insert, delete ON mydb.* TO 'Empresa'@'localhost';
+GRANT ALL PRIVILEGES ON mydb.* TO 'Administrador'@'localhost';
+GRANT select, update, insert ON mydb.* TO 'Gerente'@'localhost';
 
 -- procedure permisos
-GRANT EXECUTE ON PROCEDURE itso_mydb.deleteReserva TO 'Operador'@'localhost';
-GRANT EXECUTE ON PROCEDURE itso_mydb.insertDevolucion TO 'Inspector'@'localhost';
-GRANT EXECUTE ON PROCEDURE itso_mydb.insertVehiculo TO 'Empresa'@'localhost';
-GRANT EXECUTE ON PROCEDURE itso_mydb.deleteEmpresaAlquiler TO 'Administrado'@'localhost';
-GRANT EXECUTE ON PROCEDURE itso_mydb.deleteDevolucion TO 'Gerente'@'localhost';
+GRANT EXECUTE ON PROCEDURE mydb.deleteReserva TO 'Operador'@'localhost';
+GRANT EXECUTE ON PROCEDURE mydb.insertDevolucion TO 'Inspector'@'localhost';
+GRANT EXECUTE ON PROCEDURE mydb.insertVehiculo TO 'Empresa'@'localhost';
+GRANT EXECUTE ON PROCEDURE mydb.deleteEmpresaAlquiler TO 'Administrado'@'localhost';
+GRANT EXECUTE ON PROCEDURE mydb.deleteDevolucion TO 'Gerente'@'localhost';
 
 -- vistas premisos
-GRANT SELECT, insert  ON itso_mydb.GananciasPorMarca TO 'Administrador'@'localhost';
-GRANT SELECT, insert ON itso_mydb.PromedioTiempoAlquiler TO 'Operador'@'localhost';
-GRANT SELECT, update ON itso_mydb.ReservaVehiculosNoReclamados TO 'Gerente'@'localhost';
-GRANT SELECT,  update on itso_mydb.VehiculosReservadosNoDevueltos TO 'Inspector'@'localhost';
-GRANT SELECT, insert ON itso_mydb.GananciasPorMarca TO 'Empresa'@'localhost';
+GRANT SELECT, insert  ON mydb.GananciasPorMarca TO 'Administrador'@'localhost';
+GRANT SELECT, insert ON mydb.PromedioTiempoAlquiler TO 'Operador'@'localhost';
+GRANT SELECT, update ON mydb.ReservaVehiculosNoReclamados TO 'Gerente'@'localhost';
+GRANT SELECT,  update on mydb.VehiculosReservadosNoDevueltos TO 'Inspector'@'localhost';
+GRANT SELECT, insert ON mydb.GananciasPorMarca TO 'Empresa'@'localhost';
 
 
 FLUSH PRIVILEGES;
