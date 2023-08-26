@@ -1118,7 +1118,7 @@ create index idx_indexReserva on reserva(Fecha_Inicio);
 
 
 -- usuarios
-CREATE USER 'Cliente'@'localhost' IDENTIFIED BY '1';
+CREATE USER 'Operador'@'localhost' IDENTIFIED BY '1';
 CREATE USER 'Inspector'@'localhost' IDENTIFIED BY '2';
 CREATE USER 'Empresa'@'localhost' IDENTIFIED BY '3';
 CREATE USER 'Administrador'@'localhost' IDENTIFIED BY '4';
@@ -1135,7 +1135,7 @@ GRANT select, update, insert ON mydb.* TO 'Gerente'@'localhost';
 GRANT EXECUTE ON PROCEDURE mydb.deleteReserva TO 'Operador'@'localhost';
 GRANT EXECUTE ON PROCEDURE mydb.insertDevolucion TO 'Inspector'@'localhost';
 GRANT EXECUTE ON PROCEDURE mydb.insertVehiculo TO 'Empresa'@'localhost';
-GRANT EXECUTE ON PROCEDURE mydb.deleteEmpresaAlquiler TO 'Administrado'@'localhost';
+GRANT EXECUTE ON PROCEDURE mydb.deleteEmpresaAlquiler TO 'Administrador'@'localhost';
 GRANT EXECUTE ON PROCEDURE mydb.deleteDevolucion TO 'Gerente'@'localhost';
 
 -- vistas premisos
