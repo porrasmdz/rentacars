@@ -352,79 +352,129 @@ INSERT INTO Devolucion (No_Matricula, Estado_devolucion, Hora_devolucion, Hora_d
 DELIMITER //
 CREATE PROCEDURE insertInspector(IN nombre VARCHAR(20), IN email VARCHAR(50), IN celular VARCHAR(10))
 BEGIN
+    DECLARE inspectorCount INT;
+    
     START TRANSACTION;
+    
     IF nombre = '' OR email = '' OR celular = '' THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
     END IF;
     
-    INSERT INTO Inspector(nombre, email, celular) VALUES (nombre, email, celular);
+    -- Verificar si el inspector ya existe
+    SELECT COUNT(*) INTO inspectorCount FROM Inspector WHERE nombre = nombre OR email = email;
+    
+    IF inspectorCount > 0 THEN
+        SIGNAL SQLSTATE '02000' SET MESSAGE_TEXT = 'El inspector ya existe';
+    ELSE
+        INSERT INTO Inspector(nombre, email, celular) VALUES (nombre, email, celular);
+    END IF;
     
     COMMIT;
 END;
 //
 DELIMITER ;
+
 
 DELIMITER //
 CREATE PROCEDURE updateInspector(IN id INT, IN nombre VARCHAR(20), IN email VARCHAR(50), IN celular VARCHAR(10))
 BEGIN
-	START TRANSACTION;
-    IF nombre = '' OR email = '' OR celular = '' THEN
-		SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
-	END IF;
+    DECLARE inspectorCount INT;
     
-    UPDATE Inspector
-    SET nombre = nombre, email = email, celular = celular
-    WHERE id_Inspector = id;
+    START TRANSACTION;
+    
+    -- Verificar si el inspector existe
+    SELECT COUNT(*) INTO inspectorCount FROM Inspector WHERE id_Inspector = id;
+    
+    IF inspectorCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El inspector no existe';
+    ELSE
+        IF nombre = '' OR email = '' OR celular = '' THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+        END IF;
+        
+        UPDATE Inspector
+        SET nombre = nombre, email = email, celular = celular
+        WHERE id_Inspector = id;
+    END IF;
     
     COMMIT;
 END;
 //
 DELIMITER ;
 
+
 DELIMITER //
 CREATE PROCEDURE deleteInspector(IN id INT)
 BEGIN
-	START TRANSACTION;
-    IF id IS NULL THEN
-		SIGNAL SQLSTATE '45000'
-		SET MESSAGE_TEXT = 'El ID del Inspector no puede ser NULL';
+    DECLARE inspectorCount INT;
+    
+    START TRANSACTION;
+    
+    -- Verificar si el inspector existe
+    SELECT COUNT(*) INTO inspectorCount FROM Inspector WHERE id_Inspector = id;
+    
+    IF inspectorCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El inspector no existe';
+    ELSE
+        DELETE FROM Inspector WHERE id_Inspector = id;
     END IF;
-    DELETE FROM Inspector
-    WHERE id_Inspector = id;
+    
+    COMMIT;
 END;
 //
 DELIMITER ;
+
 
 -- Clientes
 DELIMITER //
 CREATE PROCEDURE insertCliente(IN nombre VARCHAR(20), IN apellido VARCHAR(20), IN fecha_nacimiento DATE, IN email VARCHAR(50), IN celular VARCHAR(10), IN edad INT, IN licencia TINYINT, IN id_Inspector INT)
 BEGIN
-	START TRANSACTION;
-    IF nombre = '' OR apellido = '' OR email = '' OR celular = '' THEN
-		SIGNAL SQLSTATE '45000'
-		SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+    DECLARE clientCount INT;
+    
+    START TRANSACTION;
+    
+    -- Verificar si el cliente ya existe
+    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE email = email OR celular = celular;
+    
+    IF clientCount > 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente ya existe';
+    ELSE
+        IF nombre = '' OR apellido = '' OR email = '' OR celular = '' THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+        END IF;
+        
+        INSERT INTO Cliente(nombre, apellido, fecha_nacimiento, email, celular, edad, licencia, id_Inspector)
+        VALUES (nombre, apellido, fecha_nacimiento, email, celular, edad, licencia, id_Inspector);
     END IF;
-    INSERT INTO Cliente(nombre, apellido, fecha_nacimiento, email, celular, edad, licencia, id_Inspector)
-    VALUES (nombre, apellido, fecha_nacimiento, email, celular, edad, licencia, id_Inspector);
     
     COMMIT;
 END;
 //
 DELIMITER ;
 
+
 DELIMITER //
-CREATE PROCEDURE updateCliente(IN nombre VARCHAR(20), IN apellido VARCHAR(20), IN fecha_nacimiento DATE, IN email VARCHAR(50), IN celular VARCHAR(10), IN edad INT, IN licencia TINYINT, IN id_Inspector INT)
+CREATE PROCEDURE updateCliente(IN id INT, IN nombre VARCHAR(20), IN apellido VARCHAR(20), IN fecha_nacimiento DATE, IN email VARCHAR(50), IN celular VARCHAR(10), IN edad INT, IN licencia TINYINT, IN id_Inspector INT)
 BEGIN
-	START TRANSACTION;
-    IF nombre = '' OR apellido = '' OR email = '' OR celular = '' THEN
-		SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
-	END IF;
+    DECLARE clientCount INT;
     
-    UPDATE Cliente
-    SET nombre = nombre, apellido = apellido, fecha_nacimiento = fecha_nacimiento, email = email, celular = celular, edad = edad, licencia = licencia, id_Inspector = id_Inspector
-    WHERE id_Cliente = id;
+    START TRANSACTION;
+    
+    -- Verificar si el cliente existe
+    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE id_Cliente = id;
+    
+    IF clientCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente no existe';
+    ELSE
+        IF nombre = '' OR apellido = '' OR email = '' OR celular = '' THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+        END IF;
+        
+        UPDATE Cliente
+        SET nombre = nombre, apellido = apellido, fecha_nacimiento = fecha_nacimiento, email = email, celular = celular, edad = edad, licencia = licencia, id_Inspector = id_Inspector
+        WHERE id_Cliente = id;
+    END IF;
+    
     COMMIT;
 END;
 //
@@ -433,29 +483,48 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE deleteCliente(IN id INT)
 BEGIN
-	START TRANSACTION;
-    IF id IS NULL THEN
-		SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El ID del Cliente no puede ser NULL';
-	END IF;
-    DELETE FROM Cliente 
-    WHERE id_Cliente = id;
+    DECLARE clientCount INT;
+    
+    START TRANSACTION;
+    
+    -- Verificar si el cliente existe
+    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE id_Cliente = id;
+    
+    IF clientCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente no existe';
+    ELSE
+        DELETE FROM Cliente 
+        WHERE id_Cliente = id;
+    END IF;
+    
+    COMMIT;
 END;
 //
-DELIMITER //
+DELIMITER ;
+
 
 -- Pago
 DELIMITER //
 CREATE PROCEDURE insertPago(IN id_Cliente INT, IN monto FLOAT, IN conf_pago TINYINT, IN plazo DATE, IN forma_pago VARCHAR(20))
 BEGIN
-	START TRANSACTION;
-    IF id_Cliente IS NULL OR monto IS NULL OR conf_pago IS NULL OR plazo IS NULL OR forma_pago = '' THEN
-		SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
-	END IF;
-    INSERT INTO Pago(id_Cliente, monto, conf_pago, plazo, forma_pago)
-    VALUES (id_Cliente, monto, conf_pago, plazo, forma_pago);
+    DECLARE clientCount INT;
     
+    START TRANSACTION;
+
+    -- Verificar si el cliente existe
+    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE id_Cliente = id_Cliente;
+
+    IF clientCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente no existe';
+    ELSE
+        IF id_Cliente IS NULL OR monto IS NULL OR conf_pago IS NULL OR plazo IS NULL OR forma_pago = '' THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+        END IF;
+
+        INSERT INTO Pago(id_Cliente, monto, conf_pago, plazo, forma_pago)
+        VALUES (id_Cliente, monto, conf_pago, plazo, forma_pago);
+    END IF;
+
     COMMIT;
 END;
 //
@@ -464,15 +533,30 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE updatePago(IN id_Pago INT, IN id_Cliente INT, IN monto FLOAT, IN conf_pago TINYINT, IN plazo DATE, IN forma_pago VARCHAR(20))
 BEGIN
+    DECLARE clientCount INT;
+    DECLARE paymentCount INT;
+
     START TRANSACTION;
 
-    IF id_Cliente IS NULL OR monto IS NULL OR conf_pago IS NULL OR plazo IS NULL OR forma_pago = '' THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
-    END IF;
+    -- Verificar si el cliente y el pago existen
+    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE id_Cliente = id_Cliente;
+    SELECT COUNT(*) INTO paymentCount FROM Pago WHERE id_Pago = id_Pago;
 
-    UPDATE Pago
-    SET id_Cliente = id_Cliente, monto = monto, conf_pago = conf_pago, plazo = plazo, forma_pago = forma_pago
-    WHERE id_Pago = id_Pago;
+    IF clientCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente no existe';
+    ELSE
+        IF paymentCount = 0 THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El pago no existe';
+        ELSE
+            IF id_Cliente IS NULL OR monto IS NULL OR conf_pago IS NULL OR plazo IS NULL OR forma_pago = '' THEN
+                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+            END IF;
+
+            UPDATE Pago
+            SET id_Cliente = id_Cliente, monto = monto, conf_pago = conf_pago, plazo = plazo, forma_pago = forma_pago
+            WHERE id_Pago = id_Pago;
+        END IF;
+    END IF;
 
     COMMIT;
 END;
@@ -482,30 +566,51 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE DeletePago(IN id_Pago INT)
 BEGIN
+    DECLARE paymentCount INT;
+
     START TRANSACTION;
 
-    IF id_Pago IS NULL THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El ID del Pago no puede ser nulo';
-    END IF;
+    -- Verificar si el pago existe
+    SELECT COUNT(*) INTO paymentCount FROM Pago WHERE id_Pago = id_Pago;
 
-    DELETE FROM pago WHERE id_Pago = id_Pago;
+    IF paymentCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El pago no existe';
+    ELSE
+        IF id_Pago IS NULL THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El ID del Pago no puede ser nulo';
+        END IF;
+
+        DELETE FROM pago WHERE id_Pago = id_Pago;
+    END IF;
 
     COMMIT;
 END;
 //
 DELIMITER ;
 
+
 -- Empresa Alquiler
 DELIMITER //
 CREATE PROCEDURE insertEmpresaAlquiler(IN RUC VARCHAR(10), IN nombre VARCHAR(50))
 BEGIN
-	START TRANSACTION;
-    IF RUC = '' OR nombre = '' THEN
-		SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
-	END IF;
-    INSERT INTO EmpresaAlquiler(RUC, nombre)
-    VALUES (RUC, nombre);
+    DECLARE rucCount INT;
+
+    START TRANSACTION;
+
+    -- Verificar si la empresa ya existe por su RUC
+    SELECT COUNT(*) INTO rucCount FROM EmpresaAlquiler WHERE RUC = RUC;
+
+    IF rucCount > 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La empresa con este RUC ya existe';
+    ELSE
+        IF RUC = '' OR nombre = '' THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+        END IF;
+
+        INSERT INTO EmpresaAlquiler(RUC, nombre)
+        VALUES (RUC, nombre);
+    END IF;
+
     COMMIT;
 END;
 //
@@ -514,15 +619,25 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE updateEmpresaAlquiler(IN RUC VARCHAR(10), IN nombre VARCHAR(50))
 BEGIN
-	START TRANSACTION;
-    IF RUC = '' OR nombre = '' THEN
-		SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
-	END IF;
-    
-    UPDATE EmpresaAlquiler
-    SET nombre = nombre
-    WHERE RUC = RUC;
+    DECLARE rucCount INT;
+
+    START TRANSACTION;
+
+    -- Verificar si la empresa existe por su RUC
+    SELECT COUNT(*) INTO rucCount FROM EmpresaAlquiler WHERE RUC = RUC;
+
+    IF rucCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La empresa con este RUC no existe';
+    ELSE
+        IF RUC = '' OR nombre = '' THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+        END IF;
+
+        UPDATE EmpresaAlquiler
+        SET nombre = nombre
+        WHERE RUC = RUC;
+    END IF;
+
     COMMIT;
 END;
 //
@@ -530,29 +645,53 @@ DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE deleteEmpresaAlquiler(IN RUC VARCHAR(10))
-BEGIN 
-	START TRANSACTION;
-	IF RUC IS NULL THEN
-		SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El RUC de la empresa no puede ser NULL';
-	END IF;
-    DELETE FROM EmpresaAlquiler
-    WHERE RUC = RUC;
+BEGIN
+    DECLARE rucCount INT;
+
+    START TRANSACTION;
+
+    -- Verificar si la empresa existe por su RUC
+    SELECT COUNT(*) INTO rucCount FROM EmpresaAlquiler WHERE RUC = RUC;
+
+    IF rucCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La empresa con este RUC no existe';
+    ELSE
+        IF RUC IS NULL THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El RUC de la empresa no puede ser NULL';
+        END IF;
+
+        DELETE FROM EmpresaAlquiler
+        WHERE RUC = RUC;
+    END IF;
+
     COMMIT;
 END;
 //
 DELIMITER ;
 
+
 -- Vehiculo
 DELIMITER //
 CREATE PROCEDURE insertVehiculo(IN no_Matricula VARCHAR(7), IN RUC VARCHAR(10), IN marca VARCHAR(20), IN disponibilidad TINYINT, IN precio_alquiler FLOAT, IN capacidad INT, IN imageURLVe VARCHAR(300))
 BEGIN
-	START TRANSACTION;
-    IF no_Matricula = '' OR RUC = '' OR marca = '' OR precio_alquiler IS NULL OR capacidad IS NULL THEN
-		SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
-	END IF;
-    INSERT INTO Vehiculo(no_Matricula, RUC, marca, disponibilidad, precio_alquiler, capacidad, imageURLVe);
+    DECLARE matriculaCount INT;
+
+    START TRANSACTION;
+
+    -- Verificar si el vehículo ya existe por su matrícula
+    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE no_Matricula = no_Matricula;
+
+    IF matriculaCount > 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo con esta matrícula ya existe';
+    ELSE
+        IF no_Matricula = '' OR RUC = '' OR marca = '' OR precio_alquiler IS NULL OR capacidad IS NULL THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+        END IF;
+
+        INSERT INTO Vehiculo(no_Matricula, RUC, marca, disponibilidad, precio_alquiler, capacidad, imageURLVe)
+        VALUES (no_Matricula, RUC, marca, disponibilidad, precio_alquiler, capacidad, imageURLVe);
+    END IF;
+
     COMMIT;
 END;
 //
@@ -561,15 +700,25 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE updateVehiculo(IN no_Matricula VARCHAR(7), IN RUC VARCHAR(10), IN marca VARCHAR(20), IN disponibilidad TINYINT, IN precio_alquiler FLOAT, IN capacidad INT, IN imageURLVe VARCHAR(300))
 BEGIN
-	START TRANSACTION;
-    IF no_Matricula = '' OR RUC = '' OR marca = '' OR precioAlquiler IS NULL THEN
-		SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
-	END IF;
-    
-    UPDATE Vehiculo
-    SET RUC = RUC, marca = marca, disponibilidad = disponibilidad, precio_alquiler = precio_alquiler, capacidad = capacidad, imageURLVe = imageURLVe
-    WHERE no_Matricula = no_Matricula;
+    DECLARE matriculaCount INT;
+
+    START TRANSACTION;
+
+    -- Verificar si el vehículo existe por su matrícula
+    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE no_Matricula = no_Matricula;
+
+    IF matriculaCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo con esta matrícula no existe';
+    ELSE
+        IF no_Matricula = '' OR RUC = '' OR marca = '' OR precio_alquiler IS NULL THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+        END IF;
+
+        UPDATE Vehiculo
+        SET RUC = RUC, marca = marca, disponibilidad = disponibilidad, precio_alquiler = precio_alquiler, capacidad = capacidad, imageURLVe = imageURLVe
+        WHERE no_Matricula = no_Matricula;
+    END IF;
+
     COMMIT;
 END;
 //
@@ -578,31 +727,60 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE deleteVehiculo(IN no_Matricula VARCHAR(7))
 BEGIN
-	START TRANSACTION;
-    IF no_Matricula IS NULL THEN
-		SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La matricula del vehiculo no puede ser NULL';
-	END IF;
-    
-    DELETE FROM Vehiculo 
-    WHERE
-    no_Matricula = no_Matricula;
+    DECLARE matriculaCount INT;
+
+    START TRANSACTION;
+
+    -- Verificar si el vehículo existe por su matrícula
+    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE no_Matricula = no_Matricula;
+
+    IF matriculaCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo con esta matrícula no existe';
+    ELSE
+        IF no_Matricula IS NULL THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La matrícula del vehículo no puede ser NULL';
+        END IF;
+
+        DELETE FROM Vehiculo 
+        WHERE no_Matricula = no_Matricula;
+    END IF;
+
     COMMIT;
 END;
 //
 DELIMITER ;
 
+
 -- Reserva
 DELIMITER //
 CREATE PROCEDURE insertReserva(IN id_Cliente INT, IN id_Inspector INT, IN no_Matricula VARCHAR(7), IN fecha_inicio DATE, IN hora_reserva TIME, IN ubicacion_recogida VARCHAR(50))
 BEGIN
-	START TRANSACTION;
-    IF id_Cliente IS NULL OR id_Inspector IS NULL OR no_Matricula IS NULL OR hora_reserva IS NULL OR ubicacion_recogida = '' THEN
-		SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
-	END IF;
-    INSERT INTO Reserva(id_Cliente, id_Inspector, nod_Matricula, fecha_inicio, hora_reserva, ubicacion_recogida)
-    VALUES (id_Cliente, id_Inspector, no_Matricula, fecha_inicio, hora_reserva, ubicacion_recogida);
+    DECLARE clienteCount INT;
+    DECLARE inspectorCount INT;
+    DECLARE matriculaCount INT;
+
+    START TRANSACTION;
+
+    -- Verificar si el cliente, el inspector y el vehículo existen
+    SELECT COUNT(*) INTO clienteCount FROM Cliente WHERE id_Cliente = id_Cliente;
+    SELECT COUNT(*) INTO inspectorCount FROM Inspector WHERE id_Inspector = id_Inspector;
+    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE no_Matricula = no_Matricula;
+
+    IF clienteCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente especificado no existe';
+    ELSEIF inspectorCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El inspector especificado no existe';
+    ELSEIF matriculaCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo especificado no existe';
+    ELSE
+        IF id_Cliente IS NULL OR id_Inspector IS NULL OR no_Matricula IS NULL OR hora_reserva IS NULL OR ubicacion_recogida = '' THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+        END IF;
+
+        INSERT INTO Reserva(id_Cliente, id_Inspector, nod_Matricula, fecha_inicio, hora_reserva, ubicacion_recogida)
+        VALUES (id_Cliente, id_Inspector, no_Matricula, fecha_inicio, hora_reserva, ubicacion_recogida);
+    END IF;
+
     COMMIT;
 END;
 //
@@ -611,15 +789,37 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE updateReserva(IN id_Reserva INT, IN id_Inspector INT, IN no_Matricula VARCHAR(7), IN fecha_inicio DATE, IN hora_reserva TIME, IN ubicacion_recogida VARCHAR(50))
 BEGIN
-	START TRANSACTION;
-    IF id_Reserva IS NULL OR id_Cliente IS NULL OR id_Inspector IS NULL OR no_Matricula = '' OR fecha_inicio IS NULL OR hora_reserva IS NULL OR ubicacion_recogida = '' THEN
-		SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
-	END IF;
-    
-    UPDATE Reserva;
-    SET id_Cliente = id_Cliente, id_Inspector = id_Inspector, no_Matricula = no_Matricula, fecha_inicio = fecha_inicio, hora_reserva = hora_reserva, ubicacion_recogida = ubicacion_recogida
-    WHERE id_Reserva = id_Reserva;
+    DECLARE reservaCount INT;
+    DECLARE clienteCount INT;
+    DECLARE inspectorCount INT;
+    DECLARE matriculaCount INT;
+
+    START TRANSACTION;
+
+    -- Verificar si la reserva, el cliente, el inspector y el vehículo existen
+    SELECT COUNT(*) INTO reservaCount FROM Reserva WHERE id_Reserva = id_Reserva;
+    SELECT COUNT(*) INTO clienteCount FROM Cliente WHERE id_Cliente = id_Cliente;
+    SELECT COUNT(*) INTO inspectorCount FROM Inspector WHERE id_Inspector = id_Inspector;
+    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE no_Matricula = no_Matricula;
+
+    IF reservaCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La reserva especificada no existe';
+    ELSEIF clienteCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente especificado no existe';
+    ELSEIF inspectorCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El inspector especificado no existe';
+    ELSEIF matriculaCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo especificado no existe';
+    ELSE
+        IF id_Reserva IS NULL OR id_Cliente IS NULL OR id_Inspector IS NULL OR no_Matricula = '' OR fecha_inicio IS NULL OR hora_reserva IS NULL OR ubicacion_recogida = '' THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+        END IF;
+
+        UPDATE Reserva
+        SET id_Cliente = id_Cliente, id_Inspector = id_Inspector, no_Matricula = no_Matricula, fecha_inicio = fecha_inicio, hora_reserva = hora_reserva, ubicacion_recogida = ubicacion_recogida
+        WHERE id_Reserva = id_Reserva;
+    END IF;
+
     COMMIT;
 END;
 //
@@ -628,17 +828,194 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE deleteReserva(IN id_Reserva INT)
 BEGIN
-	START TRANSACTION;
-    IF id_Reserva IS NULL THEN
-		SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'El ID de la Reserva no puede ser NULL';
-	END IF;
-    DELETE FROM Reserva 
-    WHERE id_Reserva = id_Reserva;
+    DECLARE reservaCount INT;
+
+    START TRANSACTION;
+
+    -- Verificar si la reserva existe
+    SELECT COUNT(*) INTO reservaCount FROM Reserva WHERE id_Reserva = id_Reserva;
+
+    IF reservaCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La reserva especificada no existe';
+    ELSE
+        IF id_Reserva IS NULL THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El ID de la Reserva no puede ser NULL';
+        END IF;
+
+        DELETE FROM Reserva 
+        WHERE id_Reserva = id_Reserva;
+    END IF;
+
     COMMIT;
 END;
 //
 DELIMITER ;
+
 -- Recargo
+DELIMITER //
+CREATE PROCEDURE insertRecargo(IN id_Pago INT, IN cobertura_seguro VARCHAR(20), IN monto FLOAT, IN razon VARCHAR(100))
+BEGIN
+    DECLARE pagoCount INT;
+
+    START TRANSACTION;
+
+    -- Verificar si el pago existe
+    SELECT COUNT(*) INTO pagoCount FROM Pago WHERE id_Pago = id_Pago;
+
+    IF pagoCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El pago especificado no existe';
+    ELSE
+        IF id_Pago IS NULL OR cobertura_seguro = '' OR monto IS NULL OR razon = '' THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+        END IF;
+
+        INSERT INTO Recargo(id_Pago, cobertura_seguro, monto, razon)
+        VALUES(id_Pago, cobertura_seguro, monto, razon);
+    END IF;
+
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE updateRecargo(IN id_Recargo INT, IN id_Pago INT, IN cobertura_seguro VARCHAR(20), IN monto FLOAT, IN razon VARCHAR(100))
+BEGIN
+    DECLARE recargoCount INT;
+    DECLARE pagoCount INT;
+
+    START TRANSACTION;
+
+    -- Verificar si el recargo y el pago existen
+    SELECT COUNT(*) INTO recargoCount FROM Recargo WHERE id_Recargo = id_Recargo;
+    SELECT COUNT(*) INTO pagoCount FROM Pago WHERE id_Pago = id_Pago;
+
+    IF recargoCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El recargo especificado no existe';
+    ELSEIF pagoCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El pago especificado no existe';
+    ELSE
+        IF id_Recargo IS NULL OR id_Pago IS NULL OR cobertura_seguro = '' OR monto IS NULL OR razon = '' THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+        END IF;
+
+        UPDATE Recargo
+        SET id_Pago = id_Pago, cobertura_seguro = cobertura_seguro, monto = monto, razon = razon
+        WHERE id_Recargo = id_Recargo;
+    END IF;
+
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE deleteRecargo(IN id_Recargo INT)
+BEGIN
+    DECLARE recargoCount INT;
+
+    START TRANSACTION;
+
+    -- Verificar si el recargo existe
+    SELECT COUNT(*) INTO recargoCount FROM Recargo WHERE id_Recargo = id_Recargo;
+
+    IF recargoCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El recargo especificado no existe';
+    ELSE
+        IF id_Recargo IS NULL THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El ID del Recargo no puede ser NULL';
+        END IF;
+
+        DELETE FROM Recargo
+        WHERE id_Recargo = id_Recargo;
+    END IF;
+
+    COMMIT;
+END;
+//
+DELIMITER ;
+
 
 -- Devoluciones
+DELIMITER //
+CREATE PROCEDURE insertDevolucion(IN no_Matricula VARCHAR(7), IN estado_devolucion TINYINT, IN hora_devolucion TIME, IN hora_devolucion_real TIME, IN fecha_devolucion DATE, IN fecha_devolucion_real DATE, IN lugar_devolucion VARCHAR(100))
+BEGIN
+    DECLARE vehiculoCount INT;
+
+    START TRANSACTION;
+
+    -- Verificar si el vehículo asociado a la devolución existe
+    SELECT COUNT(*) INTO vehiculoCount FROM Vehiculo WHERE no_Matricula = no_Matricula;
+
+    IF vehiculoCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo especificado no existe';
+    ELSE
+        IF no_Matricula IS NULL OR estado_devolucion IS NULL OR hora_devolucion IS NULL OR hora_devolucion_real IS NULL OR fecha_devolucion IS NULL OR fecha_devolucion_real IS NULL OR lugar_devolucion = '' THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+        END IF;
+
+        INSERT INTO Devolucion(no_Matricula, estado_devolucion, hora_devolucion, hora_devolucion_real, fecha_devolucion, fecha_devolucion_real, lugar_devolucion)
+        VALUES(no_Matricula, estado_devolucion, hora_devolucion, hora_devolucion_real, fecha_devolucion, fecha_devolucion_real, lugar_devolucion);
+    END IF;
+
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE updateDevolucion(IN id_Devolucion INT, IN no_Matricula VARCHAR(7), IN estado_devolucion TINYINT, IN hora_devolucion TIME, IN hora_devolucion_real TIME, IN fecha_devolucion_real DATE, IN lugar_devolucion VARCHAR(100))
+BEGIN
+    DECLARE devolucionCount INT;
+    DECLARE vehiculoCount INT;
+
+    START TRANSACTION;
+
+    -- Verificar si la devolución y el vehículo existen
+    SELECT COUNT(*) INTO devolucionCount FROM Devolucion WHERE id_Devolucion = id_Devolucion;
+    SELECT COUNT(*) INTO vehiculoCount FROM Vehiculo WHERE no_Matricula = no_Matricula;
+
+    IF devolucionCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La devolución especificada no existe';
+    ELSEIF vehiculoCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo especificado no existe';
+    ELSE
+        IF id_Devolucion IS NULL OR no_Matricula IS NULL OR estado_devolucion IS NULL OR hora_devolucion IS NULL OR hora_devolucion_real IS NULL OR fecha_devolucion_real IS NULL OR lugar_devolucion = '' THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
+        END IF;
+
+        UPDATE Devolucion
+        SET no_Matricula = no_Matricula, estado_devolucion = estado_devolucion, hora_devolucion = hora_devolucion, hora_devolucion_real = hora_devolucion_real, fecha_devolucion_real = fecha_devolucion_real, lugar_devolucion = lugar_devolucion
+        WHERE id_Devolucion = id_Devolucion;
+    END IF;
+
+    COMMIT;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE deleteDevolucion(IN id_Devolucion INT)
+BEGIN
+    DECLARE devolucionCount INT;
+
+    START TRANSACTION;
+
+    -- Verificar si la devolución existe
+    SELECT COUNT(*) INTO devolucionCount FROM Devolucion WHERE id_Devolucion = id_Devolucion;
+
+    IF devolucionCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La devolución especificada no existe';
+    ELSE
+        IF id_Devolucion IS NULL THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El ID de la devolución no puede ser NULL';
+        END IF;
+
+        DELETE FROM Devolucion
+        WHERE id_Devolucion = id_Devolucion;
+    END IF;
+
+    COMMIT;
+END;
+//
+DELIMITER ;
