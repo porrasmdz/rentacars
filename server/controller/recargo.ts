@@ -25,7 +25,6 @@ export const create = async (evt: H3Event) => {
     const result = await recargoModel.create({
      
       Id_pago: body.Id_pago,
-      Fecha: body.Fecha,
       Cobertura_Seguro: body.Cobertura_Seguro,
       Monto : body.Monto,
       Razon: body.Razon

@@ -14,11 +14,11 @@
             class="text-xs text-justify font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200"
           >
             <tr>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-1/2 sm:w-1/5">
                 <div class="font-semibold">Logo</div>
               </th>
               
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden sm:table-cell">
                 <div class="font-semibold">RUC</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

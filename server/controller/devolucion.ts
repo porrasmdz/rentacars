@@ -25,11 +25,11 @@ export const create = async (evt: H3Event) => {
     const result = await devolucionModel.create({
      
       No_Matricula: body.No_Matricula,
-      Estado_Devolucion: body.Estado_Devolucion,
+      Id_Cliente: body.Id_Cliente,
+      Estado_devolucion: body.Estado_devolucion,
       Hora_devolucion: body.Hora_devolucion,
-      Hora_devolucion_real: body.Hora_devolucion_real,
+      
       Fecha_devolucion: body.Fecha_devolucion,
-      Fecha_devolucion_real: body.Fecha_devolucion_real,
       Lugar_devolucion: body.Lugar_devolucion
      
      
@@ -68,7 +68,8 @@ export const update = async (evt: H3Event) => {
       Number.parseInt(evt.context.params?.id_devolucion || "1") as Number,
       {
         No_Matricula: body.No_Matricula,
-        Estado_Devolucion: body.Estado_Devolucion,
+        Id_Cliente: body.Id_Cliente,
+        Estado_devolucion: body.Estado_devolucion,
         Hora_devolucion: body.Hora_devolucion,
         Hora_devolucion_real: body.Hora_devolucion_real,
         Fecha_devolucion: body.Fecha_devolucion,

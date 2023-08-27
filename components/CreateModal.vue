@@ -68,8 +68,7 @@ const createNewItem = async() => {
         useState('success').value = "El registro ha sido creado exitosamente";
         emits('success')})
     .catch((error)=> {
-        useState('errors').value.push(error);
-        console.log("ERROR",error)
+        useState('errors').value.push("Codigo " +error.statusCode + " - "+ error.statusMessage);
     })
 }
 

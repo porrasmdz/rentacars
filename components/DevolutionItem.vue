@@ -15,7 +15,7 @@
       <div class="">{{ devolution?.Hora_devolucion }}</div>
     </td>
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-      <div class="">{{ devolution?.Hora_devolucion_real }}</div>
+      <div class="">{{ devolution?.Hora_devolucion_real ?? '---' }}</div>
     </td>
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
       
@@ -23,7 +23,8 @@
     </td>
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
       
-      <span >{{ new Date(devolution?.Fecha_devolucion_real)?.toLocaleDateString() }}</span>
+      <span v-if="devolution?.Fecha_devolucion_real">{{ new Date(devolution?.Fecha_devolucion_real)?.toLocaleDateString() }}</span>
+      <span v-else>---</span>
     </td>
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
       <div class="">{{ devolution.Lugar_devolucion }}</div>
@@ -48,7 +49,7 @@
       </DropdownEditMenu>
 
       <EditModal
-      :editable-fields="['No_Matricula', 'Estado_devolucion', 'Hora_devolucion',
+      :editable-fields="['No_Matricula', 'Id_Cliente','Estado_devolucion', 'Hora_devolucion',
       'Hora_devolucion_real','Fecha_devolucion','Fecha_devolucion_real','Lugar_devolucion']"
       :put-url="`/api/devolucion/`"
       :edit-modal-open="editModal"
@@ -82,7 +83,7 @@ const deleteItem = async () => {
       
     })
     .catch((error)=>{
-      useState('errors').value.push(error);
+      useState('errors').value.push("Codigo " +error.statusCode + " - "+ error.statusMessage);
     })
 }
 

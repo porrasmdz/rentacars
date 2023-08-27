@@ -29,19 +29,8 @@ export const create = async (data: EmpresaModel) => {
     console.log(Object.values(data));
     const result = await sql({
         query: `
-        INSERT INTO EmpresaAlquiler (
-            
-        RUC,
-        Nombre,
-        imageURLLogo
-    
-        ) VALUES (
-            ?,
-            ?,
-            ?
-            
-           
-        ) RETURNING *
+        CALL insertEmpresaAlquiler(?,?,?)
+        
         `,
         values:[data.RUC, data.Nombre, data.imageURLLogo]
     }) as any;
@@ -58,29 +47,23 @@ export const detail = async (id: string) => {
 };
 
 export const update = async (id: string, data: EmpresaModel) => {
-    console.log("recvd2",id,data)
+   
     await sql({
         query: `
-        UPDATE EmpresaAlquiler
-        SET
-
-            Nombre = ?,
-            imageURLLogo = ?
-        
-    
-        WHERE RUC = ?
+        CALL updateEmpresaAlquiler(?,?,?)
         `,
-        values:[  
+        values:[ 
+            id, 
             data.Nombre,
             data.imageURLLogo,
-            , id]
+        ]
     });
     return await detail(id);
 }
 
 export const remove = async (id: string) => {
     await sql({
-        query: 'DELETE FROM EmpresaAlquiler WHERE RUC = ?',
+        query: 'CALL deleteEmpresaAlquiler(?)',
         values: [id]
     });
 

@@ -46,7 +46,7 @@
      :data="data"
      :models="'Recargos'"
      :total="totalResults"
-     v-else-if="data.length > 1"></RechargesTable>
+     v-else-if="data.length > 0"></RechargesTable>
     <div v-else-if="errors.length < 1">
       <div
         class="bg-white shadow-lg rounded-sm border border-slate-200 relative"
@@ -78,7 +78,7 @@
     
     <CreateModal
      @success="fetchData()"
-     :editable-fields="['Id_pago', 'Fecha', 'Cobertura_Seguro', 'Monto', 'Razon']"
+     :editable-fields="['Id_pago', 'Cobertura_Seguro', 'Monto', 'Razon']"
      :post-url="'/api/recargo/'"
      :create-modal-open="createModalOpen"
      @close-modal="createModalOpen=false" 

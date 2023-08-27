@@ -1,6 +1,6 @@
 <template>
   <tr>
-    <td class="px-2 first:pl-5 last:pr-5 py-3 text-justify whitespace-nowrap overflow-hidden w-1/5">
+    <td class="px-2 first:pl-5 last:pr-5 py-3 text-justify whitespace-nowrap overflow-hidden ">
       <div class="flex items-center">
         
         <img class="h-36" :src="business?.imageURLLogo" alt="">
@@ -9,7 +9,7 @@
       </div>
     </td>
     
-    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden sm:table-cell">
       <div class="">{{ business?.RUC }}</div>
     </td>
     
@@ -69,7 +69,7 @@ const deleteItem = async () => {
       
     })
     .catch((error)=>{
-      useState('errors').value.push(error);
+      useState('errors').value.push("Codigo " +error.statusCode + " - "+ error.statusMessage);
     })
 }
 

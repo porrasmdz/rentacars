@@ -23,9 +23,10 @@ export const create = async (evt: H3Event) => {
     const body = await readBody(evt);
     const result = await pagoModel.create({
       Id_Cliente: body.Id_Cliente,
-      Monto: body.Monto,
-      Fecha: body.Fecha,
       
+      id_Devolucion: body.id_Devolucion,
+      Monto: body.Monto,
+     
       conf_pago: body.conf_pago,
       Plazo: body.Plazo,
       Forma_pago: body.Forma_pago,
@@ -66,6 +67,8 @@ export const update = async (evt: H3Event) => {
       Number.parseInt(evt.context.params?.id_pago || "1") as Number,
       {
         Id_Cliente: body.Id_Cliente,
+        
+        id_Devolucion: body.id_Devolucion,
         Monto: body.Monto,
         Fecha: body.Fecha,
         

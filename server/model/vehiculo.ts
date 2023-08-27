@@ -33,29 +33,8 @@ export const read = async() => {
 export const create = async (data: VehiculoModel) => {
     
     const result = await sql({
-        query: `
-        INSERT INTO Vehiculo (     
-        No_Matricula,
-        RUC,
-        Marca,
-        Disponibilidad,
-        Precio_alquiler,
-        Capacidad,
-        imageURLVe
-    
-        ) VALUES (
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?
-            
-           
-        ) RETURNING *
-        `,
-        values:Object.values(data)
+        query: `CALL insertVehiculo(?,?,?,?,?,?,?)`,
+        values:[data.No_Matricula,data.RUC, data.Marca, data.Disponibilidad, data.Precio_alquiler, data.Capacidad, data.imageURLVe]
     }) as any;
     return result.length === 1 ? (result[0] as VehiculoModel) : null;
 }
@@ -72,33 +51,23 @@ export const detail = async (No_Matricula: string) => {
 export const update = async (No_Matricula: string, data: VehiculoModel) => {
     await sql({
         query: `
-        UPDATE Vehiculo
-        SET
-            
-       
-        RUC = ?,
-        Marca = ?,
-        Disponibilidad = ?,
-        Precio_alquiler = ?,
-        Capacidad = ?,
-        imageURLVe = ?
-    
-        WHERE No_Matricula = ?
+        CALL updateVehiculo(?,?,?,?,?,?,?)
         `,
-        values:[  
+        values:[
+        No_Matricula,  
         data.RUC,
         data.Marca,
         data.Disponibilidad,
         data.Precio_alquiler,
         data.Capacidad,
-        data.imageURLVe, No_Matricula]
+        data.imageURLVe]
     });
     return await detail(No_Matricula);
 }
 
 export const remove = async (No_Matricula: string) => {
     await sql({
-        query: 'DELETE FROM Vehiculo WHERE No_Matricula =?',
+        query: 'CALL deleteVehiculo(?)',
         values: [No_Matricula]
     });
 

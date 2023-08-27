@@ -15,32 +15,32 @@
           >
             <tr>
               
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-1/2 sm:w-1/5">
                 <div class="font-semibold">Auto</div>
               </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden sm:table-cell">
                 <div class="font-semibold">Matrícula</div>
               </th>
               
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden sm:table-cell">
                 <div class="font-semibold">Empresa</div>
               </th>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="font-semibold">Marca</div>
               </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden sm:table-cell">
                 <div class="font-semibold">Disponibles</div>
               </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden sm:table-cell">
                 <div class="font-semibold">Precio /dia</div>
               </th>
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden sm:table-cell">
                 <div class="font-semibold">Capacidad</div>
               </th>
              
               
              
-              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                 <span class="sr-only">Menu</span>
               </th>
             </tr>

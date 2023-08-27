@@ -4,7 +4,7 @@ import {sql} from '~~/server/db';
 export type RecargoModel = {
     id_Recargo?: Number,
     Id_pago: Number,
-    Fecha: Date,
+    Fecha?: Date,
     Cobertura_Seguro: string,
     Monto : Number,
     Razon: string
@@ -32,26 +32,10 @@ export const create = async (data: RecargoModel) => {
     console.log(Object.values(data));
     const result = await sql({
         query: `
-        INSERT INTO Recargo (
-            
-            Id_pago,
-            Fecha,
-            Cobertura_Seguro,
-            Monto ,
-            Razon
+        CALL insertRecargo(?,?,?,?)
         
-
-        ) VALUES (
-            ?,
-            ?,
-            ?,
-            ?,
-            ?
-            
-           
-        ) RETURNING *
         `,
-        values:Object.values(data)
+        values:[data.Id_pago, data.Cobertura_Seguro, data.Monto, data.Razon]
     }) as any;
     return result.length === 1 ? (result[0] as RecargoModel) : null;
 }
@@ -66,33 +50,25 @@ export const detail = async (id: Number) => {
 };
 
 export const update = async (id: Number, data: RecargoModel) => {
+    //CONTINUE
     await sql({
         query: `
-        UPDATE Recargo
-        SET
-            
-        
-        Id_pago = ?,
-        Fecha = ?,
-        Cobertura_Seguro = ?,
-        Monto  = ?,
-        Razon = ?
-    
-        WHERE id_Recargo = ?
+        CALL updateRecargo(?,?,?,?,?)
+      
         `,
         values:[  
+            id,
             data.Id_pago,
-            data.Fecha,
             data.Cobertura_Seguro,
             data.Monto ,
-            data.Razon, id]
+            data.Razon]
     });
     return await detail(id);
 }
 
 export const remove = async (id: Number) => {
     await sql({
-        query: 'DELETE FROM Recargo WHERE id_Recargo =?',
+        query: 'CALL deleteRecargo(?)',
         values: [id]
     });
 

@@ -1,6 +1,6 @@
 <template>
   <tr>
-    <td class="px-2 first:pl-5 last:pr-5 py-3 text-justify whitespace-nowrap overflow-hidden w-1/3">
+    <td class="px-2 first:pl-5 last:pr-5 py-3 text-justify whitespace-nowrap overflow-hidden w-auto">
       <div class="flex items-center">
         
         <img class="h-36" :src="vehicle?.imageURLVe" alt="">
@@ -9,28 +9,28 @@
       </div>
     </td>
     
-    <td class="px-2 first:pl-5 last:pr-5 py-3 text-justify whitespace-nowrap">
+    <td class="px-2 first:pl-5 last:pr-5 py-3 text-justify whitespace-nowrap hidden sm:table-cell">
       <div class="flex items-center">
        
         <div class="font-medium text-slate-800">{{ vehicle?.No_Matricula }}</div>
       </div>
     </td>
     
-    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden sm:table-cell">
       <div class="">{{ vehicle?.RUC }}</div>
     </td>
     
-    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap ">
       <div class="">{{ vehicle?.Marca }}</div>
     </td>
-    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden sm:table-cell">
       <div class="">{{ vehicle?.Disponibilidad }}</div>
     </td>
-    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden sm:table-cell">
       
       <span >{{ vehicle?.Precio_alquiler }}</span>
     </td>
-    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden sm:table-cell">
       
       <span >{{ vehicle?.Capacidad }}</span>
     </td>

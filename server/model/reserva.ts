@@ -34,26 +34,8 @@ export const create = async (data: ReservaModel) => {
     console.log("values",Object.values(data));
     const result = await sql({
         query: `
-        INSERT INTO Reserva (
-            
-            Id_Cliente,
-            Id_Inspector,    
-            No_Matricula,  
-            Fecha_Inicio,
-            Hora_reserva,
-            ubicacion_recogida
-
-        ) VALUES (
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?
-           
-        ) RETURNING *
-        `,
-        values:Object.values(data)
+        CALL insertReserva(?,?,?,?,?,?)`,
+        values:[data.Id_Cliente,data.Id_Inspector,data.No_Matricula, data.Fecha_Inicio, data.Hora_reserva, data.ubicacion_recogida]
     }) as any;
     return result.length === 1 ? (result[0] as ReservaModel) : null;
 }
@@ -70,33 +52,22 @@ export const detail = async (id: Number) => {
 export const update = async (id: Number, data: ReservaModel) => {
     await sql({
         query: `
-        UPDATE Reserva
-        SET
-            
-        
-        id_Cliente = ?,
-        id_Inspector = ?,   
-        No_Matricula = ?,      
-        Fecha_Inicio = ?,
-        Hora_reserva = ?,
-        ubicacion_recogida = ?
-    
-        WHERE id_Reserva = ?
-        `,
+        CALL updateReserva(?,?,?,?,?,?,?)`,
         values:[  
+            id,
             data.Id_Cliente,
             data.Id_Inspector,
             data.No_Matricula,      
             data.Fecha_Inicio,
             data.Hora_reserva,
-            data.ubicacion_recogida, id]
+            data.ubicacion_recogida]
     });
     return await detail(id);
 }
 
 export const remove = async (id: Number) => {
     await sql({
-        query: 'DELETE FROM Reserva WHERE id_Reserva =?',
+        query: 'CALL deleteReserva(?)',
         values: [id]
     });
 

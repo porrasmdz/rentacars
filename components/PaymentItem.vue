@@ -6,9 +6,12 @@
         <div class="font-medium text-slate-800">{{ payment?.Id_Cliente ?? 'null'}}</div>
       </div>
     </td>
-    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap flex w-20 gap-2 justify-between">
-      <span>$</span>
-      <span >{{ payment?.Monto?.toFixed(2)  ?? '0.00'}}</span>
+    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <div class="flex gap-2 items-center justify-between w-16">
+        <span >$</span>
+        <span >{{ payment?.Monto?.toFixed(2)  ?? '0.00'}}</span>
+    
+      </div>
     </td>
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
       <div class="">{{ new Date(payment?.Fecha)?.toLocaleDateString() ?? '--/--/--'}}</div>
@@ -41,7 +44,7 @@
       </DropdownEditMenu>
 
       <EditModal
-      :editable-fields="['Id_Cliente', 'Monto', 'Fecha','conf_pago','Plazo','Forma_pago']"
+      :editable-fields="['Id_Cliente', 'id_Devolucion','Monto', 'Fecha','conf_pago','Plazo','Forma_pago']"
       :put-url="`/api/pago/`"
       :edit-modal-open="editModal"
       :item="payment"
@@ -63,7 +66,6 @@ const editModal = ref(false);
 const deleteModal = ref(false);
 
 const deleteItem = async () => {
-  console.log("Buscando", props.payment)
     const result = await $fetch(`/api/pago/${props?.payment?.Id_Pago}`, {method: 'DELETE'})
     .then((res)=> {
       useState('success').value = "El registro ha sido ELIMINADO exitosamente";
@@ -71,7 +73,7 @@ const deleteItem = async () => {
       
     })
     .catch((error)=>{
-      useState('errors').value.push(error);
+      useState('errors').value.push("Codigo " +error.statusCode + " - "+ error.statusMessage);
     })
 }
 

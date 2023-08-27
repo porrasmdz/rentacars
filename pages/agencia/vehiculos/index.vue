@@ -46,7 +46,7 @@
      :data="data"
      
      :total="totalResults"
-     v-else-if="data.length > 1"></VehiclesTable>
+     v-else-if="data.length > 0"></VehiclesTable>
     <div v-else-if="errors.length < 1">
       <div
         class="bg-white shadow-lg rounded-sm border border-slate-200 relative"

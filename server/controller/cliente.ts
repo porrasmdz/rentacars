@@ -39,7 +39,6 @@ export const create = async (evt: H3Event) => {
       data: result,
     };
   } catch (error:any) {
-    console.log(error);
     throw createError({
       statusCode: 500,
       statusMessage: error.message ?? UNKNOWM_ERROR,

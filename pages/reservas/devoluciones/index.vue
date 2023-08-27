@@ -47,7 +47,7 @@
      :data="data"
      
      :total="totalResults"
-     v-else-if="data.length > 1"></DevolutionsTable>
+     v-else-if="data.length > 0"></DevolutionsTable>
     <div v-else-if="errors.length < 1">
       <div
         class="bg-white shadow-lg rounded-sm border border-slate-200 relative"
@@ -78,7 +78,7 @@
     </div>
     <CreateModal
      @success="fetchData()"
-     :editable-fields="['No_Matricula', 'Estado_devolucion', 'Hora_devolucion','Hora_devolucion_real', 'Fecha_devolucion','Fecha_devolucion_real', 'Lugar_devolucion']"
+     :editable-fields="['No_Matricula', 'Id_Cliente','Estado_Devolucion', 'Hora_devolucion', 'Fecha_devolucion', 'Lugar_devolucion']"
      :post-url="'/api/devolucion/'"
      :create-modal-open="createModalOpen"
      @close-modal="createModalOpen=false" 

@@ -35,27 +35,7 @@ export const create = async (data: ClienteModel) => {
    
     const result = await sql({
         query: `
-        INSERT INTO Cliente (
-            
-            Nombre,
-            Apellido,
-            Fecha_Nacimiento,
-            Email,
-            Celular,
-            Edad,
-            Licencia,
-            id_Inspector
-
-        ) VALUES (
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?
-        ) 
+        CALL insertCliente(?,?,?,?,?,?,?,?)
         `,
         values:[data.Nombre,data.Apellido,data.Fecha_Nacimiento,data.Email,data.Celular,data.Edad,data.Licencia,data.id_Inspector]
     }) as any;
@@ -74,25 +54,17 @@ export const detail = async (id: string) => {
 export const update = async (id:string, data: ClienteModel) => {
     await sql({
         query: `
-        UPDATE Cliente
-        SET
-            nombre = ?,
-            apellido = ?,
-            fecha_nacimiento = ?,
-            email = ? ,
-            celular = ?,
-            edad = ?,
-            licencia = ?
-        WHERE id_Cliente = ?
+        CALL updateCliente(?,?,?,?,?,?,?,?,?)
+        
         `,
-        values:[data.Nombre,data.Apellido,data.Fecha_Nacimiento,data.Email,data.Celular,data.Edad,data.Licencia, id]
+        values:[id, data.Nombre,data.Apellido,data.Fecha_Nacimiento,data.Email,data.Celular,data.Edad,data.Licencia, data.id_Inspector]
     });
     return await detail(id);
 }
 
 export const remove = async (id: string) => {
     await sql({
-        query: 'DELETE FROM Cliente WHERE id_Cliente =?',
+        query: 'CALL deleteCliente(?)',
         values: [id]
     });
 
