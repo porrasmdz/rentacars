@@ -79,8 +79,7 @@ export const detail = async (Reporte: string) => {
             query: `SELECT * FROM VehiculosReservadosNoDevueltos`,
            
         }) as any;
-        console.log("queryres", result4)
-    
+        
         return result4 as ReporteModel;
     break;
     }

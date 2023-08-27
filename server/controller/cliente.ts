@@ -10,7 +10,7 @@ export const read = async () => {
       total
     };
   } catch (error) {
-    console.log(error);
+   
       
     throw createError({
       statusCode: 500,
@@ -22,7 +22,6 @@ export const read = async () => {
 export const create = async (evt: H3Event) => {
   try {
     const body = await readBody(evt);
-    console.log("Before parsing", body)
     const result = await clienteModel.create({
       
       Nombre: body.Nombre,
@@ -65,7 +64,6 @@ export const detail = async (evt: H3Event) => {
 export const update = async (evt: H3Event) => {
   try {
     const body = await readBody(evt);
-    console.log("Arrived",body)
     const result = await clienteModel.update(
       evt.context.params?.id_cliente as string,
 

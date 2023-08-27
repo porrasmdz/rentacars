@@ -91,7 +91,6 @@ export const update = async (evt: H3Event) => {
 
 export const remove = async (evt: H3Event) => {
     try {
-      console.log("Received params ", evt.context.params)
       const result = await pagoModel.remove(
         Number.parseInt(evt.context.params?.id_pago || "1") as Number
       );

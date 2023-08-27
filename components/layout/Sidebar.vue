@@ -170,7 +170,7 @@
                         >
                           <span
                             class="text-sm font-medium md:opacity-0 md:sidebar-expanded:opacity-100 lg:opacity-100 duration-200"
-                            >Main</span
+                            >Reportes (Views)</span
                           >
                         </a>
                       </li>

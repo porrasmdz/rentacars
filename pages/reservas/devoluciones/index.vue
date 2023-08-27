@@ -78,7 +78,7 @@
     </div>
     <CreateModal
      @success="fetchData()"
-     :editable-fields="['No_Matricula', 'Id_Cliente','Estado_Devolucion', 'Hora_devolucion', 'Fecha_devolucion', 'Lugar_devolucion']"
+     :editable-fields="['No_Matricula', 'Id_Cliente','Estado_devolucion', 'Hora_devolucion', 'Fecha_devolucion', 'Lugar_devolucion']"
      :post-url="'/api/devolucion/'"
      :create-modal-open="createModalOpen"
      @close-modal="createModalOpen=false" 

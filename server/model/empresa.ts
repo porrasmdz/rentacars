@@ -26,7 +26,6 @@ export const read = async() => {
 
 
 export const create = async (data: EmpresaModel) => {
-    console.log(Object.values(data));
     const result = await sql({
         query: `
         CALL insertEmpresaAlquiler(?,?,?)

@@ -222,7 +222,7 @@ INSERT INTO Inspector (Nombre, Email, Celular) VALUES
 ('Sara', 'sara.inspector@yahoo.com', '0987654321');
 -- ---------------
 -- Registros Clientes
-INSERT INTO Cliente (Nombre, Apellido, Fecha_Nacimiento, Email, Celular, Edad, Licencia,Id_Inspector) VALUES
+INSERT INTO Cliente (Nombre, Apellido, Fecha_Nacimiento, Email, Celular, Edad, Licencia,id_Inspector) VALUES
 ('Juan', 'Perez', '1985-05-15', 'juan.perez@gmail.com', '0991234567', 36, 1,2),
 ('Maria', 'Gonzalez', '1990-09-22', 'maria.gonzalez@hotmail.com', '0987654321', 31, 1,4),
 ('Pedro', 'Ramirez', '1988-11-10', 'pedro.ramirez@yahoo.com', '0998765432', 33, 1,3),
@@ -233,6 +233,47 @@ INSERT INTO Cliente (Nombre, Apellido, Fecha_Nacimiento, Email, Celular, Edad, L
 ('Paula', 'Torres', '1998-06-14', 'paula.torres@gmail.com', '0987654321', 23, 1,7),
 ('Roberto', 'Gomez', '1980-09-30', 'roberto.gomez@outlook.com', '0998765432', 41, 1,7),
 ('Sofia', 'Diaz', '1993-04-28', 'sofia.diaz@yahoo.com', '0987654321', 28, 1,7);
+
+
+
+-- Registros Empresa Alquiler
+INSERT INTO EmpresaAlquiler (RUC, Nombre, imageURLLogo) VALUES
+('3000000001', 'Alquiler de Autos Ecuador', 'https://cdn1.vectorstock.com/i/1000x1000/86/00/logo-for-car-rental-and-sales-vector-25468600.jpg'),
+('4000000002', 'Autos Rentables Cía. Ltda.', 'https://cdn1.vectorstock.com/i/1000x1000/86/00/logo-for-car-rental-and-sales-vector-25468600.jpg'),
+('5000000003', 'Carros Express S.A.', 'https://cdn1.vectorstock.com/i/1000x1000/86/00/logo-for-car-rental-and-sales-vector-25468600.jpg'),
+('6000000004', 'Rentacar Andino C.A.', 'https://cdn1.vectorstock.com/i/1000x1000/86/00/logo-for-car-rental-and-sales-vector-25468600.jpg'),
+('7000000005', 'CarrosVeloz Rentacar', 'https://cdn1.vectorstock.com/i/1000x1000/86/00/logo-for-car-rental-and-sales-vector-25468600.jpg'),
+('8000000006', 'RentautoEC Alquiler de Autos', 'https://cdn1.vectorstock.com/i/1000x1000/86/00/logo-for-car-rental-and-sales-vector-25468600.jpg'),
+('9000000007', 'Ecuarent Car Rental', 'https://cdn1.vectorstock.com/i/1000x1000/86/00/logo-for-car-rental-and-sales-vector-25468600.jpg'),
+('1000000008', 'Alquilautos S.A.', 'https://cdn1.vectorstock.com/i/1000x1000/86/00/logo-for-car-rental-and-sales-vector-25468600.jpg'),
+('2000000009', 'Velocar Rentacar', 'https://cdn1.vectorstock.com/i/1000x1000/86/00/logo-for-car-rental-and-sales-vector-25468600.jpg'),
+('3500000010', 'RentacarPremium Cía. Ltda.', 'https://cdn1.vectorstock.com/i/1000x1000/86/00/logo-for-car-rental-and-sales-vector-25468600.jpg');
+-- Registros Vehiculos
+INSERT INTO Vehiculo (No_Matricula, RUC, Marca, Disponibilidad, Precio_alquiler, Capacidad, imageURLVe) VALUES
+('ABC123', '3000000001', 'Toyota', 1, 50.00, 4, 'https://acroadtrip.blob.core.windows.net/catalogo-imagenes/m/RT_V_05a99b23df054e0eb2c93b3885eaa13e.jpg'),
+('XYZ789', '4000000002', 'Nissan', 1, 45.00, 5, 'https://acroadtrip.blob.core.windows.net/catalogo-imagenes/m/RT_V_05a99b23df054e0eb2c93b3885eaa13e.jpg'),
+('DEF456', '5000000003', 'Chevrolet', 1, 60.00, 7, 'https://acroadtrip.blob.core.windows.net/catalogo-imagenes/m/RT_V_05a99b23df054e0eb2c93b3885eaa13e.jpg'),
+('GHI987', '6000000004', 'Ford', 1, 55.00, 4, 'https://acroadtrip.blob.core.windows.net/catalogo-imagenes/m/RT_V_05a99b23df054e0eb2c93b3885eaa13e.jpg'),
+('JKL234', '7000000005', 'Honda', 1, 48.00, 5, 'https://acroadtrip.blob.core.windows.net/catalogo-imagenes/m/RT_V_05a99b23df054e0eb2c93b3885eaa13e.jpg'),
+('MNO345', '8000000006', 'Hyundai', 1, 52.00, 6, 'https://acroadtrip.blob.core.windows.net/catalogo-imagenes/m/RT_V_05a99b23df054e0eb2c93b3885eaa13e.jpg'),
+('PQR567', '9000000007', 'Volkswagen', 1, 50.00, 4, 'https://acroadtrip.blob.core.windows.net/catalogo-imagenes/m/RT_V_05a99b23df054e0eb2c93b3885eaa13e.jpg'),
+('STU890', '1000000008', 'Kia', 1, 47.00, 5, 'https://acroadtrip.blob.core.windows.net/catalogo-imagenes/m/RT_V_05a99b23df054e0eb2c93b3885eaa13e.jpg'),
+('VWX901', '2000000009', 'Mazda', 1, 55.00, 6, 'https://acroadtrip.blob.core.windows.net/catalogo-imagenes/m/RT_V_05a99b23df054e0eb2c93b3885eaa13e.jpg'),
+('YZA012', '3500000010', 'Suzuki', 1, 49.00, 5, 'https://acroadtrip.blob.core.windows.net/catalogo-imagenes/m/RT_V_05a99b23df054e0eb2c93b3885eaa13e.jpg');
+
+
+-- Registros Devoluciones
+INSERT INTO Devolucion (Id_Cliente, No_Matricula, Estado_devolucion, Hora_devolucion, Hora_devolucion_real, Fecha_devolucion, Fecha_devolucion_real, Lugar_devolucion) VALUES
+(1,'ABC123', 1, '17:00:00', null, '2023-08-01', null, 'Quito, Aeropuerto Internacional Mariscal Sucre'),
+(2,'XYZ789', 1, '18:30:00', '19:00:00', '2023-08-15', '2023-08-15', 'Guayaquil, Centro Ciudad'),
+(3,'DEF456', 1, '15:45:00', '16:00:00', '2023-08-02', '2023-08-02', 'Cuenca, Terminal de Autobuses'),
+(4,'GHI987', 1, '16:30:00', null, '2023-08-20', null, 'Riobamba, Terminal de Autobuses'),
+(5,'JKL234', 1, '14:30:00', '15:00:00', '2023-08-03', '2023-08-03', 'Manta, Aeropuerto Internacional Eloy Alfaro'),
+(6,'ABC123', 1, '16:00:00', '16:30:00', '2023-08-25', '2023-08-25', 'Guayaquil, Hotel Sheraton'),
+(3,'STU890', 1, '12:45:00', '13:15:00', '2023-08-10', '2023-08-10', 'Guayaquil, Centro Ciudad'),
+(8,'VWX901', 1, '19:30:00', null, '2023-08-05', null, 'Cuenca, Terminal de Autobuses'),
+(9,'YZA012', 1, '17:15:00', '17:45:00', '2023-08-12', '2023-08-12', 'Riobamba, Hotel Montecarlo');
+
 
 -- Registros Pagos
 INSERT INTO Pago (Id_Cliente, id_Devolucion, Monto, Fecha, conf_pago, Plazo, Forma_pago) VALUES
@@ -245,32 +286,6 @@ INSERT INTO Pago (Id_Cliente, id_Devolucion, Monto, Fecha, conf_pago, Plazo, For
 (3, 7, 90.00, '2023-07-10', 0, '2023-12-10', 'Tarjeta'),
 (8, 8, 220.75, '2023-07-05', 0, '2023-08-05', 'Transferencia'),
 (9, 9, 150.25, '2023-07-12', 1, '2023-08-12', 'Tarjeta');
-
-
--- Registros Empresa Alquiler
-INSERT INTO EmpresaAlquiler (RUC, Nombre) VALUES
-('3000000001', 'Alquiler de Autos Ecuador'),
-('4000000002', 'Autos Rentables Cía. Ltda.'),
-('5000000003', 'Carros Express S.A.'),
-('6000000004', 'Rentacar Andino C.A.'),
-('7000000005', 'CarrosVeloz Rentacar'),
-('8000000006', 'RentautoEC Alquiler de Autos'),
-('9000000007', 'Ecuarent Car Rental'),
-('1000000008', 'Alquilautos S.A.'),
-('2000000009', 'Velocar Rentacar'),
-('3500000010', 'RentacarPremium Cía. Ltda.');
--- Registros Vehiculos
-INSERT INTO Vehiculo (No_Matricula, RUC, Marca, Disponibilidad, Precio_alquiler, Capacidad) VALUES
-('ABC123', '3000000001', 'Toyota', 1, 50.00, 4),
-('XYZ789', '4000000002', 'Nissan', 1, 45.00, 5),
-('DEF456', '5000000003', 'Chevrolet', 1, 60.00, 7),
-('GHI987', '6000000004', 'Ford', 1, 55.00, 4),
-('JKL234', '7000000005', 'Honda', 1, 48.00, 5),
-('MNO345', '8000000006', 'Hyundai', 1, 52.00, 6),
-('PQR567', '9000000007', 'Volkswagen', 1, 50.00, 4),
-('STU890', '1000000008', 'Kia', 1, 47.00, 5),
-('VWX901', '2000000009', 'Mazda', 1, 55.00, 6),
-('YZA012', '3500000010', 'Suzuki', 1, 49.00, 5);
 
 
 -- Registros Reservas
@@ -300,18 +315,6 @@ INSERT INTO Recargo (Id_pago, Fecha, Cobertura_Seguro, Monto, Razon) VALUES
 (9, '2023-07-05', 'Seguro básico', 22.75, 'Demora en la entrega'),
 (10, '2023-07-12', 'Seguro completo', 15.25, 'Daño en el retrovisor');
 
-
--- Registros Devoluciones
-INSERT INTO Devolucion (Id_Cliente, No_Matricula, Estado_devolucion, Hora_devolucion, Hora_devolucion_real, Fecha_devolucion, Fecha_devolucion_real, Lugar_devolucion) VALUES
-(1,'ABC123', 1, '17:00:00', null, '2023-08-01', null, 'Quito, Aeropuerto Internacional Mariscal Sucre'),
-(2,'XYZ789', 1, '18:30:00', '19:00:00', '2023-08-15', '2023-08-15', 'Guayaquil, Centro Ciudad'),
-(3,'DEF456', 1, '15:45:00', '16:00:00', '2023-08-02', '2023-08-02', 'Cuenca, Terminal de Autobuses'),
-(4,'GHI987', 1, '16:30:00', null, '2023-08-20', null, 'Riobamba, Terminal de Autobuses'),
-(5,'JKL234', 1, '14:30:00', '15:00:00', '2023-08-03', '2023-08-03', 'Manta, Aeropuerto Internacional Eloy Alfaro'),
-(6,'ABC123', 1, '16:00:00', '16:30:00', '2023-08-25', '2023-08-25', 'Guayaquil, Hotel Sheraton'),
-(3,'STU890', 1, '12:45:00', '13:15:00', '2023-08-10', '2023-08-10', 'Guayaquil, Centro Ciudad'),
-(8,'VWX901', 1, '19:30:00', null, '2023-08-05', null, 'Cuenca, Terminal de Autobuses'),
-(9,'YZA012', 1, '17:15:00', '17:45:00', '2023-08-12', '2023-08-12', 'Riobamba, Hotel Montecarlo');
 
 -- ##############################################################################
 -- ##############################AVANCE 3########################################
@@ -397,20 +400,22 @@ GROUP BY
 SELECT * FROM PromedioTiempoAlquilerVehiculosPorCliente;
 -- Vehiculos Reservados pero no recogidos de la agencia
 CREATE VIEW ReservasVehiculosNoReclamados AS
-SELECT
+SELECT DISTINCT
     R.id_Reserva,
+    D.id_Devolucion,
     R.No_Matricula,
-    C.Nombre AS Cliente_Nombre,
-    C.Apellido AS Cliente_Apellido,
+    C.Id_Cliente,
     R.Fecha_Inicio AS Fecha_Reserva,
     R.Hora_reserva AS Hora_Reserva,
     R.ubicacion_recogida AS Ubicacion_Recogida,
     datediff(NOW(), R.Fecha_Inicio) as Dias_Sin_Retirar
 FROM
-    (Reserva R
-	JOIN Cliente C ON C.Id_Cliente = R.id_Cliente)
-    LEFT JOIN Devolucion D ON (D.No_Matricula = R.No_Matricula AND D.Id_Cliente = C.Id_Cliente)
-WHERE D.id_Devolucion IS NULL;
+    Vehiculo V
+     RIGHT JOIN (Reserva R INNER JOIN Cliente C ON R.Id_Cliente = C.id_Cliente) ON V.No_Matricula = R.No_Matricula
+     LEFT JOIN Devolucion D ON V.No_Matricula = D.No_Matricula AND D.Id_Cliente = C.id_Cliente
+     WHERE D.id_Devolucion IS NULL;
+	 
+     
 
 SELECT * FROM ReservasVehiculosNoReclamados;
 -- Ganancias por Vehiculo (Considerando Recargos)

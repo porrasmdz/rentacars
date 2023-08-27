@@ -23,11 +23,9 @@ export const read = async () => {
 
 export const detail = async (evt: H3Event) => {
   try {
-    console.log(evt.context.params?.id_reporte ?? "");
     const result = await reporteModel.detail(
       evt.context.params?.id_reporte ?? ""
     );
-    console.log("Reporte: ", result);
     return {
       data: result,
     };

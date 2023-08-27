@@ -8,7 +8,12 @@
     <div class="p-3">
       <!-- Card content -->
       <!-- "Today" group -->
-      <div>
+      <div v-if="loading"
+      class="flex flex-col mx-auto w-max items-center justify-center"
+      >
+        <LoaderComponent></LoaderComponent>
+      </div>
+      <div v-else-if="data && data.length>0">
         <header
           class="text-xs uppercase text-slate-400 bg-slate-50 rounded-sm font-semibold p-2"
         >
@@ -48,12 +53,12 @@
                 </div>
               </td>
               <td class="px-2 first:pl-5 last:pr-5 py-3 text-justify whitespace-nowrap">
-                <div v-if="value.Dias_Promedio_Alquiler" class="flex items-center gap-2 justify-between w-14 font-bold"
-                :class="value.Dias_Promedio_Alquiler < 1 ? 'text-amber-500' : 'text-red-500'">
+                <div v-if="value.Dias_Promedio_Alquiler >=0" class="flex items-center gap-2 justify-between w-14 font-bold text-green-600"
+                >
                   <span>{{  Number.parseFloat(value?.Dias_Promedio_Alquiler)?.toFixed(0)}}</span>
                 </div>
                 <div v-else class="flex items-center gap-2 justify-between w-14 font-bold">
-                  Error
+                  Tiene Devoluciones Pend.
                 </div>
               </td>
              
@@ -63,6 +68,17 @@
         
         </ul>
       </div>
+      <div v-else-if="!loading">
+        <div
+          class="bg-white shadow-lg rounded-sm border border-slate-200 relative"
+        >
+          <header class="px-5 py-4">
+            <h2 class="font-semibold text-slate-800">
+              Aun no se han hecho reservas.
+            </h2>
+          </header>
+        </div>
+      </div>
      
     </div>
   </div>
@@ -70,6 +86,10 @@
 <script setup lang="ts">
 const title = ref("");
 const props = defineProps({
+  loading: {
+    type: Boolean,
+    default: true
+  },
   title: {
     type: String,
     default: "Últimos Registros",
