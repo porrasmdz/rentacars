@@ -19,7 +19,7 @@
         >
           Recientes
         </header>
-        <ul class="my-1">
+        <ul class="my-1 overflow-x-auto">
           <table class="table-auto w-full">
           <!-- Table header -->
           <thead
