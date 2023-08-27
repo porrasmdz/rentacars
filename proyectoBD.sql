@@ -1135,7 +1135,7 @@ create index idx_indexReserva on Reserva(Fecha_Inicio);
 
 
 -- usuarios
-CREATE USER 'Cliente'@'localhost' IDENTIFIED BY '1';
+CREATE USER 'Operador'@'localhost' IDENTIFIED BY '1';
 CREATE USER 'Inspector'@'localhost' IDENTIFIED BY '2';
 CREATE USER 'Empresa'@'localhost' IDENTIFIED BY '3';
 CREATE USER 'Administrador'@'localhost' IDENTIFIED BY '4';
