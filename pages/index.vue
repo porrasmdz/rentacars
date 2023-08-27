@@ -18,9 +18,19 @@
     </div>
 
     <div class="grid grid-cols-12 gap-6">
-        <RecentUsersTable :data="dataCliente" :title="'Últimos Clientes'"></RecentUsersTable>
-        <RecentUsersTable :data="dataInspectors" :title="'Últimos Inspectores'" :target-route="'/agencia/inspectores'" ></RecentUsersTable>
-    </div>
+        <NonClaimedCars :data="unclaimedReserves" :headers="
+          ['Id Reserva', 'No.Matricula', 'Nombre Cliente',
+          'Apellido', 'Fecha de Retiro', 'Ubicacion Recogida', 
+          'Días Sin Retirar']" 
+          :title="'Reservas No Reclamadas'"/>
+        <NonReturnedCars :data="nonReturnedCars" :headers="
+        ['Id Devolucion', 'No.Matricula', 'Marca Auto',
+        'Fecha Máx. Devolución', 'Fecha de Devolución', 'Días de Atraso', 
+        'Cliente Nombre','Correo','Celular']" :title="'Vehículos No Devueltos'"/>
+        
+        <MostValuableBrand :data="incomeByBrand" :headers="['Vehiculo', 'Marca.', 'Ingresos Tot.', 'Recargos Tot.']" :title="'Ganancias Por Marca'"></MostValuableBrand>
+        <AvgTimePerClient :data="avgTimeByClient" :headers="['Id_Cliente', 'Nombre', 'Apellido', 'Días Promedio']" :title="'Tiempo Promedio Alquiler'"/>
+      </div>
   </div>
 </template>
 
@@ -29,23 +39,74 @@
 import type { InspectorModel } from "~~/server/model/inspector";
 
 import type { ClienteModel } from "~~/server/model/cliente";
+import type { ReporteModel } from "~~/server/model/reporte";
 useHead({
   title: "Home Page",
 });
 const loading = ref<Boolean>(false);
 const dataInspectors = ref<InspectorModel[]>([]);
 const dataCliente = ref<ClienteModel[]>([]);
+const incomeByBrand = ref<any>([]);
+const avgTimeByClient = ref<any>([]);
+const unclaimedReserves = ref<any>([]);
+const nonReturnedCars = ref<any>([]);
 const errors = ref([]);
 
 const fetchData = async () => {
+
   try {
     loading.value = true;
     const result = await $fetch("/api/inspector");
+    
     dataInspectors.value = result.data as InspectorModel[];
     
   } catch (error) {
     loading.value = false;
     errors.value.push(error);
+  }
+  try {
+    loading.value = true;
+    const result = await $fetch("/api/reporte/GananciasPorMarca")
+    incomeByBrand.value = result.data;
+    console.log(incomeByBrand.value)
+    
+    loading.value = false;
+  } catch (error) {
+    loading.value = false;
+    useState('errors').value.push(error);
+  }
+  try {
+    loading.value = true;
+    const result = await $fetch("/api/reporte/TiempoPromedio")
+    avgTimeByClient.value = result.data;
+    
+    
+    loading.value = false;
+  } catch (error) {
+    loading.value = false;
+    useState('errors').value.push(error);
+  } 
+  try {
+    loading.value = true;
+    const result = await $fetch("/api/reporte/ReservasNoReclamadas")
+    unclaimedReserves.value = result.data;
+    
+    
+    loading.value = false;
+  } catch (error) {
+    loading.value = false;
+    useState('errors').value.push(error);
+  }
+  try {
+    loading.value = true;
+    const result = await $fetch("/api/reporte/NoDevueltos")
+    nonReturnedCars.value = result.data;
+    
+    
+    loading.value = false;
+  } catch (error) {
+    loading.value = false;
+    useState('errors').value.push(error);
   }
   try {
     loading.value = true;

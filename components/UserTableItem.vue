@@ -96,7 +96,7 @@ const deleteItem = async () => {
       
     })
     .catch((error)=>{
-      useState('errors').value.push(error);
+      useState('errors').value.push("Codigo " +error.statusCode + " - "+ error.statusMessage);
     })
 }
 </script>

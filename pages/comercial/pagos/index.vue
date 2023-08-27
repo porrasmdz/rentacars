@@ -46,7 +46,7 @@
      :data="data"
      :models="'Pagos'"
      :total="totalResults"
-     v-else-if="data.length > 1"></PaymentsTable>
+     v-else-if="data.length > 0"></PaymentsTable>
     <div v-else-if="errors.length < 1">
       <div
         class="bg-white shadow-lg rounded-sm border border-slate-200 relative"
@@ -78,7 +78,7 @@
     
     <CreateModal
       @success="fetchData()"
-     :editable-fields="['Id_Cliente', 'Monto', 'Fecha', 'conf_pago', 'Plazo', 'Forma_pago']"
+     :editable-fields="['Id_Cliente', 'id_Devolucion','Monto', 'conf_pago', 'Plazo', 'Forma_pago']"
      :post-url="'/api/pago/'"
      :create-modal-open="createModalOpen"
      @close-modal="createModalOpen=false" 

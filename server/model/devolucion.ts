@@ -4,12 +4,13 @@ import {sql} from '~~/server/db';
 export type DevolucionModel = {
     
     id_Devolucion?: Number,
-    No_Matricula: string
-    Estado_Devolucion: Number,
+    No_Matricula: string,
+    Id_Cliente: Number,
+    Estado_devolucion: Number,
     Hora_devolucion: string,
-    Hora_devolucion_real: string,
+    Hora_devolucion_real?: string,
     Fecha_devolucion: string,
-    Fecha_devolucion_real: string,
+    Fecha_devolucion_real?: string,
     Lugar_devolucion: string
 
 };
@@ -35,29 +36,9 @@ export const create = async (data: DevolucionModel) => {
     console.log(Object.values(data));
     const result = await sql({
         query: `
-        INSERT INTO Devolucion (
-            
-        No_Matricula,
-        Estado_Devolucion,
-        Hora_devolucion,
-        Hora_devolucion_real,
-        Fecha_devolucion,
-        Fecha_devolucion_real,
-        Lugar_devolucion
-    
-        ) VALUES (
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?
-            
-           
-        ) RETURNING *
+        CALL insertDevolucion(?,?,?,?,?,?)
         `,
-        values:Object.values(data)
+        values:[data.No_Matricula, data.Id_Cliente, data.Estado_devolucion, data.Hora_devolucion,data.Fecha_devolucion, data.Lugar_devolucion]
     }) as any;
     return result.length === 1 ? (result[0] as DevolucionModel) : null;
 }
@@ -72,37 +53,28 @@ export const detail = async (id: Number) => {
 };
 
 export const update = async (id: Number, data: DevolucionModel) => {
+    console.log(Object.values(data))
     await sql({
         query: `
-        UPDATE Devolucion
-        SET
-            
-        
-        No_Matricula = ?,
-        Estado_Devolucion = ?,
-        Hora_devolucion = ?,
-        Hora_devolucion_real = ?,
-        Fecha_devolucion = ?,
-        Fecha_devolucion_real = ?,
-        Lugar_devolucion = ?
-    
-        WHERE id_Devolucion = ?
+        CALL updateDevolucion(?,?,?,?,?,?,?,?,?)
         `,
         values:[  
+            id,
             data.No_Matricula,
-            data.Estado_Devolucion,
+            data.Id_Cliente,
+            data.Estado_devolucion,
             data.Hora_devolucion,
             data.Hora_devolucion_real,
             data.Fecha_devolucion,
             data.Fecha_devolucion_real,
-            data.Lugar_devolucion, id]
+            data.Lugar_devolucion]
     });
     return await detail(id);
 }
 
 export const remove = async (id: Number) => {
     await sql({
-        query: 'DELETE FROM Devolucion WHERE id_Devolucion =?',
+        query: 'CALL deleteDevolucion(?)',
         values: [id]
     });
 

@@ -49,7 +49,7 @@
      :data="data"
      
      :total="totalResults"
-     v-else-if="data.length > 1"></ReservationsTable>
+     v-else-if="data.length > 0"></ReservationsTable>
     <!-- On Error -->
      <div v-else-if="errors.length < 1">
       <div

@@ -31,19 +31,8 @@ export const create = async (data: InspectorModel) => {
 
     const result = await sql({
         query: `
-        INSERT INTO Inspector (
-            
-            Nombre,
-            Email,
-            Celular,
-            imageURLFotoin
-            
-        ) VALUES (
-            ?,
-            ?,
-            ?,
-            ?
-        ) RETURNING *
+        CALL insertInspector(?,?,?)
+       
         `,
         values:[data.Nombre,data.Email,data.Celular, data.imageURLFotoin]
     }) as any;
@@ -52,6 +41,7 @@ export const create = async (data: InspectorModel) => {
 
 export const detail = async (id: string) => {
     const result  = await sql({
+
         query: 'SELECT id_Inspector, Nombre, Email, Celular FROM Inspector WHERE id_Inspector = ?',
         values : [id]
     }) as any;
@@ -61,25 +51,18 @@ export const detail = async (id: string) => {
 
 export const update = async (id:string, data: InspectorModel) => {
     
-    console.log("data",data)
     await sql({
         query: `
-        UPDATE Inspector
-        SET
-            Nombre = ?,
-            Email = ? ,
-            Celular = ?
-            
-        WHERE id_Inspector = ?
+        CALL updateInspector(?,?,?,?)
         `,
-        values:[data.Nombre,data.Email,data.Celular, id]
+        values:[id, data.Nombre,data.Email,data.Celular]
     });
     return await detail(id);
 }
 
 export const remove = async (id: string) => {
     await sql({
-        query: 'DELETE FROM Inspector WHERE id_Inspector =?',
+        query: 'CALL deleteInspector(?)',
         values: [id]
     });
 

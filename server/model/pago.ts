@@ -3,10 +3,10 @@ import {sql} from '~~/server/db';
 
 export type PagoModel = {
     Id_Pago?:Number,
-    
+    id_Devolucion?: Number,
     Id_Cliente:Number,
     Monto:Number,
-    Fecha:Date,
+    Fecha?:Date,
     conf_pago: Number,
     Plazo:Date,
     Forma_pago: string
@@ -33,26 +33,10 @@ export const create = async (data: PagoModel) => {
     console.log(Object.values(data));
     const result = await sql({
         query: `
-        INSERT INTO Pago (
-            
-            Id_Cliente,
-            Monto,
-            Fecha,
-            conf_pago,
-            Plazo,
-            Forma_pago
-
-        ) VALUES (
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?
-           
-        ) RETURNING *
+        CALL insertPago(?,?,?,?,?,?)
+        
         `,
-        values:Object.values(data)
+        values:[data.Id_Cliente, data.id_Devolucion, data.Monto, data.conf_pago, data.Plazo, data.Forma_pago]
     }) as any;
     return result.length === 1 ? (result[0] as PagoModel) : null;
 }
@@ -67,22 +51,12 @@ export const detail = async (id: Number) => {
 };
 
 export const update = async (id: Number, data: PagoModel) => {
+    console.log(id, data)
     await sql({
         query: `
-        UPDATE Pago
-        SET
-            
-        Id_Cliente = ?,
-        Monto =  ?,
-        Fecha = ?,
-        conf_pago = ?,
-        Plazo = ?,
-        Forma_pago = ?
-
-    
-        WHERE id_Pago = ?
-        `,
-        values:[data.Id_Cliente,data.Monto,data.Fecha,data.conf_pago,data.Plazo,data.Forma_pago, id]
+        CALL updatePago(?,?,?,?,?,?,?,?)
+       `,
+        values:[id, data.Id_Cliente, data.id_Devolucion, data.Monto, data.Fecha, data.conf_pago, data.Plazo, data.Forma_pago]
     });
     return await detail(id);
 }
@@ -90,7 +64,9 @@ export const update = async (id: Number, data: PagoModel) => {
 export const remove = async (id: Number) => {
     console.log("Received ", id)
     await sql({
-        query: 'DELETE FROM Pago WHERE id_Pago =?',
+        query: `
+        CALL deletePago(?)
+        `,
         values: [id]
     });
 

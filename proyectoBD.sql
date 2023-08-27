@@ -8,20 +8,20 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema ITSO_mydb
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema ITSO_mydb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `ITSO_mydb` DEFAULT CHARACTER SET utf8 ;
+USE `ITSO_mydb` ;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Inspector`
+-- Table `ITSO_mydb`.`Inspector`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Inspector` (
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Inspector` (
   `id_Inspector` INT AUTO_INCREMENT NOT NULL,
   `Nombre` VARCHAR(20) NULL,
   `Email` VARCHAR(50) NULL,
@@ -30,9 +30,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Inspector` (
 ) 
 ENGINE = InnoDB;
 -- -----------------------------------------------------
--- Table `mydb`.`Cliente`
+-- Table `ITSO_mydb`.`Cliente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Cliente` (
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Cliente` (
   `id_Cliente` INT AUTO_INCREMENT NOT NULL,
   `Nombre` VARCHAR(20) NULL,
   `Apellido` VARCHAR(20) NULL,
@@ -43,49 +43,15 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Cliente` (
   `Licencia` TINYINT NULL,
   `id_Inspector` INT NULL,
   PRIMARY KEY (`id_Cliente`),
-  FOREIGN KEY (`id_inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`) ON DELETE SET NULL
+  FOREIGN KEY (`id_inspector`) REFERENCES `ITSO_mydb`.`Inspector` (`id_Inspector`) ON DELETE SET NULL
   )
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Pago`
+-- Table `ITSO_mydb`.`Vehiculo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Pago` (
-  `Id_Pago` INT AUTO_INCREMENT NOT NULL,
-  `Id_Cliente` INT NULL,
-  `id_Devolucion` INT NULL,
-  `Monto` FLOAT NULL,
-  `Fecha` DATE NULL,
-  `conf_pago` TINYINT NULL,
-  `Plazo` DATE NULL,
-  `Forma_pago` VARCHAR(20) NULL,
-  PRIMARY KEY (`Id_Pago`),
-  FOREIGN KEY (`Id_Cliente`) REFERENCES `mydb`.`Cliente` (`id_Cliente`) ON DELETE SET NULL,
-  FOREIGN KEY (`id_Devolucion`) REFERENCES `mydb`.`Devolucion` (`id_Devolucion`) ON DELETE SET NULL
-) 
-ENGINE = InnoDB;
-
-
-
-
-
--- -----------------------------------------------------
--- Table `mydb`.`EmpresaAlquiler`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`EmpresaAlquiler` (
-  `RUC` VARCHAR(10) NOT NULL,
-  `Nombre` VARCHAR(50) NULL,
-  PRIMARY KEY (`RUC`)
-) 
-ENGINE = InnoDB;
-
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Vehiculo`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Vehiculo` (
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Vehiculo` (
   `No_Matricula` VARCHAR(7) NOT NULL,
   `RUC` VARCHAR(10) NULL,
   `Marca` VARCHAR(20) NULL,
@@ -97,45 +63,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Vehiculo` (
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `mydb`.`Reserva`
+-- Table `ITSO_mydb`.`Devolucion`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Reserva` (
-  `id_Reserva` INT AUTO_INCREMENT NOT NULL,
-  `Id_Cliente` INT NULL,
-  `Id_Inspector` INT NULL,
-  `No_Matricula` VARCHAR(7) NULL,
-  `Fecha_Inicio` DATE NULL,
-  `Hora_reserva` TIME NULL,
-  `ubicacion_recogida` VARCHAR(50) NULL,
-  PRIMARY KEY (`id_Reserva`),
-  FOREIGN KEY (`Id_Cliente`) REFERENCES `mydb`.`Cliente` (`id_Cliente`) ON DELETE SET NULL,
-  FOREIGN KEY (`Id_Inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`) ON DELETE SET NULL,
-  FOREIGN KEY (`No_Matricula`) REFERENCES `mydb`.`Vehiculo` (`No_Matricula`) ON DELETE SET NULL
-) 
-ENGINE = InnoDB;
-
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Recargo`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Recargo` (
-  `id_Recargo` INT AUTO_INCREMENT NOT NULL,
-  `Id_pago` INT NULL,
-  `Fecha` DATE NULL,
-  `Cobertura_Seguro` VARCHAR(20) NULL,
-  `Monto` FLOAT NULL,
-  `Razon` VARCHAR(100) NULL,
-  PRIMARY KEY (`id_Recargo`),
-  FOREIGN KEY (`id_Pago`) REFERENCES `mydb`.`Pago` (`Id_Pago`) ON DELETE CASCADE
-) 
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Devolucion`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Devolucion` (
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Devolucion` (
   `id_Devolucion` INT AUTO_INCREMENT NOT NULL,
   `Id_Cliente` INT NULL,
   `No_Matricula` VARCHAR(7) NULL,
@@ -147,8 +77,41 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Devolucion` (
   `Lugar_devolucion` VARCHAR(100) NULL,
   PRIMARY KEY (`id_Devolucion`),
   
-  FOREIGN KEY (`No_Matricula`) REFERENCES `mydb`.`Vehiculo` (`No_Matricula`) ON DELETE SET NULL,
-  FOREIGN KEY (`Id_Cliente`) REFERENCES `mydb`.`Cliente` (`Id_Cliente`) ON DELETE SET NULL
+  FOREIGN KEY (`No_Matricula`) REFERENCES `ITSO_mydb`.`Vehiculo` (`No_Matricula`) ON DELETE SET NULL,
+  FOREIGN KEY (`Id_Cliente`) REFERENCES `ITSO_mydb`.`Cliente` (`Id_Cliente`) ON DELETE SET NULL
+) 
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ITSO_mydb`.`Pago`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Pago` (
+  `Id_Pago` INT AUTO_INCREMENT NOT NULL,
+  `Id_Cliente` INT NULL,
+  `id_Devolucion` INT NULL,
+  `Monto` FLOAT NULL,
+  `Fecha` DATE NULL,
+  `conf_pago` TINYINT NULL,
+  `Plazo` DATE NULL,
+  `Forma_pago` VARCHAR(20) NULL,
+  PRIMARY KEY (`Id_Pago`),
+  FOREIGN KEY (`Id_Cliente`) REFERENCES `ITSO_mydb`.`Cliente` (`id_Cliente`) ON DELETE SET NULL,
+  FOREIGN KEY (`id_Devolucion`) REFERENCES `ITSO_mydb`.`Devolucion` (`id_Devolucion`) ON DELETE SET NULL
+) 
+ENGINE = InnoDB;
+
+
+
+
+
+-- -----------------------------------------------------
+-- Table `ITSO_mydb`.`EmpresaAlquiler`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`EmpresaAlquiler` (
+  `RUC` VARCHAR(10) NOT NULL,
+  `Nombre` VARCHAR(50) NULL,
+  PRIMARY KEY (`RUC`)
 ) 
 ENGINE = InnoDB;
 
@@ -156,15 +119,54 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Alquilar`
+-- Table `ITSO_mydb`.`Reserva`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Reserva` (
+  `id_Reserva` INT AUTO_INCREMENT NOT NULL,
+  `Id_Cliente` INT NULL,
+  `Id_Inspector` INT NULL,
+  `No_Matricula` VARCHAR(7) NULL,
+  `Fecha_Inicio` DATE NULL,
+  `Hora_reserva` TIME NULL,
+  `ubicacion_recogida` VARCHAR(50) NULL,
+  PRIMARY KEY (`id_Reserva`),
+  FOREIGN KEY (`Id_Cliente`) REFERENCES `ITSO_mydb`.`Cliente` (`id_Cliente`) ON DELETE SET NULL,
+  FOREIGN KEY (`Id_Inspector`) REFERENCES `ITSO_mydb`.`Inspector` (`id_Inspector`) ON DELETE SET NULL,
+  FOREIGN KEY (`No_Matricula`) REFERENCES `ITSO_mydb`.`Vehiculo` (`No_Matricula`) ON DELETE SET NULL
+) 
+ENGINE = InnoDB;
+
+
+
+-- -----------------------------------------------------
+-- Table `ITSO_mydb`.`Recargo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Recargo` (
+  `id_Recargo` INT AUTO_INCREMENT NOT NULL,
+  `Id_pago` INT NULL,
+  `Fecha` DATE NULL,
+  `Cobertura_Seguro` VARCHAR(20) NULL,
+  `Monto` FLOAT NULL,
+  `Razon` VARCHAR(100) NULL,
+  PRIMARY KEY (`id_Recargo`),
+  FOREIGN KEY (`id_Pago`) REFERENCES `ITSO_mydb`.`Pago` (`Id_Pago`) ON DELETE CASCADE
+) 
+ENGINE = InnoDB;
+
+
+
+
+
+-- -----------------------------------------------------
+-- Table `ITSO_mydb`.`Alquilar`
 -- Inspector_EmpresaAlquiler
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Alquilar` (
+CREATE TABLE IF NOT EXISTS `ITSO_mydb`.`Alquilar` (
   `RUC` VARCHAR(10) NOT NULL,
   `id_Inspector` INT NOT NULL,
   PRIMARY KEY (`RUC`,`id_Inspector`),
-  FOREIGN KEY (`RUC`) REFERENCES `mydb`.`EmpresaAlquiler` (`RUC`),
-  FOREIGN KEY (`id_Inspector`) REFERENCES `mydb`.`Inspector` (`id_Inspector`)
+  FOREIGN KEY (`RUC`) REFERENCES `ITSO_mydb`.`EmpresaAlquiler` (`RUC`),
+  FOREIGN KEY (`id_Inspector`) REFERENCES `ITSO_mydb`.`Inspector` (`id_Inspector`)
 ) 
 ENGINE = InnoDB;
 
@@ -195,16 +197,16 @@ END;
 //
 DELIMITER ;
 -- Agrega tabla vihiculo
-alter table vehiculo add imageURLVe varchar(300) default null;
+alter table Vehiculo add imageURLVe varchar(300) default null;
 
 -- Agrega tabla empresaAlquiler
-alter table empresaalquiler add imageURLLogo varchar(300) default null;
+alter table EmpresaAlquiler add imageURLLogo varchar(300) default null;
 
 -- Agrega tabla cliente
-alter table cliente add imageURLFoto varchar(300) default null;
+alter table Cliente add imageURLFoto varchar(300) default null;
 
 -- Agrega tabla inspector
-alter table inspector add imageURLFotoin varchar(300) default null ;
+alter table Inspector add imageURLFotoin varchar(300) default null ;
 
 -- Registros Inspectores
 INSERT INTO Inspector (Nombre, Email, Celular) VALUES
@@ -438,7 +440,7 @@ BEGIN
     END IF;
     
     -- Verificar si el inspector ya existe
-    SELECT COUNT(*) INTO inspectorCount FROM Inspector WHERE nombre = nombre OR email = email;
+    SELECT COUNT(*) INTO inspectorCount FROM Inspector I WHERE I.nombre = nombre OR I.email = email;
     
     IF inspectorCount > 0 THEN
         SIGNAL SQLSTATE '02000' SET MESSAGE_TEXT = 'El inspector ya existe';
@@ -460,7 +462,7 @@ BEGIN
     START TRANSACTION;
     
     -- Verificar si el inspector existe
-    SELECT COUNT(*) INTO inspectorCount FROM Inspector WHERE id_Inspector = id;
+    SELECT COUNT(*) INTO inspectorCount FROM Inspector I WHERE I.id_Inspector = id;
     
     IF inspectorCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El inspector no existe';
@@ -488,7 +490,7 @@ BEGIN
     START TRANSACTION;
     
     -- Verificar si el inspector existe
-    SELECT COUNT(*) INTO inspectorCount FROM Inspector WHERE id_Inspector = id;
+    SELECT COUNT(*) INTO inspectorCount FROM Inspector I WHERE I.id_Inspector = id;
     
     IF inspectorCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El inspector no existe';
@@ -511,7 +513,7 @@ BEGIN
     START TRANSACTION;
     
     -- Verificar si el cliente ya existe
-    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE email = email OR celular = celular;
+    SELECT COUNT(*) INTO clientCount FROM Cliente C WHERE C.email = email OR C.celular = celular;
     
     IF clientCount > 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente ya existe';
@@ -538,7 +540,7 @@ BEGIN
     START TRANSACTION;
     
     -- Verificar si el cliente existe
-    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE Id_Cliente = id;
+    SELECT COUNT(*) INTO clientCount FROM Cliente C WHERE C.Id_Cliente = id;
     
     IF clientCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente no existe';
@@ -565,7 +567,7 @@ BEGIN
     START TRANSACTION;
     
     -- Verificar si el cliente existe
-    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE Id_Cliente = id;
+    SELECT COUNT(*) INTO clientCount FROM Cliente C WHERE C.Id_Cliente = id;
     
     IF clientCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente no existe';
@@ -585,12 +587,16 @@ DELIMITER //
 CREATE PROCEDURE insertPago(IN Id_Cliente INT, IN id_Devolucion INT, IN monto FLOAT, IN conf_pago TINYINT, IN plazo DATE, IN forma_pago VARCHAR(20))
 BEGIN
     DECLARE clientCount INT;
-    
+    DECLARE devolutionCount INT;
     START TRANSACTION;
 
     -- Verificar si el cliente existe
-    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE Id_Cliente = Id_Cliente;
-
+    SELECT COUNT(*) INTO clientCount FROM Cliente C WHERE C.Id_Cliente = Id_Cliente;
+    SELECT COUNT(*) INTO devolutionCount FROM Devolucion D WHERE D.id_Devolucion = id_Devolucion;
+    
+    IF devolutionCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Registro de devolucion inválido';
+    END IF;
     IF clientCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente no existe';
     ELSE
@@ -608,17 +614,22 @@ END;
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE updatePago(IN id_Pago INT, IN Id_Cliente INT, IN id_Devolucion INT, IN monto FLOAT, IN conf_pago TINYINT, IN plazo DATE, IN forma_pago VARCHAR(20))
+CREATE PROCEDURE updatePago(IN id_Pago INT, IN Id_Cliente INT, IN id_Devolucion INT, IN monto FLOAT, IN Fecha DATE,IN conf_pago TINYINT, IN plazo DATE, IN forma_pago VARCHAR(20))
 BEGIN
     DECLARE clientCount INT;
+    DECLARE devolutionCount INT;
     DECLARE paymentCount INT;
 
     START TRANSACTION;
 
     -- Verificar si el cliente y el pago existen
-    SELECT COUNT(*) INTO clientCount FROM Cliente WHERE Id_Cliente = Id_Cliente;
-    SELECT COUNT(*) INTO paymentCount FROM Pago WHERE id_Pago = id_Pago;
+    SELECT COUNT(*) INTO clientCount FROM Cliente C WHERE C.Id_Cliente = Id_Cliente;
+    SELECT COUNT(*) INTO devolutionCount FROM Devolucion D WHERE D.id_Devolucion = id_Devolucion;
+    SELECT COUNT(*) INTO paymentCount FROM Pago P WHERE P.Id_Pago = id_Pago;
 
+    IF devolutionCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Registro de devolucion inválido';
+    END IF;
     IF clientCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente no existe';
     ELSE
@@ -630,8 +641,8 @@ BEGIN
             END IF;
 
             UPDATE Pago
-            SET Id_Cliente = Id_Cliente, monto = monto, conf_pago = conf_pago, plazo = plazo, forma_pago = forma_pago
-            WHERE id_Pago = id_Pago;
+            SET Id_Cliente = Id_Cliente, monto = monto, Fecha = Fecha, conf_pago = conf_pago, plazo = plazo, forma_pago = forma_pago
+            WHERE Id_Pago = id_Pago;
         END IF;
     END IF;
 
@@ -641,14 +652,14 @@ END;
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE DeletePago(IN id_Pago INT)
+CREATE PROCEDURE deletePago(IN id_Pago INT)
 BEGIN
     DECLARE paymentCount INT;
 
     START TRANSACTION;
 
     -- Verificar si el pago existe
-    SELECT COUNT(*) INTO paymentCount FROM Pago WHERE id_Pago = id_Pago;
+    SELECT COUNT(*) INTO paymentCount FROM Pago P WHERE P.id_Pago = id_Pago;
 
     IF paymentCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El pago no existe';
@@ -657,7 +668,7 @@ BEGIN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El ID del Pago no puede ser nulo';
         END IF;
 
-        DELETE FROM pago WHERE id_Pago = id_Pago;
+        DELETE FROM Pago P WHERE Pago.Id_Pago = id_Pago;
     END IF;
 
     COMMIT;
@@ -668,14 +679,14 @@ DELIMITER ;
 
 -- Empresa Alquiler
 DELIMITER //
-CREATE PROCEDURE insertEmpresaAlquiler(IN RUC VARCHAR(10), IN nombre VARCHAR(50))
+CREATE PROCEDURE insertEmpresaAlquiler(IN RUC VARCHAR(10), IN nombre VARCHAR(50), IN imageURLLogo VARCHAR(500))
 BEGIN
     DECLARE rucCount INT;
 
     START TRANSACTION;
 
     -- Verificar si la empresa ya existe por su RUC
-    SELECT COUNT(*) INTO rucCount FROM EmpresaAlquiler WHERE RUC = RUC;
+    SELECT COUNT(*) INTO rucCount FROM EmpresaAlquiler EA WHERE EA.RUC = RUC;
 
     IF rucCount > 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La empresa con este RUC ya existe';
@@ -684,8 +695,8 @@ BEGIN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
         END IF;
 
-        INSERT INTO EmpresaAlquiler(RUC, nombre)
-        VALUES (RUC, nombre);
+        INSERT INTO EmpresaAlquiler(RUC, nombre, imageURLLogo)
+        VALUES (RUC, nombre, imageURLLogo);
     END IF;
 
     COMMIT;
@@ -694,14 +705,14 @@ END;
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE updateEmpresaAlquiler(IN RUC VARCHAR(10), IN nombre VARCHAR(50))
+CREATE PROCEDURE updateEmpresaAlquiler(IN RUC VARCHAR(10), IN nombre VARCHAR(50), IN imageURLLogo VARCHAR(500))
 BEGIN
     DECLARE rucCount INT;
 
     START TRANSACTION;
 
     -- Verificar si la empresa existe por su RUC
-    SELECT COUNT(*) INTO rucCount FROM EmpresaAlquiler WHERE RUC = RUC;
+    SELECT COUNT(*) INTO rucCount FROM EmpresaAlquiler EA WHERE EA.RUC = RUC;
 
     IF rucCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La empresa con este RUC no existe';
@@ -711,8 +722,8 @@ BEGIN
         END IF;
 
         UPDATE EmpresaAlquiler
-        SET nombre = nombre
-        WHERE RUC = RUC;
+        SET nombre = nombre, imageURLLogo = imageURLLogo
+        WHERE EmpresaAlquiler.RUC = RUC;
     END IF;
 
     COMMIT;
@@ -728,7 +739,7 @@ BEGIN
     START TRANSACTION;
 
     -- Verificar si la empresa existe por su RUC
-    SELECT COUNT(*) INTO rucCount FROM EmpresaAlquiler WHERE RUC = RUC;
+    SELECT COUNT(*) INTO rucCount FROM EmpresaAlquiler EA WHERE EA.RUC = RUC;
 
     IF rucCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La empresa con este RUC no existe';
@@ -738,7 +749,7 @@ BEGIN
         END IF;
 
         DELETE FROM EmpresaAlquiler
-        WHERE RUC = RUC;
+        WHERE EmpresaAlquiler.RUC = RUC;
     END IF;
 
     COMMIT;
@@ -756,7 +767,7 @@ BEGIN
     START TRANSACTION;
 
     -- Verificar si el vehículo ya existe por su matrícula
-    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE No_Matricula = No_Matricula;
+    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo V WHERE V.No_Matricula = No_Matricula;
 
     IF matriculaCount > 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo con esta matrícula ya existe';
@@ -782,7 +793,7 @@ BEGIN
     START TRANSACTION;
 
     -- Verificar si el vehículo existe por su matrícula
-    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE No_Matricula = No_Matricula;
+    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo V WHERE V.No_Matricula = No_Matricula;
 
     IF matriculaCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo con esta matrícula no existe';
@@ -793,7 +804,7 @@ BEGIN
 
         UPDATE Vehiculo
         SET RUC = RUC, marca = marca, disponibilidad = disponibilidad, precio_alquiler = precio_alquiler, capacidad = capacidad, imageURLVe = imageURLVe
-        WHERE No_Matricula = No_Matricula;
+        WHERE Vehiculo.No_Matricula = No_Matricula;
     END IF;
 
     COMMIT;
@@ -809,7 +820,7 @@ BEGIN
     START TRANSACTION;
 
     -- Verificar si el vehículo existe por su matrícula
-    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE No_Matricula = No_Matricula;
+    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo V WHERE V.No_Matricula = No_Matricula;
 
     IF matriculaCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo con esta matrícula no existe';
@@ -819,7 +830,7 @@ BEGIN
         END IF;
 
         DELETE FROM Vehiculo 
-        WHERE No_Matricula = No_Matricula;
+        WHERE Vehiculo.No_Matricula = No_Matricula;
     END IF;
 
     COMMIT;
@@ -839,9 +850,9 @@ BEGIN
     START TRANSACTION;
 
     -- Verificar si el cliente, el inspector y el vehículo existen
-    SELECT COUNT(*) INTO clienteCount FROM Cliente WHERE Id_Cliente = Id_Cliente;
-    SELECT COUNT(*) INTO inspectorCount FROM Inspector WHERE id_Inspector = id_Inspector;
-    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE No_Matricula = No_Matricula;
+    SELECT COUNT(*) INTO clienteCount FROM Cliente C WHERE C.Id_Cliente = Id_Cliente;
+    SELECT COUNT(*) INTO inspectorCount FROM Inspector I WHERE I.id_Inspector = id_Inspector;
+    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo V WHERE V.No_Matricula = No_Matricula;
 
     IF clienteCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente especificado no existe';
@@ -874,10 +885,10 @@ BEGIN
     START TRANSACTION;
 
     -- Verificar si la reserva, el cliente, el inspector y el vehículo existen
-    SELECT COUNT(*) INTO reservaCount FROM Reserva WHERE id_Reserva = id_Reserva;
-    SELECT COUNT(*) INTO clienteCount FROM Cliente WHERE Id_Cliente = Id_Cliente;
-    SELECT COUNT(*) INTO inspectorCount FROM Inspector WHERE id_Inspector = id_Inspector;
-    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo WHERE No_Matricula = No_Matricula;
+    SELECT COUNT(*) INTO reservaCount FROM Reserva R WHERE R.id_Reserva = id_Reserva;
+    SELECT COUNT(*) INTO clienteCount FROM Cliente C WHERE C.Id_Cliente = Id_Cliente;
+    SELECT COUNT(*) INTO inspectorCount FROM Inspector I WHERE I.id_Inspector = id_Inspector;
+    SELECT COUNT(*) INTO matriculaCount FROM Vehiculo V WHERE V.No_Matricula = No_Matricula;
 
     IF reservaCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La reserva especificada no existe';
@@ -894,7 +905,7 @@ BEGIN
 
         UPDATE Reserva
         SET Id_Cliente = Id_Cliente, id_Inspector = id_Inspector, No_Matricula = No_Matricula, fecha_inicio = fecha_inicio, hora_reserva = hora_reserva, ubicacion_recogida = ubicacion_recogida
-        WHERE id_Reserva = id_Reserva;
+        WHERE Reserva.id_Reserva = id_Reserva;
     END IF;
 
     COMMIT;
@@ -910,7 +921,7 @@ BEGIN
     START TRANSACTION;
 
     -- Verificar si la reserva existe
-    SELECT COUNT(*) INTO reservaCount FROM Reserva WHERE id_Reserva = id_Reserva;
+    SELECT COUNT(*) INTO reservaCount FROM Reserva R WHERE R.id_Reserva = id_Reserva;
 
     IF reservaCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La reserva especificada no existe';
@@ -920,7 +931,7 @@ BEGIN
         END IF;
 
         DELETE FROM Reserva 
-        WHERE id_Reserva = id_Reserva;
+        WHERE Reserva.id_Reserva = id_Reserva;
     END IF;
 
     COMMIT;
@@ -937,7 +948,7 @@ BEGIN
     START TRANSACTION;
 
     -- Verificar si el pago existe
-    SELECT COUNT(*) INTO pagoCount FROM Pago WHERE id_Pago = id_Pago;
+    SELECT COUNT(*) INTO pagoCount FROM Pago P WHERE P.id_Pago = id_Pago;
 
     IF pagoCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El pago especificado no existe';
@@ -964,8 +975,8 @@ BEGIN
     START TRANSACTION;
 
     -- Verificar si el recargo y el pago existen
-    SELECT COUNT(*) INTO recargoCount FROM Recargo WHERE id_Recargo = id_Recargo;
-    SELECT COUNT(*) INTO pagoCount FROM Pago WHERE id_Pago = id_Pago;
+    SELECT COUNT(*) INTO recargoCount FROM Recargo R WHERE R.id_Recargo = id_Recargo;
+    SELECT COUNT(*) INTO pagoCount FROM Pago P WHERE P.id_Pago = id_Pago;
 
     IF recargoCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El recargo especificado no existe';
@@ -978,7 +989,7 @@ BEGIN
 
         UPDATE Recargo
         SET id_Pago = id_Pago, cobertura_seguro = cobertura_seguro, monto = monto, razon = razon
-        WHERE id_Recargo = id_Recargo;
+        WHERE Recargo.id_Recargo = id_Recargo;
     END IF;
 
     COMMIT;
@@ -994,7 +1005,7 @@ BEGIN
     START TRANSACTION;
 
     -- Verificar si el recargo existe
-    SELECT COUNT(*) INTO recargoCount FROM Recargo WHERE id_Recargo = id_Recargo;
+    SELECT COUNT(*) INTO recargoCount FROM Recargo R WHERE R.id_Recargo = id_Recargo;
 
     IF recargoCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El recargo especificado no existe';
@@ -1004,7 +1015,7 @@ BEGIN
         END IF;
 
         DELETE FROM Recargo
-        WHERE id_Recargo = id_Recargo;
+        WHERE Recargo.id_Recargo = id_Recargo;
     END IF;
 
     COMMIT;
@@ -1015,26 +1026,29 @@ DELIMITER ;
 
 -- Devoluciones
 DELIMITER //
-CREATE PROCEDURE insertDevolucion(IN No_Matricula VARCHAR(7), IN Id_Cliente INT,IN estado_devolucion TINYINT, IN hora_devolucion TIME, IN hora_devolucion_real TIME, IN fecha_devolucion DATE, IN fecha_devolucion_real DATE, IN lugar_devolucion VARCHAR(100))
+CREATE PROCEDURE insertDevolucion(IN No_Matricula VARCHAR(7), IN Id_Cliente INT,IN estado_devolucion TINYINT, IN hora_devolucion TIME, IN fecha_devolucion DATE, IN lugar_devolucion VARCHAR(100))
 BEGIN
-    DECLARE clienteCount INT;
+    DECLARE clientCount INT;
     DECLARE vehiculoCount INT;
 
     START TRANSACTION;
 
     -- Verificar si el vehículo asociado a la devolución existe
-    SELECT COUNT(*) INTO clienteCount FROM Cliente WHERE Id_Cliente = Id_Cliente;
-    SELECT COUNT(*) INTO vehiculoCount FROM Vehiculo WHERE No_Matricula = No_Matricula;
+    SELECT COUNT(*) INTO clientCount FROM Cliente C WHERE C.Id_Cliente = Id_Cliente;
+    SELECT COUNT(*) INTO vehiculoCount FROM Vehiculo V WHERE V.No_Matricula = No_Matricula;
 
+    IF clientCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente especificado no existe';
+    END IF;
     IF vehiculoCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El vehículo especificado no existe';
     ELSE
-        IF No_Matricula IS NULL OR estado_devolucion IS NULL OR hora_devolucion IS NULL OR hora_devolucion_real IS NULL OR fecha_devolucion IS NULL OR fecha_devolucion_real IS NULL OR lugar_devolucion = '' THEN
+        IF No_Matricula IS NULL OR estado_devolucion IS NULL OR hora_devolucion IS NULL OR fecha_devolucion IS NULL OR lugar_devolucion = '' THEN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Todos los campos deben estar completos';
         END IF;
 
         INSERT INTO Devolucion(No_Matricula, Id_Cliente, estado_devolucion, hora_devolucion, hora_devolucion_real, fecha_devolucion, fecha_devolucion_real, lugar_devolucion)
-        VALUES(No_Matricula, Id_Cliente, estado_devolucion, hora_devolucion, hora_devolucion_real, fecha_devolucion, fecha_devolucion_real, lugar_devolucion);
+        VALUES(No_Matricula, Id_Cliente, estado_devolucion, hora_devolucion, NULL, fecha_devolucion, NULL, lugar_devolucion);
     END IF;
 
     COMMIT;
@@ -1043,20 +1057,23 @@ END;
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE updateDevolucion(IN id_Devolucion INT, IN No_Matricula VARCHAR(7), IN Id_Cliente INT,IN estado_devolucion TINYINT, IN hora_devolucion TIME, IN hora_devolucion_real TIME, IN fecha_devolucion_real DATE, IN lugar_devolucion VARCHAR(100))
+CREATE PROCEDURE updateDevolucion(IN id_Devolucion INT, IN No_Matricula VARCHAR(7), IN Id_Cliente INT,IN estado_devolucion TINYINT, IN hora_devolucion TIME, IN hora_devolucion_real TIME, IN fecha_devolucion DATE,IN fecha_devolucion_real DATE, IN lugar_devolucion VARCHAR(100))
 BEGIN
     DECLARE devolucionCount INT;
     DECLARE vehiculoCount INT;
-    DECLARE clienteCount INT;
+    DECLARE clientCount INT;
 
     START TRANSACTION;
 
     -- Verificar si la devolución y el vehículo existen
     
-    SELECT COUNT(*) INTO clienteCount FROM Cliente WHERE Id_Cliente = Id_Cliente;
-    SELECT COUNT(*) INTO devolucionCount FROM Devolucion WHERE id_Devolucion = id_Devolucion;
-    SELECT COUNT(*) INTO vehiculoCount FROM Vehiculo WHERE No_Matricula = No_Matricula;
+    SELECT COUNT(*) INTO clientCount FROM Cliente C WHERE C.Id_Cliente = Id_Cliente;
+    SELECT COUNT(*) INTO devolucionCount FROM Devolucion D WHERE D.id_Devolucion = id_Devolucion;
+    SELECT COUNT(*) INTO vehiculoCount FROM Vehiculo V WHERE V.No_Matricula = No_Matricula;
 
+    IF clientCount = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente especificado no existe';
+    END IF;
     IF devolucionCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La devolución especificada no existe';
     ELSEIF vehiculoCount = 0 THEN
@@ -1067,8 +1084,8 @@ BEGIN
         END IF;
 
         UPDATE Devolucion
-        SET No_Matricula = No_Matricula, Id_Cliente, estado_devolucion = estado_devolucion, hora_devolucion = hora_devolucion, hora_devolucion_real = hora_devolucion_real, fecha_devolucion_real = fecha_devolucion_real, lugar_devolucion = lugar_devolucion
-        WHERE id_Devolucion = id_Devolucion;
+        SET No_Matricula = No_Matricula, Id_Cliente  = Id_Cliente, estado_devolucion = estado_devolucion, hora_devolucion = hora_devolucion, hora_devolucion_real = hora_devolucion_real, fecha_devolucion = fecha_devolucion,fecha_devolucion_real = fecha_devolucion_real, lugar_devolucion = lugar_devolucion
+        WHERE Devolucion.id_Devolucion = id_Devolucion;
     END IF;
 
     COMMIT;
@@ -1084,7 +1101,7 @@ BEGIN
     START TRANSACTION;
 
     -- Verificar si la devolución existe
-    SELECT COUNT(*) INTO devolucionCount FROM Devolucion WHERE id_Devolucion = id_Devolucion;
+    SELECT COUNT(*) INTO devolucionCount FROM Devolucion D WHERE D.id_Devolucion = id_Devolucion;
 
     IF devolucionCount = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La devolución especificada no existe';
@@ -1094,7 +1111,7 @@ BEGIN
         END IF;
 
         DELETE FROM Devolucion
-        WHERE id_Devolucion = id_Devolucion;
+        WHERE Devolucion.id_Devolucion = id_Devolucion;
     END IF;
 
     COMMIT;
@@ -1106,15 +1123,15 @@ DELIMITER ;
 
 -- indices
 
-create index idx_indexpago on pago(Fecha);
+create index idx_indexpago on Pago(Fecha);
 
-create index idx_indexclie on cliente(Nombre);
+create index idx_indexclie on Cliente(Nombre);
 
-create index idx_indexEmp on empresaalquiler(Nombre);
+create index idx_indexEmp on EmpresaAlquiler(Nombre);
 
-create index idx_indexVehi on vehiculo(Marca);
+create index idx_indexVehi on Vehiculo(Marca);
 
-create index idx_indexReserva on reserva(Fecha_Inicio);
+create index idx_indexReserva on Reserva(Fecha_Inicio);
 
 
 -- usuarios
@@ -1125,25 +1142,25 @@ CREATE USER 'Administrador'@'localhost' IDENTIFIED BY '4';
 CREATE USER 'Gerente'@'localhost' IDENTIFIED BY '5';
 
 
-GRANT select, insert ON mydb.* TO 'Operador'@'localhost';
-GRANT select, update, insert, delete ON mydb.* TO 'Inspector'@'localhost';
-GRANT select, update , insert, delete ON mydb.* TO 'Empresa'@'localhost';
-GRANT ALL PRIVILEGES ON mydb.* TO 'Administrador'@'localhost';
-GRANT select, update, insert ON mydb.* TO 'Gerente'@'localhost';
+GRANT select, insert ON ITSO_mydb.* TO 'Operador'@'localhost';
+GRANT select, update, insert, delete ON ITSO_mydb.* TO 'Inspector'@'localhost';
+GRANT select, update , insert, delete ON ITSO_mydb.* TO 'Empresa'@'localhost';
+GRANT ALL PRIVILEGES ON ITSO_mydb.* TO 'Administrador'@'localhost';
+GRANT select, update, insert ON ITSO_mydb.* TO 'Gerente'@'localhost';
 
 -- procedure permisos
-GRANT EXECUTE ON PROCEDURE mydb.deleteReserva TO 'Operador'@'localhost';
-GRANT EXECUTE ON PROCEDURE mydb.insertDevolucion TO 'Inspector'@'localhost';
-GRANT EXECUTE ON PROCEDURE mydb.insertVehiculo TO 'Empresa'@'localhost';
-GRANT EXECUTE ON PROCEDURE mydb.deleteEmpresaAlquiler TO 'Administrador'@'localhost';
-GRANT EXECUTE ON PROCEDURE mydb.deleteDevolucion TO 'Gerente'@'localhost';
+GRANT EXECUTE ON PROCEDURE ITSO_mydb.deleteReserva TO 'Operador'@'localhost';
+GRANT EXECUTE ON PROCEDURE ITSO_mydb.insertDevolucion TO 'Inspector'@'localhost';
+GRANT EXECUTE ON PROCEDURE ITSO_mydb.insertVehiculo TO 'Empresa'@'localhost';
+GRANT EXECUTE ON PROCEDURE ITSO_mydb.deleteEmpresaAlquiler TO 'Administrado'@'localhost';
+GRANT EXECUTE ON PROCEDURE ITSO_mydb.deleteDevolucion TO 'Gerente'@'localhost';
 
 -- vistas premisos
-GRANT SELECT, insert  ON mydb.GananciasPorMarca TO 'Administrador'@'localhost';
-GRANT SELECT, insert ON mydb.PromedioTiempoAlquiler TO 'Operador'@'localhost';
-GRANT SELECT, update ON mydb.ReservaVehiculosNoReclamados TO 'Gerente'@'localhost';
-GRANT SELECT,  update on mydb.VehiculosReservadosNoDevueltos TO 'Inspector'@'localhost';
-GRANT SELECT, insert ON mydb.GananciasPorMarca TO 'Empresa'@'localhost';
+GRANT SELECT, insert  ON ITSO_mydb.GananciasPorMarca TO 'Administrador'@'localhost';
+GRANT SELECT, insert ON ITSO_mydb.PromedioTiempoAlquiler TO 'Operador'@'localhost';
+GRANT SELECT, update ON ITSO_mydb.ReservaVehiculosNoReclamados TO 'Gerente'@'localhost';
+GRANT SELECT,  update on ITSO_mydb.VehiculosReservadosNoDevueltos TO 'Inspector'@'localhost';
+GRANT SELECT, insert ON ITSO_mydb.GananciasPorMarca TO 'Empresa'@'localhost';
 
 
 FLUSH PRIVILEGES;

@@ -13,9 +13,12 @@
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
       <div class="">{{ recharge.Cobertura_Seguro ?? '---' }}</div>
     </td>
-    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap flex w-16 gap-2 justify-between">
-      <span>$</span>
-      <span>{{ recharge.Monto ?? '0.00'}}</span>
+    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap ">
+      <div class="flex w-16 gap-2 justify-between items-center">
+        <span>$</span>
+        <span>{{ recharge.Monto ?? '0.00'}}</span>
+    
+      </div>
     </td>
     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
       <div class=" font-medium text-sky-500">
