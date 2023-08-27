@@ -69,7 +69,6 @@ export const update = async (evt: H3Event) => {
         imageURLLogo : body.imageURLLogo
       }
     );
-    console.log("RESULTADO:",result)
     return {
       data: result,
     };

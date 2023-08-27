@@ -33,7 +33,6 @@ export const read = async() => {
 
 
 export const create = async (data: DevolucionModel) => {
-    console.log(Object.values(data));
     const result = await sql({
         query: `
         CALL insertDevolucion(?,?,?,?,?,?)
@@ -53,7 +52,6 @@ export const detail = async (id: Number) => {
 };
 
 export const update = async (id: Number, data: DevolucionModel) => {
-    console.log(Object.values(data))
     await sql({
         query: `
         CALL updateDevolucion(?,?,?,?,?,?,?,?,?)

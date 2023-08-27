@@ -30,7 +30,6 @@ export const read = async() => {
 
 
 export const create = async (data: PagoModel) => {
-    console.log(Object.values(data));
     const result = await sql({
         query: `
         CALL insertPago(?,?,?,?,?,?)
@@ -51,7 +50,6 @@ export const detail = async (id: Number) => {
 };
 
 export const update = async (id: Number, data: PagoModel) => {
-    console.log(id, data)
     await sql({
         query: `
         CALL updatePago(?,?,?,?,?,?,?,?)
@@ -62,7 +60,6 @@ export const update = async (id: Number, data: PagoModel) => {
 }
 
 export const remove = async (id: Number) => {
-    console.log("Received ", id)
     await sql({
         query: `
         CALL deletePago(?)

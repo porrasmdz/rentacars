@@ -61,7 +61,7 @@ const emits = defineEmits(['close-modal', 'success'])
 const newItem = ref({...props.item});
 
 const createNewItem = async() => {
-    console.log(newItem.value)
+    
     await $fetch(props.putUrl+props.id,{
         method: 'PUT',
         body: {...newItem.value}

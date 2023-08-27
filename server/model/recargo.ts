@@ -29,7 +29,6 @@ export const read = async() => {
 
 
 export const create = async (data: RecargoModel) => {
-    console.log(Object.values(data));
     const result = await sql({
         query: `
         CALL insertRecargo(?,?,?,?)

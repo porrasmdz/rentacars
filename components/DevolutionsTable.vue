@@ -15,6 +15,9 @@
           >
             <tr>
               <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                <div class="font-semibold">ID</div>
+              </th>
+              <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                 <div class="font-semibold">Vehiculo</div>
               </th>
               

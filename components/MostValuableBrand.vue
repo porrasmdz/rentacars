@@ -8,7 +8,12 @@
     <div class="p-3">
       <!-- Card content -->
       <!-- "Today" group -->
-      <div>
+      <div v-if="loading"
+      class="flex flex-col mx-auto w-max items-center justify-center"
+      >
+        <LoaderComponent></LoaderComponent>
+      </div>
+      <div v-else-if="!loading && data && data.length>0">
         <header
           class="text-xs uppercase text-slate-400 bg-slate-50 rounded-sm font-semibold p-2"
         >
@@ -29,6 +34,7 @@
           </thead>
           <!-- Table body -->
           <tbody class="text-sm divide-y divide-slate-200">
+           
             <tr v-for="(value, key) in data" :key="key+'-incByBrand'" >
               <td class="px-2 first:pl-5 last:pr-5 py-3 text-justify whitespace-nowrap">
                 <div class="flex items-center">
@@ -62,12 +68,28 @@
         </ul>
       </div>
      
+      <div v-else-if="!loading">
+        <div
+          class="bg-white shadow-lg rounded-sm border border-slate-200 relative"
+        >
+          <header class="px-5 py-4">
+            <h2 class="font-semibold text-slate-800">
+              Todos las reservas fueron atendidas
+            </h2>
+          </header>
+        </div>
+      </div>
+     
     </div>
   </div>
 </template>
 <script setup lang="ts">
 const title = ref("");
 const props = defineProps({
+  loading: {
+    type: Boolean,
+    default: true
+  },
   title: {
     type: String,
     default: "Últimos Registros",

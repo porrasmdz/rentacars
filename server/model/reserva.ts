@@ -31,7 +31,6 @@ export const read = async() => {
 
 
 export const create = async (data: ReservaModel) => {
-    console.log("values",Object.values(data));
     const result = await sql({
         query: `
         CALL insertReserva(?,?,?,?,?,?)`,
