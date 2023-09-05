@@ -78,6 +78,7 @@
     <CreateModal
      @success="fetchData()"
      :editable-fields="['RUC', 'Nombre', 'imageURLLogo']"
+     :notvehicle="true"
      :post-url="'/api/empresa/'"
      :create-modal-open="createModalOpen"
      @close-modal="createModalOpen=false" 
