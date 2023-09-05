@@ -83,6 +83,7 @@
     <CreateModal
      @success="fetchData()"
      :editable-fields="['Id_Cliente', 'Id_Inspector', 'No_Matricula', 'Fecha_Inicio', 'Hora_reserva', 'ubicacion_recogida']"
+     :notvehicle="true"
      :post-url="'/api/reserva/'"
      :create-modal-open="createModalOpen"
      @close-modal="createModalOpen=false" 
