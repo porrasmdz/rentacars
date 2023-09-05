@@ -153,7 +153,7 @@ const fetchRucOptions = async () => {
 const fetchCarOptions = async () => {
   
   await $fetch('/api/vehiculo').then((res)=>{
-    options.value['vehiculo'] = res.data.filter((item)=> item.Disponibilidad > 0)
+    options.value['vehiculo'] = res.data
   }
   )
   .catch((error)=>{
