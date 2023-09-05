@@ -25,21 +25,21 @@
               <select v-if="field.toString().toLowerCase().includes('ruc') && notvehicle" :id="field" class="form-input w-full" v-model="newItem[field]">
                 
                 
-                <option v-for="(option,id) in options['ruc']?.map((item)=>item.RUC)" :key="`${id}-${option}`" :value="'sda'" >
+                <option v-for="(option,id) in options['ruc']?.map((item)=>item.RUC)" :key="`${id}-${option}`" :value="option" >
                   {{ option }}
                 </option>
               </select>
               <select v-else-if="field.toString().toLowerCase().includes('no_matricula') && notvehicle" :id="field" class="form-input w-full" v-model="newItem[field]">
                 
                 
-                <option v-for="(option,id) in options['vehiculo']?.map((item)=>item.No_Matricula)" :key="`${id}-${option}`" :value="'sda'">
+                <option v-for="(option,id) in options['vehiculo']?.map((item)=>item.No_Matricula)" :key="`${id}-${option}`" :value="option">
                   {{ option }}
                 </option>
               </select>
               <input v-else-if="!field.toString().toLowerCase().includes('id_')" :id="field" class="form-input w-full" type="text" v-model="newItem[field]"/>
               <select v-else-if="field.toString().toLowerCase().includes('cliente')" v-model="newItem[field]" :id="field" class="form-input w-full">
                 
-                <option v-for="(option,id) in options['cliente']?.map((item)=>item.id_Cliente)" :key="`${id}-${option}`" :value="'sda'">
+                <option v-for="(option,id) in options['cliente']?.map((item)=>item.id_Cliente)" :key="`${id}-${option}`" :value="option">
                   {{ option }}
                 </option>
               </select>
@@ -47,7 +47,7 @@
               <select v-else-if="field.toString().toLowerCase().includes('devolucion')" :id="field" v-model="newItem[field]" class="form-input w-full">
                 
                 
-                <option v-for="(option,id) in options['devolucion']?.map((item)=>item.id_Devolucion)" :key="`${id}-${option}`" :value="'sda'">
+                <option v-for="(option,id) in options['devolucion']?.map((item)=>item.id_Devolucion)" :key="`${id}-${option}`" :value="option">
                   {{ option }}
                 </option>
               </select>
@@ -55,7 +55,7 @@
               <select v-else-if="field.toString().toLowerCase().includes('inspector')" :id="field" v-model="newItem[field]" class="form-input w-full">
                 
                 
-                <option v-for="(option,id) in options['inspector']?.map((item)=>item.id_Inspector)" :key="`${id}-${option}`" :value="'sda'">
+                <option v-for="(option,id) in options['inspector']?.map((item)=>item.id_Inspector)" :key="`${id}-${option}`" :value="option">
                   {{ option }}
                 </option>
               </select>
@@ -63,7 +63,7 @@
               <select v-else-if="field.toString().toLowerCase().includes('pago')" :id="field" v-model="newItem[field]" class="form-input w-full">
                 
                 
-                <option v-for="(option,id) in options['pago']?.map((item)=>item.Id_Pago)" :key="`${id}-${option}`" :value="'sda'">
+                <option v-for="(option,id) in options['pago']?.map((item)=>item.Id_Pago)" :key="`${id}-${option}`" :value="option">
                   {{ option }}
                 </option>
               </select>
