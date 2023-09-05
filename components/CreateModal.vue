@@ -22,7 +22,7 @@
               </label>
 
 
-              <select v-if="field.toString().toLowerCase().includes('ruc') && notvehicle" :id="field" class="form-input w-full" v-model="newItem[field]">
+              <select v-if="field.toString().toLowerCase().includes('ruc')  && !notvehicle" :id="field" class="form-input w-full" v-model="newItem[field]">
                 
                 
                 <option v-for="(option,id) in options['ruc']?.map((item)=>item.RUC)" :key="`${id}-${option}`" :value="option" >
